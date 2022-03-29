@@ -9,6 +9,7 @@
 * ### [Android](https://github.com/socure-inc/socure-android-sdk/tree/master/SocureSDK)
 
 * ### [React Native Bridge](https://github.com/socure-inc/socure-sdk-react-native)
+  * #### [React Native Sample App](https://github.com/socure-inc/socure-docv-capture-demo-app-react-native)
 
 ## Device Risk SDKs
 
@@ -16,6 +17,5 @@
 * ### [Android](https://github.com/socure-inc/socure-android-sdk/tree/master/DeviceRiskSDK)
 
 * ### [React Native Bridge](https://github.com/socure-inc/Socure-DeviceRisk-React-sdk)
-  * #### [React Native Sample App](https://github.com/socure-inc/socure-docv-capture-demo-app-react-native)
-
+  * #### [React Native Sample App](https://github.com/socure-inc/Socure-DeviceRisk-React-sdk/tree/main/example)
 
