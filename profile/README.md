@@ -8,7 +8,8 @@
 * ### [iOS](https://github.com/socure-inc/socure-docv-sdk-ios)
 * ### [Android](https://github.com/socure-inc/socure-docv-sdk-android)
 
-* ### [React Native Bridge - Sample App](https://github.com/socure-inc/socure-docv-demo-app-react-native)
+* ### [React Native Bridge](https://github.com/socure-inc/socure-docv-wrapper-react-native)
+  * #### [React Native Sample App](https://github.com/socure-inc/socure-docv-demo-app-react-native)
 
 ## Device Risk SDKs
 
