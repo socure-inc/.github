@@ -5,11 +5,10 @@
 
 ## DocV - Document Verficiation SDKs
 
-* ### [iOS](https://github.com/socure-inc/socure-ios-sdk/tree/master/Frameworks/SocureSDK)
-* ### [Android](https://github.com/socure-inc/socure-android-sdk/tree/master/SocureSDK)
+* ### [iOS](https://github.com/socure-inc/socure-docv-sdk-ios)
+* ### [Android](https://github.com/socure-inc/socure-docv-sdk-android)
 
-* ### [React Native Bridge](https://github.com/socure-inc/socure-sdk-react-native)
-  * #### [React Native Sample App](https://github.com/socure-inc/socure-docv-capture-demo-app-react-native)
+* ### [React Native Bridge - Sample App](https://github.com/socure-inc/socure-docv-demo-app-react-native)
 
 ## Device Risk SDKs
 
