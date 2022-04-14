@@ -13,8 +13,8 @@
 
 ## Device Risk SDKs
 
-* ### [iOS](https://github.com/socure-inc/socure-ios-sdk/tree/master/Frameworks/DeviceRisk)
-* ### [Android](https://github.com/socure-inc/socure-android-sdk/tree/master/DeviceRiskSDK)
+* ### [iOS](https://github.com/socure-inc/socure-sigmadevice-sdk-ios)
+* ### [Android](https://github.com/socure-inc/socure-sigmadevice-sdk-android)
 
 * ### [React Native Bridge](https://github.com/socure-inc/Socure-DeviceRisk-React-sdk)
   * #### [React Native Sample App](https://github.com/socure-inc/Socure-DeviceRisk-React-sdk/tree/main/example)
