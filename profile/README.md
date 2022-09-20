@@ -16,3 +16,5 @@
 * ### [iOS](https://github.com/socure-inc/socure-sigmadevice-sdk-ios)
 * ### [Android](https://github.com/socure-inc/socure-sigmadevice-sdk-android)
 
+* ### [React Native Bridge](https://github.com/socure-inc/socure-sigmadevice-wrapper-react-native)
+  * #### [React Native Sample App](https://github.com/socure-inc/socure-sigmadevice-demo-app-react-native)
