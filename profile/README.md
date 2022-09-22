@@ -8,8 +8,11 @@
 * ### [iOS](https://github.com/socure-inc/socure-docv-sdk-ios)
 * ### [Android](https://github.com/socure-inc/socure-docv-sdk-android)
 
-* ### [React Native Bridge](https://github.com/socure-inc/socure-docv-wrapper-react-native)
-  * #### [React Native Sample App](https://github.com/socure-inc/socure-docv-demo-app-react-native)
+* ### [React Native Bridge for V2](https://github.com/socure-inc/socure-docv-wrapper-react-native)
+  * #### [React Native Sample App for V2](https://github.com/socure-inc/socure-docv-demo-app-react-native/tree/main/v2)
+
+* ### [React Native Bridge for V3](https://www.npmjs.com/package/socure-docv-v3-rn-bridge)
+  * #### [React Native Sample App for V3](https://github.com/socure-inc/socure-docv-demo-app-react-native)
 
 ## Sigma Device SDKs
 
