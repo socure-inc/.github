@@ -1,7 +1,11 @@
-<img alt="Socure" src="https://www.socure.com/hubfs/soc_logo.svg" width="200">
+<img alt="Socure" src="/img/socure-logo.png">
 
 ## Socure Documentation
 :books: Our technical guides will assist you with implementing, updating and navigating Socure products.
+
+## OpenAPI Spec
+
+* ### [RiskOS™ API](/openapi-spec/riskos-api-spec.json)
 
 ## Predictive DocV - Predictive Document Verficiation SDKs
 
