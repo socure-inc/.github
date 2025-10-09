@@ -9,16 +9,6 @@
       "altText": "Socure Logo"
     }
   },
-  "x-readme": {
-    "explorer-enabled": false,
-    "samples-languages": [
-      "shell",
-      "java",
-      "python",
-      "node",
-      "go"
-    ]
-  },
   "servers": [
     {
       "url": "https://riskos.socure.com",
@@ -86,6 +76,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/BankAccountVerification"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WorkforceVerification"
                   }
                 ]
               },
@@ -107,6 +100,9 @@
                 },
                 "Bank Account Verification": {
                   "$ref": "#/components/examples/BankAccountVerificationRequest"
+                },
+                "Workforce Verification": {
+                  "$ref": "#/components/examples/WorkforceVerificationRequest"
                 }
               }
             }
@@ -138,6 +134,9 @@
                   },
                   "Bank Account Verification": {
                     "$ref": "#/components/examples/BankAccountVerificationResponse"
+                  },
+                  "Workforce Verification": {
+                    "$ref": "#/components/examples/WorkforceVerificationReponse"
                   }
                 }
               }
@@ -2344,6 +2343,151 @@
           }
         }
       },
+      "WorkforceVerification": {
+        "title": "Workforce Verification",
+        "type": "object",
+        "description": "Schema for the Workforce Verification flow.\n",
+        "required": [
+          "workflow",
+          "id",
+          "timestamp",
+          "data"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for the workflow event.",
+            "example": "a86580cc-1733-4188-86b5-717166e1db8c"
+          },
+          "workflow": {
+            "type": "string",
+            "description": "Workflow key indicating the evaluation type.",
+            "enum": [
+              "trust_and_safety"
+            ],
+            "example": "trust_and_safety"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the event occurred (UTC).",
+            "example": "2025-05-02T12:44:22.059Z"
+          },
+          "data": {
+            "type": "object",
+            "description": "Event payload for the workforce verification application.",
+            "required": [
+              "event_type",
+              "event_category",
+              "individual"
+            ],
+            "properties": {
+              "event_type": {
+                "type": "string",
+                "description": "Type of event being emitted.",
+                "enum": [
+                  "application_submitted"
+                ],
+                "example": "application_submitted"
+              },
+              "event_category": {
+                "type": "string",
+                "description": "Category of the event.",
+                "enum": [
+                  "workforce_verification"
+                ],
+                "example": "workforce_verification"
+              },
+              "individual": {
+                "type": "object",
+                "description": "Information about the individual being verified.",
+                "required": [
+                  "id",
+                  "given_name",
+                  "family_name",
+                  "email",
+                  "phone_number",
+                  "address",
+                  "di_session_token"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the individual.",
+                    "example": "09237776-f16b-4eec-9305-fc425843d887"
+                  },
+                  "given_name": {
+                    "type": "string",
+                    "description": "Individual's given (first) name.",
+                    "example": "John"
+                  },
+                  "family_name": {
+                    "type": "string",
+                    "description": "Individual's family (last) name.",
+                    "example": "Smith"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email address of the individual.",
+                    "example": "john.smith@gmail.com"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "Phone number for the individual. Not strictly E.164 to allow dashes and country codes.",
+                    "example": "1-310-841-6189"
+                  },
+                  "address": {
+                    "type": "object",
+                    "description": "Mailing address for the individual.",
+                    "required": [
+                      "line_1",
+                      "locality",
+                      "major_admin_division",
+                      "country",
+                      "postal_code"
+                    ],
+                    "properties": {
+                      "line_1": {
+                        "type": "string",
+                        "description": "Primary street address line.",
+                        "example": "123 Main Street"
+                      },
+                      "locality": {
+                        "type": "string",
+                        "description": "City, town, or locality.",
+                        "example": "New York"
+                      },
+                      "major_admin_division": {
+                        "type": "string",
+                        "description": "State or province code.",
+                        "example": "NY"
+                      },
+                      "country": {
+                        "type": "string",
+                        "description": "Country code in ISO 3166-1 alpha-2 format.",
+                        "example": "US"
+                      },
+                      "postal_code": {
+                        "type": "string",
+                        "description": "Postal or ZIP code.",
+                        "example": "10001"
+                      }
+                    }
+                  },
+                  "di_session_token": {
+                    "type": "string",
+                    "description": "Digital Intelligence session token from the DI SDK.",
+                    "example": "eyJraWQiOiJmMzRiN2YiLCJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.DI_LOW_SCORE"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "EvalResponseWithOutSocureData": {
         "type": "object",
         "description": "The standard Socure RiskOS™ evaluation response.",
@@ -2770,7 +2914,7 @@
         }
       },
       "AccountTakeOverRequest": {
-        "description": "Account Takeover",
+        "description": "Login and Authentication",
         "value": {
           "id": "ato-78901",
           "timestamp": "2023-12-01T15:45:12.678Z",
@@ -2914,6 +3058,33 @@
             "event_type": "account_verification",
             "custom": {},
             "channel": "mobile"
+          }
+        }
+      },
+      "WorkforceVerificationRequest": {
+        "description": "Workforce Verification",
+        "value": {
+          "id": "a86580cc-1733-4188-86b5-717166e1db8c",
+          "workflow": "trust_and_safety",
+          "timestamp": "2025-05-02T12:44:22.059Z",
+          "data": {
+            "event_type": "application_submitted",
+            "event_category": "workforce_verification",
+            "individual": {
+              "id": "09237776-f16b-4eec-9305-fc425843d887",
+              "given_name": "John",
+              "family_name": "Smith",
+              "email": "john.smith@gmail.com",
+              "phone_number": "1-310-841-6189",
+              "address": {
+                "line_1": "123 Main Street",
+                "locality": "New York",
+                "major_admin_division": "NY",
+                "country": "US",
+                "postal_code": "10001"
+              },
+              "di_session_token": "eyJraWQiOiJmMzRiN2YiLCJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.DI_LOW_SCORE"
+            }
           }
         }
       },
@@ -3475,7 +3646,7 @@
         }
       },
       "AccountTakeOverResponse": {
-        "description": "Account Takeover",
+        "description": "Login and Authentication",
         "value": {
           "id": "ato-78901",
           "eval_id": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816",
@@ -5008,7 +5179,238 @@
             }
           ]
         }
+      },
+      "WorkforceVerificationReponse": {
+        "description": "Workforce Verification",
+        "value": {
+          "id": "a86580cc-1733-4188-86b5-717166e1db8c",
+          "workflow": "trust_and_safety",
+          "workflow_id": "cdefa08b-5dce-4b0a-a87a-23693c01b5e5",
+          "workflow_version": "4.36.0",
+          "eval_source": "API",
+          "eval_id": "3d848e40-c166-4d30-bd84-03f1de461be3",
+          "eval_start_time": "2025-09-25T16:37:26.668697863Z",
+          "eval_end_time": "2025-09-25T16:37:27.27007937Z",
+          "decision": "REJECT",
+          "decision_at": "2025-09-25T16:37:27.269920344Z",
+          "status": "CLOSED",
+          "sub_status": "Reject",
+          "tags": [],
+          "notes": "",
+          "review_queues": [],
+          "data_enrichments": [
+            {
+              "enrichment_name": "Socure Digital Intelligence",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_provider": "Socure",
+              "status_code": 200,
+              "request": {
+                "city": "New York",
+                "country": "US",
+                "deviceSessionId": "eyJraWQiOiJmMzRiN2YiLCJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.DI_LOW_SCORE",
+                "email": "john.smith@gmail.com",
+                "firstName": "John",
+                "mobileNumber": "1-310-841-6189",
+                "modules": [
+                  "digitalintelligence"
+                ],
+                "parentTxnId": "3d848e40-c166-4d30-bd84-03f1de461be3",
+                "physicalAddress": "123 Main Street",
+                "riskOSId": "a86580cc-1733-4188-86b5-717166e1db8c",
+                "state": "NY",
+                "surName": "Smith",
+                "userId": "09237776-f16b-4eec-9305-fc425843d887",
+                "workflow": "trust_and_safety",
+                "zip": "10001"
+              },
+              "response": {
+                "customerProfile": {
+                  "userId": "09237776-f16b-4eec-9305-fc425843d887"
+                },
+                "digitalIntelligence": {
+                  "behavioral": {
+                    "aggregations": {
+                      "blurCount": 0,
+                      "clickCount": 0,
+                      "focusCount": 0,
+                      "inputChangeCount": 0,
+                      "pasteCount": 0,
+                      "submissionCount": 0,
+                      "totalEventCount": 0
+                    },
+                    "duration": 750,
+                    "serverCreated": "2025-01-14T00:10:50.942Z",
+                    "serverUpdated": "2025-01-14T00:10:51.692Z",
+                    "sessionId": "a1cf60e7-5915-4734-9130-223c8371f12a",
+                    "source": "http://localhost:3000/"
+                  },
+                  "device": {
+                    "attributes": {
+                      "androidAttributes": {},
+                      "battery": {
+                        "batteryLevel": 0.88,
+                        "batteryState": "charging"
+                      },
+                      "deviceManufacturer": "Apple",
+                      "deviceModel": "Apple Macintosh",
+                      "devicePixelRatio": 1.1,
+                      "deviceType": "Desktop",
+                      "iOSAttributes": {},
+                      "language": "en-US",
+                      "location": {},
+                      "os": "Mac OS",
+                      "osVersion": "14.5.0",
+                      "platform": "Web",
+                      "screenHeight": 1080,
+                      "screenWidth": 1920,
+                      "sdkVersion": "2.5.0",
+                      "timeZone": "America/Los_Angeles",
+                      "timeZoneOffset": -480,
+                      "viewportHeight": 668,
+                      "viewportWidth": 598,
+                      "webAttributes": {
+                        "browser": "Chrome",
+                        "browserVersion": "131.0.6778.205",
+                        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+                        "userAgentExtractionRequired": true
+                      }
+                    },
+                    "computed": {
+                      "isVirtualMachine": false,
+                      "statisticalId": "e81a14d6621cfd2ed9390be9d9eba266851e391aa751881cda9f74377197980b"
+                    },
+                    "deviceCaptureAt": "2025-01-14T00:10:51.692Z",
+                    "history": {
+                      "daysSeen": [
+                        "2025-01-08",
+                        "2025-01-14"
+                      ],
+                      "firstSeen": "2025-01-08T15:55:46.143356159Z",
+                      "ips": [
+                        "192.184.177.36",
+                        "105.30.177.22"
+                      ],
+                      "isps": [
+                        "sonic.net llc",
+                        "cloudflare inc."
+                      ],
+                      "lastSeen": "2025-01-14T00:10:49.385195428Z",
+                      "networkLocations": [
+                        "houston,  ca",
+                        "new york,  ny"
+                      ]
+                    },
+                    "id": "844da0ea-767a-48da-8cb5-5f2e179f43f4",
+                    "network": {
+                      "asn": 13335,
+                      "asnName": "cloudflare inc.",
+                      "connectionIp": "105.30.177.22",
+                      "domainName": "cloudflare.com",
+                      "isConsumerPrivacy": false,
+                      "isMobileCarrier": false,
+                      "isProxy": true,
+                      "isRiskyNetwork": true,
+                      "isTor": false,
+                      "isVpn": false,
+                      "isp": "cloudflare inc.",
+                      "ispType": "business",
+                      "networkLocation": {
+                        "city": "new york",
+                        "continentCode": "NA",
+                        "countryCode": "us",
+                        "gmtOffset": "-500",
+                        "latitude": 60.8,
+                        "longitude": -73.97,
+                        "metroCode": 501,
+                        "postalCode": "10025",
+                        "region": "ny",
+                        "timezoneName": "america/new_york"
+                      },
+                      "org": "cloudflare inc.",
+                      "realIp": "105.30.177.22",
+                      "speed": "broadband",
+                      "webRtcInternalIp": "105.30.177.22",
+                      "webRtcPublicIp": "105.30.177.22"
+                    },
+                    "sessionCreatedAt": "2025-01-14T00:10:50.942Z"
+                  },
+                  "entityProfiler": [
+                    {
+                      "entity": "test123@tester.com",
+                      "entityType": "email",
+                      "profile": null
+                    },
+                    {
+                      "entity": "+14159999999",
+                      "entityType": "phone",
+                      "profile": {
+                        "deviceIsps": [
+                          "att internet services"
+                        ],
+                        "deviceLanguages": [
+                          "en-us"
+                        ],
+                        "deviceModels": [
+                          "9137w"
+                        ],
+                        "deviceTimezones": [
+                          "america/los_angeles"
+                        ],
+                        "deviceTypes": [],
+                        "firstSeen": "2019-08-30",
+                        "lastSeen": "2025-01-06",
+                        "networkLocationPostalCodes": [
+                          "95035"
+                        ],
+                        "networkLocationStates": [
+                          "ca"
+                        ],
+                        "seenCount": 30
+                      }
+                    }
+                  ],
+                  "velocityMetrics": {
+                    "historicalCount": {
+                      "email": {
+                        "uniqueCount": 0,
+                        "uniqueSharePercent": 0
+                      },
+                      "firstName": {
+                        "uniqueCount": 0,
+                        "uniqueSharePercent": 0
+                      },
+                      "mobileNumber": {
+                        "uniqueCount": 0,
+                        "uniqueSharePercent": 0
+                      },
+                      "surName": {
+                        "uniqueCount": 0,
+                        "uniqueSharePercent": 0
+                      }
+                    }
+                  }
+                },
+                "referenceId": "4b905868-9d20-4d1c-9fde-544aeede981f"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            }
+          ],
+          "eval_status": "evaluation_completed",
+          "score": 72,
+          "environment_name": "Sandbox"
+        }
       }
     }
+  },
+  "x-readme": {
+    "explorer-enabled": false,
+    "samples-languages": [
+      "shell",
+      "java",
+      "python",
+      "node",
+      "go"
+    ]
   }
 }

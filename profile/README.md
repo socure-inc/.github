@@ -13,7 +13,6 @@
 * ### [Android](https://github.com/socure-inc/socure-docv-sdk-android)
 * ### [React Native](https://github.com/socure-inc/socure-docv-demo-app-react-native)
 
-
 ## Sigma Device SDKs
 
 * ### [iOS](https://github.com/socure-inc/socure-sigmadevice-sdk-ios)
