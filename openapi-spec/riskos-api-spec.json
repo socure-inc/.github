@@ -292,6 +292,119 @@
         }
       }
     },
+    "/api/evaluation/monitoring": {
+      "post": {
+        "tags": [
+          "Evaluation"
+        ],
+        "summary": "Enroll an evaluation in Watchlist Monitoring",
+        "operationId": "watchlistMonitoring",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/XApiVersionHeader"
+          }
+        ],
+        "description": "Enables or disables Watchlist Monitoring for an existing evaluation, allowing RiskOS™ to monitor Watchlist entities for ongoing updates and changes.\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "referenceId",
+                  "listType",
+                  "operation",
+                  "userConsent"
+                ],
+                "properties": {
+                  "referenceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "A unique identifier assigned to the result of a single enrichment process, available in the evaluation response.\n",
+                    "example": "ae94dd2e-46fe-4e58-bf0b-45ef1d4588a2"
+                  },
+                  "listType": {
+                    "type": "string",
+                    "enum": [
+                      "watchlist"
+                    ],
+                    "description": "Specifies which type of monitoring list to subscribe the entity (via its enrichment referenceId) to. This includes monitoring for changes to sanctions, PEP, enforcement, and adverse media matches.\n",
+                    "example": "watchlist"
+                  },
+                  "operation": {
+                    "type": "string",
+                    "enum": [
+                      "enable",
+                      "disable"
+                    ],
+                    "description": "Action to be taken with respect to monitoring enrollment — 'enable' or 'disable'.\n",
+                    "example": "enable"
+                  },
+                  "userConsent": {
+                    "type": "boolean",
+                    "description": "Indicates whether the end user has provided explicit consent to be enrolled for monitoring.\n",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The request was processed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "monitoringStatus"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates whether the monitoring enrollment operation was successful.",
+                      "example": true
+                    },
+                    "monitoringStatus": {
+                      "type": "string",
+                      "enum": [
+                        "enabled",
+                        "disabled"
+                      ],
+                      "description": "Current status of the monitoring subscription after the operation has been processed.\n",
+                      "example": "enabled"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - The request was unacceptable."
+          },
+          "401": {
+            "description": "Unauthorized - An invalid API key was provided."
+          },
+          "403": {
+            "description": "Forbidden - The client does not have permission to access this resource."
+          },
+          "404": {
+            "description": "Not Found - The requested resource does not exist."
+          },
+          "500": {
+            "description": "Internal Server Error – Unexpected server issue."
+          }
+        }
+      }
+    },
     "/api/evaluation/{eval_id}": {
       "patch": {
         "tags": [
@@ -635,7 +748,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. \n\nThe archive is organized into folders as follows:\n\n- `user_uploaded/`: Consumer-submitted identity documents.\n  - `user_uploaded/document_verification/front`\n  - `user_uploaded/document_verification/back`\n  - `user_uploaded/vouched_id_verification/driver's_license`\n- `case_attachments/`: Case attachments added via the RiskOS™ Dashboard. \n  - `case_attachments/identity.pdf`\n  - `case_attachments/additional_doc.pdf`\n",
+        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. \nThe archive is organized into folders as follows:\n- `user_uploaded/`: Consumer-submitted identity documents.\n  - `user_uploaded/document_verification/front`\n  - `user_uploaded/document_verification/back`\n  - `user_uploaded/vouched_id_verification/driver's_license`\n- `case_attachments/`: Case attachments added via the RiskOS™ Dashboard. \n  - `case_attachments/identity.pdf`\n  - `case_attachments/additional_doc.pdf`\n",
         "parameters": [
           {
             "name": "evaluation_id",
@@ -683,7 +796,7 @@
             "description": "Not Found - The requested resource does not exist."
           },
           "500": {
-            "description": "500 Internal Server Error – Unexpected server issue."
+            "description": "Internal Server Error – Unexpected server issue."
           }
         }
       }
@@ -1228,16 +1341,16 @@
           },
           "language": {
             "type": "string",
-            "description": "Specifies the language package for the Capture App. Below are the possible values.\n- Arabic: `ar`\n- Arabic (Saudi Arabia): `ar-sa`\n- Armenian: `hy`\n- Bengali: `bn`\n- Chinese (Hong Kong): `zh-hk`\n- Chinese (Simplified): `zh-cn`\n- Chinese (Traditional): `zh-tw`\n- Czech: `cs-CZ`\n- Danish: `da-DK`\n- Dutch: `nl-NL`\n- English: `en`\n- English (Australian): `en-au`\n- English (Canadian): `en-ca`\n- English (United Kingdom): `en-gb`\n- English (United States): `en-us`\n- Finnish: `fi-FI`\n- French: `fr`\n- French (Canada): `fr-CA`\n- German: `de-DE`\n- Haitian Creole: `ht`\n- Hebrew: `he-IL`\n- Hindi: `hi-IN`\n- Hungarian: `hu-HU`\n- Indonesian: `id-ID`\n- Italian: `it`\n- Italian (Switzerland): `it-ch`\n- Japanese: `ja-JP`\n- Korean: `ko`\n- Malay: `ms-MY`\n- Norwegian: `no-NO`\n- Polish: `pl-PL`\n- Portuguese (Brazil): `pt-br`\n- Portuguese (Portugal): `pt-PT`\n- Romanian (Moldova): `ro-MO`\n- Romanian (Romania): `ro-RO`\n- Russian: `ru`\n- Slovak: `sk-SK`\n- Spanish: `es`\n- Spanish (Argentina): `es-AR`\n- Spanish (International): `es-001`\n- Spanish (Mexico): `es-mx`\n- Spanish (Spain): `es-es`\n- Spanish (US): `es-US`\n- Swedish: `sv-SE`\n- Tagalog: `tl`\n- Thai: `th-TH`\n- Turkish: `tr-TR`\n- Urdu: `ur`\n- Vietnamese: `vi`\n",
+            "description": "Specifies the language package for the Capture App. Below are the possible values.\n- Arabic: `ar`\n- Arabic (Saudi Arabia): `ar-sa`\n- Armenian: `hy`\n- Bengali: `bn`\n- Chinese (Hong Kong): `zh-hk`\n- Chinese (Simplified): `zh-cn`\n- Chinese (Traditional): `zh-tw`\n- Czech: `cs-cz`\n- Danish: `da-dk`\n- Dutch: `nl-nl`\n- English: `en`\n- English (Australian): `en-au`\n- English (Canadian): `en-ca`\n- English (United Kingdom): `en-gb`\n- English (United States): `en-us`\n- Finnish: `fi-fi`\n- French: `fr`\n- French (Canada): `fr-ca`\n- German: `de-de`\n- Haitian Creole: `ht`\n- Hebrew: `he-il`\n- Hindi: `hi-in`\n- Hungarian: `hu-hu`\n- Indonesian: `id-id`\n- Italian: `it`\n- Italian (Switzerland): `it-ch`\n- Japanese: `ja-jp`\n- Korean: `ko`\n- Malay: `ms-my`\n- Norwegian: `no-no`\n- Polish: `pl-pl`\n- Portuguese (Brazil): `pt-br`\n- Portuguese (Portugal): `pt-pt`\n- Romanian (Moldova): `ro-mo`\n- Romanian (Romania): `ro-ro`\n- Russian: `ru`\n- Slovak: `sk-sk`\n- Spanish: `es`\n- Spanish (Argentina): `es-ar`\n- Spanish (International): `es-001`\n- Spanish (Mexico): `es-mx`\n- Spanish (Spain): `es-es`\n- Spanish (US): `es-us`\n- Swedish: `sv-se`\n- Tagalog: `tl`\n- Thai: `th-th`\n- Turkish: `tr-tr`\n- Urdu: `ur`\n- Vietnamese: `vi`\n",
             "example": "en-us",
             "default": "en-us",
             "enum": [
               "ar",
               "ar-sa",
               "bn",
-              "cs-CZ",
-              "da-DK",
-              "de-DE",
+              "cs-cz",
+              "da-dk",
+              "de-de",
               "en",
               "en-au",
               "en-ca",
@@ -1245,37 +1358,37 @@
               "en-us",
               "es",
               "es-001",
-              "es-AR",
+              "es-ar",
               "es-es",
               "es-mx",
-              "es-US",
-              "fi-FI",
+              "es-us",
+              "fi-fi",
               "fr",
-              "fr-CA",
-              "he-IL",
-              "hi-IN",
+              "fr-ca",
+              "he-il",
+              "hi-in",
               "ht",
-              "hu-HU",
+              "hu-hu",
               "hy",
-              "id-ID",
+              "id-id",
               "it",
               "it-ch",
-              "ja-JP",
+              "ja-jp",
               "ko",
-              "ms-MY",
-              "nl-NL",
-              "no-NO",
-              "pl-PL",
+              "ms-my",
+              "nl-nl",
+              "no-no",
+              "pl-pl",
               "pt-br",
-              "pt-PT",
-              "ro-MO",
-              "ro-RO",
+              "pt-pt",
+              "ro-mo",
+              "ro-ro",
               "ru",
-              "sk-SK",
-              "sv-SE",
-              "th-TH",
+              "sk-sk",
+              "sv-se",
+              "th-th",
               "tl",
-              "tr-TR",
+              "tr-tr",
               "ur",
               "vi",
               "zh-cn",
@@ -1428,7 +1541,7 @@
           },
           "accept_list": {
             "type": "boolean",
-            "description": "Set to `true` if the entity was accepted to conduct business with your organization. The default setting is `false`. See [Integrate Accept Lists for Continuous Compliance](/docs/id-plus/modules/global-watchlist/integrate-acceptlist) for more information.\n"
+            "description": "Set to `true` if the entity was accepted to conduct business with your organization. The default setting is `false`.\n"
           },
           "notes": {
             "type": "string",
