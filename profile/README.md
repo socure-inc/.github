@@ -5,7 +5,7 @@
 
 ## OpenAPI Spec
 
-* ### [RiskOS™ API](/openapi-spec/riskos-api-spec.json)
+* ### [RiskOS™ APIs](/openapi-spec/riskos-api-spec.json)
 
 ## Predictive DocV - Predictive Document Verficiation SDKs
 
