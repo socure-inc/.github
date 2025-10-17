@@ -1,13 +1,12 @@
-<img alt="Socure" src="/img/socure-logo.png">
-
 ## Socure Documentation
 :books: Our technical guides will assist you with implementing, updating and navigating Socure products.
 
 ## OpenAPI Spec
 
 * ### [RiskOS™ APIs](/openapi-spec/riskos-api-spec.json)
+* ### [ID+ Platform (Commercial) APIs](/openapi-spec/id-plus-api-spec.json)
 
-## Predictive DocV - Predictive Document Verficiation SDKs
+## Predictive DocV - Predictive Document Verification SDKs
 
 * ### [iOS](https://github.com/socure-inc/socure-docv-sdk-ios)
 * ### [Android](https://github.com/socure-inc/socure-docv-sdk-android)
