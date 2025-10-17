@@ -63,12 +63,6 @@
                     "$ref": "#/components/schemas/ConsumerOnboarding"
                   },
                   {
-                    "$ref": "#/components/schemas/BusinessOnboarding"
-                  },
-                  {
-                    "$ref": "#/components/schemas/AccountTakeover"
-                  },
-                  {
                     "$ref": "#/components/schemas/GenericPassthrough"
                   },
                   {
@@ -76,6 +70,12 @@
                   },
                   {
                     "$ref": "#/components/schemas/BankAccountVerification"
+                  },
+                  {
+                    "$ref": "#/components/schemas/BusinessOnboarding"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AccountTakeover"
                   },
                   {
                     "$ref": "#/components/schemas/WorkforceVerification"
@@ -86,12 +86,6 @@
                 "Consumer Onboarding": {
                   "$ref": "#/components/examples/ConsumerOnboardingRequest"
                 },
-                "Business Onboarding": {
-                  "$ref": "#/components/examples/BusinessOnboardingRequest"
-                },
-                "Account Takeover": {
-                  "$ref": "#/components/examples/AccountTakeOverRequest"
-                },
                 "Generic Passthrough": {
                   "$ref": "#/components/examples/GenericPassthroughRequest"
                 },
@@ -100,6 +94,12 @@
                 },
                 "Bank Account Verification": {
                   "$ref": "#/components/examples/BankAccountVerificationRequest"
+                },
+                "Business Onboarding": {
+                  "$ref": "#/components/examples/BusinessOnboardingRequest"
+                },
+                "Login and Authentication": {
+                  "$ref": "#/components/examples/AccountTakeOverRequest"
                 },
                 "Workforce Verification": {
                   "$ref": "#/components/examples/WorkforceVerificationRequest"
@@ -120,12 +120,6 @@
                   "Consumer Onboarding": {
                     "$ref": "#/components/examples/ConsumerOnboardingResponse"
                   },
-                  "Business Onboarding": {
-                    "$ref": "#/components/examples/BusinessOnboardingResponse"
-                  },
-                  "Account Takeover": {
-                    "$ref": "#/components/examples/AccountTakeOverResponse"
-                  },
                   "Generic Passthrough": {
                     "$ref": "#/components/examples/GenericPassthroughResponse"
                   },
@@ -134,6 +128,12 @@
                   },
                   "Bank Account Verification": {
                     "$ref": "#/components/examples/BankAccountVerificationResponse"
+                  },
+                  "Business Onboarding": {
+                    "$ref": "#/components/examples/BusinessOnboardingResponse"
+                  },
+                  "Login and Authentication": {
+                    "$ref": "#/components/examples/AccountTakeOverResponse"
                   },
                   "Workforce Verification": {
                     "$ref": "#/components/examples/WorkforceVerificationReponse"
@@ -156,7 +156,7 @@
                       "id": "BIZ-9876",
                       "eval_id": "async-239s9-df29dj",
                       "workflow": "business_onboarding",
-                      "eval_status": "evaluation_in_progress",
+                      "eval_status": "evaluation_paused",
                       "decision": "REVIEW",
                       "status": "OPEN",
                       "sub_status": "Pending Docs",
@@ -417,7 +417,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Updates risk data or metadata for a previously submitted evaluation request that is in a **paused** state.\nThe request is identified by the `eval_id`, and updates can be **partial**—any data not included in the request will remain unchanged. The body of the `PUT` request must match the structure used in the original `POST` request.\n> **Note:** Once an evaluation is completed, its data becomes immutable. Any attempt to update it will result in a failed request.\n",
+        "description": "Updates risk data or metadata for a previously submitted evaluation request that is in a **paused** state.\nThe request is identified by the `eval_id`, and updates can be **partial**—any data not included in the request will remain unchanged. The body of the `PATCH` request must match the structure used in the original `POST` request.\n> **Note:** Once an evaluation is completed, its data becomes immutable. Any attempt to update it will result in a failed request.\n",
         "parameters": [
           {
             "in": "path",
@@ -442,19 +442,19 @@
                     "$ref": "#/components/schemas/ConsumerOnboardingPatch"
                   },
                   {
-                    "$ref": "#/components/schemas/BusinessOnboarding"
-                  },
-                  {
-                    "$ref": "#/components/schemas/AccountTakeover"
-                  },
-                  {
                     "$ref": "#/components/schemas/TrustAndSafety"
                   },
                   {
                     "$ref": "#/components/schemas/BankAccountVerification"
+                  },
+                  {
+                    "$ref": "#/components/schemas/BusinessOnboarding"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AccountTakeover"
                   }
                 ],
-                "description": "A subset of the request body used in flows such as Consumer Onboarding, Business Onboarding, Account Takeover, and Login.\n"
+                "description": "A subset of the request body used in flows such as Consumer Onboarding, Business Onboarding, and Bank Account Verification.\n"
               },
               "examples": {
                 "updateEmail": {
@@ -968,7 +968,7 @@
                   "id": {
                     "type": "string",
                     "example": "9876543",
-                    "description": "The customer-side identifier (`id`) provided during the original evaluate request."
+                    "description": "The customer-side identifier (`id`) provided during the original evaluation request."
                   },
                   "workflow": {
                     "type": "string",
@@ -1249,12 +1249,13 @@
       },
       "AccountSnapshot": {
         "type": "object",
+        "description": "Represents a snapshot of the account’s state at a specific point in time.",
         "properties": {
           "timestamp": {
-            "description": "ISO 8601/ RFC 3339 date-time",
             "type": "string",
             "format": "date-time",
-            "example": "2022-03-21T21:50:07.623Z"
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
           },
           "account_view": {
             "$ref": "#/components/schemas/AccountView"
@@ -1482,7 +1483,7 @@
       "ConsentTimestamp": {
         "type": "string",
         "format": "date-time",
-        "description": "The date and time when the user provided consent, specified in ISO 8601 format. If no value is provided, defaults to the current timestamp of the transaction.\n> **Note**: Although the `consentTimestamp` parameter is optional, it's crucial to provide it when using the `ecbsv` module to meet the 90-day consent window set by the SSA for compliance with the eCBSV service.\n",
+        "description": "The date and time when the user provided consent, specified in ISO 8601 format. If no value is provided, defaults to the current timestamp of the evaluation.\n> **Note**: Although the `consentTimestamp` parameter is optional, it's crucial to provide it when using the `ecbsv` module to meet the 90-day consent window set by the SSA for compliance with the eCBSV service.\n",
         "example": "2020-09-13T23:11:12.000Z"
       },
       "PreviousReferenceID": {
@@ -1689,7 +1690,6 @@
       "ConsumerOnboarding": {
         "title": "Consumer Onboarding",
         "type": "object",
-        "description": "Schema for the `consumer_onboarding` evaluation flow...\n",
         "required": [
           "workflow",
           "id",
@@ -1699,11 +1699,8 @@
         "properties": {
           "workflow": {
             "type": "string",
-            "enum": [
-              "consumer_onboarding"
-            ],
             "example": "consumer_onboarding",
-            "description": "Your environment-specific Workflow identifier..."
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard."
           },
           "id": {
             "type": "string",
@@ -1713,8 +1710,8 @@
           "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "The current timestamp of the evaluation, typically in RFC 3339 format.",
-            "example": "2022-07-28T06:10:54.298Z"
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
           },
           "data": {
             "type": "object",
@@ -2020,6 +2017,198 @@
           }
         }
       },
+      "GenericPassthrough": {
+        "title": "Generic Passthrough",
+        "type": "object",
+        "description": "Schema for a generic pass-through evaluation flow. Typically used when the goal is to retrieve Socure module data without applying a full risk evaluation.\n",
+        "required": [
+          "workflow",
+          "id",
+          "timestamp",
+          "data"
+        ],
+        "properties": {
+          "workflow": {
+            "type": "string",
+            "example": "generic_passthrough",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard."
+          },
+          "id": {
+            "type": "string",
+            "description": "A unique ID provided by the customer to track and reference the evaluation.",
+            "example": "genr-12345"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
+          },
+          "data": {
+            "type": "object",
+            "description": "The main payload for the Pass-Through workflow.",
+            "properties": {
+              "individual": {
+                "$ref": "#/components/schemas/Individual"
+              },
+              "modules": {
+                "type": "array",
+                "description": "A list of activated modules to be included in the evaluation.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "channel": {
+                "$ref": "#/components/schemas/Channel"
+              },
+              "line_of_business": {
+                "$ref": "#/components/schemas/LineOfBusiness"
+              },
+              "ip_address": {
+                "$ref": "#/components/schemas/IPAddress"
+              }
+            }
+          }
+        }
+      },
+      "TrustAndSafety": {
+        "title": "Trust and Safety",
+        "type": "object",
+        "required": [
+          "workflow",
+          "id",
+          "timestamp",
+          "data"
+        ],
+        "properties": {
+          "workflow": {
+            "type": "string",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
+            "example": "trust_and_safety"
+          },
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the evaluation request.",
+            "example": "TS-REQ-123456"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
+          },
+          "data": {
+            "type": "object",
+            "description": "The main payload for the Trust and Safety workflow.",
+            "required": [
+              "event_type"
+            ],
+            "properties": {
+              "event_type": {
+                "type": "string",
+                "description": "Specifies the specific event type being tracked for a user, such as `identity_verification`, `document_submission`, or `badge_request`.",
+                "example": "identity_verification"
+              },
+              "event_category": {
+                "type": "string",
+                "description": "Represents the category of the event occurring on a user profile or account within the context of Trust and Safety verification processes.",
+                "enum": [
+                  "verification",
+                  "authentication",
+                  "action",
+                  "update"
+                ]
+              },
+              "individual": {
+                "$ref": "#/components/schemas/Individual"
+              },
+              "ip_address": {
+                "$ref": "#/components/schemas/IPAddress"
+              },
+              "external_device": {
+                "$ref": "#/components/schemas/Device"
+              },
+              "custom": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Include any additional customer-specific data relevant to the Trust and Safety evaluation in this field."
+              },
+              "channel": {
+                "$ref": "#/components/schemas/Channel"
+              }
+            }
+          }
+        }
+      },
+      "BankAccountVerification": {
+        "title": "Bank Account Verification",
+        "type": "object",
+        "required": [
+          "workflow",
+          "id",
+          "timestamp",
+          "data"
+        ],
+        "properties": {
+          "workflow": {
+            "type": "string",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
+            "example": "bank_account_verification"
+          },
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the evaluation request.",
+            "example": "BAV-REQ-123456"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
+          },
+          "data": {
+            "type": "object",
+            "description": "The main payload for the Bank Account Verification workflow.",
+            "properties": {
+              "individual": {
+                "$ref": "#/components/schemas/Individual"
+              },
+              "ip_address": {
+                "$ref": "#/components/schemas/IPAddress"
+              },
+              "additional_context": {
+                "$ref": "#/components/schemas/AdditionalContext"
+              },
+              "external_device": {
+                "$ref": "#/components/schemas/Device"
+              },
+              "event_category": {
+                "type": "string",
+                "description": "Represents the category of the event occurring on a user profile or account within the context of Bank Account Verification processes.",
+                "enum": [
+                  "verification",
+                  "authentication",
+                  "action",
+                  "update"
+                ]
+              },
+              "event_type": {
+                "type": "string",
+                "description": "Specifies the specific event type being tracked for a user, such as `account_verification`.",
+                "example": "account_verification"
+              },
+              "custom": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Include any additional customer-specific data relevant to the Bank Account Verification in this field."
+              },
+              "channel": {
+                "$ref": "#/components/schemas/Channel"
+              }
+            }
+          }
+        }
+      },
       "Formation": {
         "type": "object",
         "required": [
@@ -2055,7 +2244,6 @@
       "BusinessOnboarding": {
         "title": "Business Onboarding",
         "type": "object",
-        "description": "Schema for the `business_onboarding` (KYB) evaluation flow. Typically used when performing a risk and fraud evaluation for a business.\n",
         "required": [
           "workflow",
           "id",
@@ -2065,10 +2253,7 @@
         "properties": {
           "workflow": {
             "type": "string",
-            "enum": [
-              "business_onboarding"
-            ],
-            "description": "Your environment-specific Workflow identifier. You can find this value in the RiskOS™ Dashboard.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
             "example": "business_onboarding"
           },
           "id": {
@@ -2079,8 +2264,8 @@
           "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "The timestamp indicating when the business evaluation was initiated.",
-            "example": "2022-07-28T06:10:54.298Z"
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
           },
           "data": {
             "type": "object",
@@ -2181,9 +2366,8 @@
         }
       },
       "AccountTakeover": {
-        "title": "Account Takeover",
+        "title": "Login and Authentication",
         "type": "object",
-        "description": "Schema for the Account Takeover (ATO) evaluation flow, typically used when suspicious activity is detected on an existing account.\n",
         "required": [
           "workflow",
           "id",
@@ -2193,26 +2377,23 @@
         "properties": {
           "workflow": {
             "type": "string",
-            "description": "Your environment-specific Workflow identifier. You can find this value in the RiskOS™ Dashboard.",
-            "enum": [
-              "account_takeover"
-            ],
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
             "example": "account_takeover"
           },
           "id": {
             "type": "string",
-            "description": "A unique identifier for the Account Takeover (ATO) evaluation request.",
+            "description": "A unique identifier for the Login and Authentication evaluation request.",
             "example": "ATO-REQ-123456"
           },
           "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "The timestamp indicating when the Account Takeover (ATO) evaluation was initiated.",
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2022-09-01T12:34:56.789Z"
           },
           "data": {
             "type": "object",
-            "description": "The main payload for the Account Takeover (ATO) workflow.",
+            "description": "The main payload for the Login and Authentication workflow.",
             "properties": {
               "event_category": {
                 "type": "string",
@@ -2253,213 +2434,9 @@
           }
         }
       },
-      "GenericPassthrough": {
-        "title": "Generic Passthrough",
-        "type": "object",
-        "description": "Schema for a generic pass-through evaluation flow. Typically used when the goal is to retrieve Socure module data without applying a full risk evaluation.\n",
-        "required": [
-          "workflow",
-          "id",
-          "timestamp",
-          "data"
-        ],
-        "properties": {
-          "workflow": {
-            "type": "string",
-            "enum": [
-              "generic_passthrough"
-            ],
-            "example": "generic_passthrough",
-            "description": "Your environment-specific Workflow identifier. You can find this value in the RiskOS™ Dashboard."
-          },
-          "id": {
-            "type": "string",
-            "description": "A unique ID provided by the customer to track and reference the evaluation.",
-            "example": "genr-12345"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The current timestamp of the evaluation, typically in RFC 3339 format.",
-            "example": "2022-07-28T06:10:54.298Z"
-          },
-          "data": {
-            "type": "object",
-            "description": "The main payload for the Pass-Through workflow.",
-            "properties": {
-              "individual": {
-                "$ref": "#/components/schemas/Individual"
-              },
-              "modules": {
-                "type": "array",
-                "description": "A list of activated modules to be included in the evaluation.",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "channel": {
-                "$ref": "#/components/schemas/Channel"
-              },
-              "line_of_business": {
-                "$ref": "#/components/schemas/LineOfBusiness"
-              },
-              "ip_address": {
-                "$ref": "#/components/schemas/IPAddress"
-              }
-            }
-          }
-        }
-      },
-      "TrustAndSafety": {
-        "title": "Trust and Safety",
-        "type": "object",
-        "description": "Schema for the Trust and Safety evaluation flow.\n",
-        "required": [
-          "workflow",
-          "id",
-          "timestamp",
-          "data"
-        ],
-        "properties": {
-          "workflow": {
-            "type": "string",
-            "description": "Your environment-specific Workflow identifier. You can find this value in the RiskOS™ Dashboard.",
-            "enum": [
-              "trust_and_safety"
-            ],
-            "example": "trust_and_safety"
-          },
-          "id": {
-            "type": "string",
-            "description": "A unique identifier for the evaluation request.",
-            "example": "TS-REQ-123456"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The timestamp indicating when the evaluation was initiated.",
-            "example": "2022-09-01T12:34:56.789Z"
-          },
-          "data": {
-            "type": "object",
-            "description": "The main payload for the Trust and Safety workflow.",
-            "required": [
-              "event_type"
-            ],
-            "properties": {
-              "event_type": {
-                "type": "string",
-                "description": "Specifies the specific event type being tracked for a user, such as `identity_verification`, `document_submission`, or `badge_request`.",
-                "example": "identity_verification"
-              },
-              "event_category": {
-                "type": "string",
-                "description": "Represents the category of the event occurring on a user profile or account within the context of Trust and Safety verification processes.",
-                "enum": [
-                  "verification",
-                  "authentication",
-                  "action",
-                  "update"
-                ]
-              },
-              "individual": {
-                "$ref": "#/components/schemas/Individual"
-              },
-              "ip_address": {
-                "$ref": "#/components/schemas/IPAddress"
-              },
-              "external_device": {
-                "$ref": "#/components/schemas/Device"
-              },
-              "custom": {
-                "type": "object",
-                "additionalProperties": true,
-                "description": "Include any additional customer-specific data relevant to the Trust and Safety evaluation in this field."
-              },
-              "channel": {
-                "$ref": "#/components/schemas/Channel"
-              }
-            }
-          }
-        }
-      },
-      "BankAccountVerification": {
-        "title": "Bank Account Verification",
-        "type": "object",
-        "description": "Schema for the Bank Account Verification flow.\n",
-        "required": [
-          "workflow",
-          "id",
-          "timestamp",
-          "data"
-        ],
-        "properties": {
-          "workflow": {
-            "type": "string",
-            "description": "Your environment-specific Workflow identifier. You can find this value in the RiskOS™ Dashboard.",
-            "enum": [
-              "bank_account_verification"
-            ],
-            "example": "bank_account_verification"
-          },
-          "id": {
-            "type": "string",
-            "description": "A unique identifier for the evaluation request.",
-            "example": "BAV-REQ-123456"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The timestamp indicating when the evaluation was initiated.",
-            "example": "2022-09-01T12:34:56.789Z"
-          },
-          "data": {
-            "type": "object",
-            "description": "The main payload for the Bank Account Verification workflow.",
-            "properties": {
-              "individual": {
-                "$ref": "#/components/schemas/Individual"
-              },
-              "ip_address": {
-                "$ref": "#/components/schemas/IPAddress"
-              },
-              "additional_context": {
-                "$ref": "#/components/schemas/AdditionalContext"
-              },
-              "external_device": {
-                "$ref": "#/components/schemas/Device"
-              },
-              "event_category": {
-                "type": "string",
-                "description": "Represents the category of the event occurring on a user profile or account within the context of Bank Account Verification processes.",
-                "enum": [
-                  "verification",
-                  "authentication",
-                  "action",
-                  "update"
-                ]
-              },
-              "event_type": {
-                "type": "string",
-                "description": "Specifies the specific event type being tracked for a user, such as `account_verification`.",
-                "example": "account_verification"
-              },
-              "custom": {
-                "type": "object",
-                "additionalProperties": true,
-                "description": "Include any additional customer-specific data relevant to the Bank Account Verification in this field."
-              },
-              "channel": {
-                "$ref": "#/components/schemas/Channel"
-              }
-            }
-          }
-        }
-      },
       "WorkforceVerification": {
         "title": "Workforce Verification",
         "type": "object",
-        "description": "Schema for the Workforce Verification flow.\n",
         "required": [
           "workflow",
           "id",
@@ -2475,17 +2452,14 @@
           },
           "workflow": {
             "type": "string",
-            "description": "Workflow key indicating the evaluation type.",
-            "enum": [
-              "trust_and_safety"
-            ],
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
             "example": "trust_and_safety"
           },
           "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "ISO 8601 timestamp when the event occurred (UTC).",
-            "example": "2025-05-02T12:44:22.059Z"
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
           },
           "data": {
             "type": "object",
@@ -2607,7 +2581,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The customer-provided ID, identical to the one used in the Evaluate API request.",
+            "description": "The customer-provided ID, identical to the one used in the Evaluation API request.",
             "example": "EVAL-ABC123"
           },
           "eval_id": {
@@ -2617,7 +2591,7 @@
           },
           "workflow": {
             "type": "string",
-            "description": "Your environment-specific workflow identifier, matching the one provided in the Evaluate API request.",
+            "description": "Your environment-specific workflow identifier, matching the one provided in the Evaluation API request.",
             "example": "consumer_onboarding"
           },
           "eval_status": {
@@ -2629,6 +2603,12 @@
             "type": "string",
             "description": "The final decision made at the end of the evaluation (e.g., `ACCEPT`, `REJECT`, `REVIEW`).",
             "example": "REVIEW"
+          },
+          "decision_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The ISO 8601 / RFC 3339 timestamp indicating when the evaluation decision was completed (UTC).\n",
+            "example": "2025-10-17T16:17:17.456721157Z"
           },
           "score": {
             "type": "integer",
@@ -2658,14 +2638,14 @@
           "eval_start_time": {
             "type": "string",
             "format": "date-time",
-            "description": "ISO timestamp indicating when the evaluation process started.",
-            "example": "2024-12-02T10:28:24.456771162Z"
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
           },
           "eval_end_time": {
             "type": "string",
             "format": "date-time",
-            "description": "ISO timestamp indicating when the evaluation process completed.",
-            "example": "2024-12-02T10:30:00.123Z"
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
           },
           "tags": {
             "type": "array",
@@ -2677,6 +2657,11 @@
               "email_risk",
               "high_risk"
             ]
+          },
+          "notes": {
+            "type": "string",
+            "description": "Optional freeform notes or comments related to the evaluation. Can be left empty if not applicable.\n",
+            "example": ""
           },
           "review_queues": {
             "type": "array",
@@ -2726,14 +2711,18 @@
           },
           "computed": {
             "type": "object",
-            "description": "An object containing all computed data points from the Workflow. This field is disabled by default and must be explicitly enabled through support."
+            "description": "An object containing all computed data points from the workflow. This field is disabled by default and must be explicitly enabled through support."
+          },
+          "environment_name": {
+            "type": "string",
+            "description": "The name of the environment in which the evaluation is executed\n",
+            "example": "Sandbox"
           }
         }
       },
       "ConsumerOnboardingPatch": {
         "title": "Consumer Onboarding",
         "type": "object",
-        "description": "Schema for the `consumer_onboarding` evaluation flow. Typically used when performing a risk and fraud evaluation for an individual consumer.\n",
         "required": [
           "workflow",
           "id",
@@ -2743,11 +2732,8 @@
         "properties": {
           "workflow": {
             "type": "string",
-            "enum": [
-              "consumer_onboarding"
-            ],
             "example": "consumer_onboarding",
-            "description": "Your environment-specific Workflow identifier. You can find this value in the RiskOS™ Dashboard."
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard."
           },
           "id": {
             "type": "string",
@@ -2757,8 +2743,8 @@
           "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "The current timestamp of the evaluation, typically in RFC 3339 format.",
-            "example": "2022-07-28T06:10:54.298Z"
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2022-09-01T12:34:56.789Z"
           },
           "data": {
             "type": "object",
@@ -2966,110 +2952,6 @@
           }
         }
       },
-      "BusinessOnboardingRequest": {
-        "description": "Business Onboarding",
-        "value": {
-          "id": "onb-biz-56789",
-          "timestamp": "2023-12-01T10:30:25.789Z",
-          "workflow": "business_onboarding",
-          "data": {
-            "ip_address": "203.0.113.10",
-            "individual": {
-              "id": "ind-4567890",
-              "given_name": "Alice",
-              "family_name": "Johnson",
-              "national_id": "SSN-123-45-6789",
-              "date_of_birth": "1985-03-10",
-              "email": "alice.johnson@example.com",
-              "phone_number": "+1-415-555-5678",
-              "address": {
-                "line_1": "123 Maple Street",
-                "line_2": "Suite 200",
-                "locality": "San Francisco",
-                "major_admin_division": "CA",
-                "country": "US",
-                "postal_code": "94105"
-              },
-              "di_session_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ...PiUsws9D6O3DjSjNDCbIJKciX44s"
-            },
-            "business": {
-              "name": "Tech Innovators LLC",
-              "ein": "12-3456789",
-              "primary_phone": "+1-800-555-6789",
-              "address": {
-                "line_1": "456 Innovation Drive",
-                "line_2": "Floor 5",
-                "locality": "Mountain View",
-                "major_admin_division": "CA",
-                "country": "US",
-                "postal_code": "94043"
-              },
-              "formation": {
-                "entity_type": "Limited Liability Company (LLC)",
-                "registration_date": "2020-08-15",
-                "registration_state": "CA",
-                "registration_country": "US"
-              },
-              "website_url": "https://techinnovators.com",
-              "last_fiscal_revenue": {
-                "amount": 2500000,
-                "currency": "USD"
-              },
-              "account": {
-                "type": "CHECKING",
-                "account_number": "9876543210123456",
-                "routing_number": "123456789",
-                "opened_at": "2021-06-15T08:20:45.123Z",
-                "country_code": "US"
-              }
-            }
-          }
-        }
-      },
-      "AccountTakeOverRequest": {
-        "description": "Login and Authentication",
-        "value": {
-          "id": "ato-78901",
-          "timestamp": "2023-12-01T15:45:12.678Z",
-          "workflow": "account_takeover",
-          "data": {
-            "event_type": "address_update",
-            "event_category": "update",
-            "ip_address": "203.0.113.10",
-            "individual": {
-              "id": "ind-9876543",
-              "given_name": "Jane",
-              "family_name": "Smith",
-              "national_id": "123456789",
-              "date_of_birth": "1990-05-15",
-              "email": "jane.smith@example.com",
-              "phone_number": "+1-312-555-1234",
-              "address": {
-                "line_1": "742 Evergreen Terrace",
-                "line_2": "Apt 12B",
-                "locality": "Springfield",
-                "major_admin_division": "IL",
-                "country": "US",
-                "postal_code": "62704"
-              },
-              "di_session_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ...PiUsws9D6O3DjSjNDCbIJKciX44s"
-            },
-            "event_details": {
-              "previous": {
-                "address": {
-                  "line_1": "123 Main Street",
-                  "line_2": "Suite 100",
-                  "locality": "Brooklyn",
-                  "major_admin_division": "NY",
-                  "country": "US",
-                  "postal_code": "11201"
-                }
-              }
-            },
-            "custom": {}
-          }
-        }
-      },
       "GenericPassthroughRequest": {
         "description": "Generic Passthrough",
         "value": {
@@ -3171,6 +3053,110 @@
             "event_type": "account_verification",
             "custom": {},
             "channel": "mobile"
+          }
+        }
+      },
+      "BusinessOnboardingRequest": {
+        "description": "Business Onboarding",
+        "value": {
+          "id": "onb-biz-56789",
+          "timestamp": "2023-12-01T10:30:25.789Z",
+          "workflow": "business_onboarding",
+          "data": {
+            "ip_address": "203.0.113.10",
+            "individual": {
+              "id": "ind-4567890",
+              "given_name": "Alice",
+              "family_name": "Johnson",
+              "national_id": "SSN-123-45-6789",
+              "date_of_birth": "1985-03-10",
+              "email": "alice.johnson@example.com",
+              "phone_number": "+1-415-555-5678",
+              "address": {
+                "line_1": "123 Maple Street",
+                "line_2": "Suite 200",
+                "locality": "San Francisco",
+                "major_admin_division": "CA",
+                "country": "US",
+                "postal_code": "94105"
+              },
+              "di_session_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ...PiUsws9D6O3DjSjNDCbIJKciX44s"
+            },
+            "business": {
+              "name": "Tech Innovators LLC",
+              "ein": "12-3456789",
+              "primary_phone": "+1-800-555-6789",
+              "address": {
+                "line_1": "456 Innovation Drive",
+                "line_2": "Floor 5",
+                "locality": "Mountain View",
+                "major_admin_division": "CA",
+                "country": "US",
+                "postal_code": "94043"
+              },
+              "formation": {
+                "entity_type": "Limited Liability Company (LLC)",
+                "registration_date": "2020-08-15",
+                "registration_state": "CA",
+                "registration_country": "US"
+              },
+              "website_url": "https://techinnovators.com",
+              "last_fiscal_revenue": {
+                "amount": 2500000,
+                "currency": "USD"
+              },
+              "account": {
+                "type": "CHECKING",
+                "account_number": "9876543210123456",
+                "routing_number": "123456789",
+                "opened_at": "2021-06-15T08:20:45.123Z",
+                "country_code": "US"
+              }
+            }
+          }
+        }
+      },
+      "AccountTakeOverRequest": {
+        "description": "Login and Authentication",
+        "value": {
+          "id": "ato-78901",
+          "timestamp": "2023-12-01T15:45:12.678Z",
+          "workflow": "account_takeover",
+          "data": {
+            "event_type": "address_update",
+            "event_category": "update",
+            "ip_address": "203.0.113.10",
+            "individual": {
+              "id": "ind-9876543",
+              "given_name": "Jane",
+              "family_name": "Smith",
+              "national_id": "123456789",
+              "date_of_birth": "1990-05-15",
+              "email": "jane.smith@example.com",
+              "phone_number": "+1-312-555-1234",
+              "address": {
+                "line_1": "742 Evergreen Terrace",
+                "line_2": "Apt 12B",
+                "locality": "Springfield",
+                "major_admin_division": "IL",
+                "country": "US",
+                "postal_code": "62704"
+              },
+              "di_session_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ...PiUsws9D6O3DjSjNDCbIJKciX44s"
+            },
+            "event_details": {
+              "previous": {
+                "address": {
+                  "line_1": "123 Main Street",
+                  "line_2": "Suite 100",
+                  "locality": "Brooklyn",
+                  "major_admin_division": "NY",
+                  "country": "US",
+                  "postal_code": "11201"
+                }
+              }
+            },
+            "custom": {}
           }
         }
       },
@@ -3666,424 +3652,8 @@
               "is_source_cache": false,
               "total_attempts": 1
             }
-          ]
-        }
-      },
-      "BusinessOnboardingResponse": {
-        "description": "Business Onboarding",
-        "value": {
-          "id": "onb-biz-56789",
-          "eval_id": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816",
-          "workflow": "business_onboarding",
-          "eval_status": "evaluation_completed",
-          "decision": "REVIEW",
-          "status": "CLOSED",
-          "sub_status": "In Review",
-          "workflow_id": "472288ff-b3a8-4e69-89dd-069d5e2bcb41",
-          "workflow_version": "3.7.0",
-          "eval_source": "API",
-          "eval_start_time": "2024-12-02T10:28:24.456771162Z",
-          "eval_end_time": "2024-12-02T10:29:10.999Z",
-          "tags": [
-            "Medium Risk",
-            "SOS Missing"
           ],
-          "score": 15,
-          "review_queues": [],
-          "data_enrichments": [
-            {
-              "enrichment_name": "Socure Address risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
-              "enrichment_provider": "Socure",
-              "status_code": 200,
-              "request": {
-                "city": "bakersfield",
-                "country": "US",
-                "deviceSessionId": "234ac3ff-3ed1-42de-8f33-8f332febfa54",
-                "dob": "1990-05-17",
-                "email": "johnsmith123+test@example.com",
-                "modules": [
-                  "addressrisk"
-                ],
-                "nationalId": "454236793",
-                "segmentation": {
-                  "channel": "mobile",
-                  "eventType": "accountOpen"
-                }
-              },
-              "response": {
-                "addressRisk": {
-                  "reasonCodes": [
-                    "I704",
-                    "I705",
-                    "I708"
-                  ],
-                  "score": 0.01,
-                  "scores": [
-                    {
-                      "name": "addressrisk_cus1",
-                      "score": 0.01,
-                      "version": "10.0"
-                    },
-                    {
-                      "name": "address_risk_pri",
-                      "score": 0.01,
-                      "version": "9.0"
-                    }
-                  ]
-                },
-                "referenceId": "4ca693ee-af2a-45ef-9688-834683ac1b34"
-              },
-              "is_source_cache": false,
-              "total_attempts": 1
-            },
-            {
-              "enrichment_name": "SocureCNam",
-              "enrichment_endpoint": "https://mfa-orchestrator-service-9.webapps.us-east-1.product-dev.socure.link/api/2.0/cnam",
-              "enrichment_provider": "SocureCNam",
-              "status_code": 200,
-              "request": {
-                "phoneNumber": "+1-312-555-1234"
-              },
-              "response": {
-                "callerName": "John Smith",
-                "callerType": "BUSINESS",
-                "countryCode": "US",
-                "phoneNumber": "+1-415-555-5678",
-                "valid": true
-              },
-              "is_source_cache": false,
-              "total_attempts": 1
-            }
-          ]
-        }
-      },
-      "AccountTakeOverResponse": {
-        "description": "Login and Authentication",
-        "value": {
-          "id": "ato-78901",
-          "eval_id": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816",
-          "workflow": "account_takeover",
-          "eval_status": "evaluation_completed",
-          "decision": "REJECT",
-          "status": "CLOSED",
-          "sub_status": "Reject",
-          "workflow_id": "472288ff-b3a8-4e69-89dd-069d5e2bcb41",
-          "workflow_version": "3.7.0",
-          "eval_source": "API",
-          "eval_start_time": "2024-12-02T10:28:24.456771162Z",
-          "eval_end_time": "2024-12-02T10:29:10.999Z",
-          "tags": [
-            "account ta",
-            "high risk"
-          ],
-          "score": -76,
-          "review_queues": [],
-          "data_enrichments": [
-            {
-              "enrichment_name": "SocureCNam",
-              "enrichment_endpoint": "https://mfa-orchestrator-service-9.webapps.us-east-1.product-dev.socure.link/api/2.0/cnam",
-              "enrichment_provider": "SocureCNam",
-              "status_code": 200,
-              "request": {
-                "phoneNumber": "+1-312-555-1234"
-              },
-              "response": {
-                "callerName": "Jane Smith",
-                "callerType": "CONSUMER",
-                "countryCode": "US",
-                "phoneNumber": "+1-312-555-1234",
-                "valid": true
-              },
-              "is_source_cache": false,
-              "total_attempts": 1
-            },
-            {
-              "enrichment_name": "Socure Digital Intelligence",
-              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
-              "enrichment_provider": "Socure",
-              "status_code": 200,
-              "request": {
-                "modules": [
-                  "digitalintelligence"
-                ],
-                "deviceSessionId": "7b3c2c04-0e7e-46e4-afe8-b905cdf91833",
-                "customerUserId": "129",
-                "userId": "dwanyedever1975"
-              },
-              "response": {
-                "referenceId": "7b3c2c04-0e7e-46e4-afe8-b905cdf91833",
-                "digitalIntelligence": {
-                  "device": {
-                    "id": "234ac3ff-3ed1-42de-8f33-8f332febfa54",
-                    "sessionCreatedAt": "2024-12-23T18:06:52.248985937Z",
-                    "deviceCapturedAt": "2024-12-23T18:09:12.735992851Z",
-                    "computed": {
-                      "statisticalId": "9349d69fef75cd356744293487462f8cd912",
-                      "isVirtualMachine": false,
-                      "isTamperedAndroidBuild": true
-                    },
-                    "network": {
-                      "connectionIp": "38.48.122.126",
-                      "forwardedForIps": [
-                        "78.32.11.221",
-                        "70.45.2.1"
-                      ],
-                      "webRtcPublicIp": "176.124.54.12",
-                      "webRtcInternalIp": "192.168.1.85",
-                      "realIp": "38.48.122.126",
-                      "isTor": true,
-                      "isProxy": true,
-                      "isVpn": true,
-                      "isConsumerPrivacy": true,
-                      "isRiskyNetwork": true,
-                      "isp": "comcast",
-                      "ispType": "home",
-                      "asn": 27364,
-                      "asnName": "armstrong",
-                      "domainName": "zoominternet.net",
-                      "org": "comcast",
-                      "isMobileCarrier": true,
-                      "speed": "cable",
-                      "networkLocation": {
-                        "countryCode": "US",
-                        "region": "WA",
-                        "city": "Tacoma",
-                        "postalCode": "98401",
-                        "latitude": 47.2529001,
-                        "longitude": -122.4443,
-                        "metroCode": 819,
-                        "continentCode": "na",
-                        "timezoneName": "America/New_York",
-                        "gmtOffset": "-0400"
-                      }
-                    },
-                    "attributes": {
-                      "sdkVersion": "3.0.1",
-                      "platform": "iOS",
-                      "os": "iOS",
-                      "osVersion": 17,
-                      "deviceModel": "iphone14,7",
-                      "deviceManufacturer": "Apple",
-                      "deviceType": "tablet",
-                      "viewportWidth": 600,
-                      "viewportHeight": 400,
-                      "screenHeight": 1080,
-                      "screenWidth": 1920,
-                      "devicePixelRatio": 1.5,
-                      "network": {
-                        "vpnStatus": true
-                      },
-                      "location": {
-                        "latitude": 41.50854591662628,
-                        "longitude": -81.69534315646631,
-                        "horizontalAccuracy": 2.1,
-                        "altitude": 998.2,
-                        "verticalAccuracy": 0,
-                        "bearing": 32,
-                        "bearingAccuracy": 2.1,
-                        "speed": 1.3,
-                        "speedAccuracy": 0.2
-                      },
-                      "battery": {
-                        "batteryState": "charging",
-                        "batteryLevel": 0.47
-                      },
-                      "timeZone": "America/New_York",
-                      "timeZoneOffset": -480,
-                      "language": "en-US",
-                      "deviceArchitecture": "arm64",
-                      "applicationType": "native",
-                      "isEmulator": true,
-                      "deviceContext": "homepage",
-                      "androidAttributes": {
-                        "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
-                      },
-                      "iOSAttributes": {
-                        "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
-                      },
-                      "webAttributes": {
-                        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21A5291h [FBAN/FBIOS;FBDV/iPhone15,3;FBMD/iPhone;FBSN/iOS;FBSV/17.0;FBSS/3;FBID/phone;FBLC/fr_FR;FBOP/5]",
-                        "userAgentExtractionRequired": true,
-                        "browser": "Google Chrome",
-                        "browserVersion": 116
-                      }
-                    },
-                    "history": {
-                      "firstSeen": "2023-10-24T15:55:16.368Z",
-                      "lastSeen": "2023-10-24T15:55:16.368Z",
-                      "ips": [
-                        "78.32.11.221",
-                        "70.45.2.1"
-                      ],
-                      "isps": [
-                        "RogersCable",
-                        "T-Mobile"
-                      ],
-                      "daysSeen": [
-                        "2023-10-24"
-                      ],
-                      "networkLocations": [
-                        "chicago, il",
-                        "new york, ny",
-                        "paris, fr"
-                      ]
-                    }
-                  },
-                  "behavioral": {
-                    "sessionId": "d34304a6-a726-4dec-b1cd-9c4a3c192a0d",
-                    "serverCreated": "2021-09-01T11:19:58.796Z",
-                    "serverUpdated": "2021-09-11T16:19:58.796Z",
-                    "clientUpdated": "2021-09-11T16:14:58.796Z",
-                    "duration": 120910,
-                    "source": "https://example.com/",
-                    "aggregations": {
-                      "totalEventCount": 26,
-                      "focusCount": 0,
-                      "blurCount": 3,
-                      "inputChangeCount": 6,
-                      "submissionCount": 1,
-                      "clickCount": 3,
-                      "pasteCount": 0
-                    }
-                  },
-                  "entityProfiler": [
-                    {
-                      "entity": "12223334444",
-                      "entityType": "phone",
-                      "profile": {
-                        "seenCount": 2,
-                        "firstSeen": "2019-08-24T14:15:22Z",
-                        "lastSeen": "2019-08-24T14:15:22Z",
-                        "deviceTypes": [
-                          "phone",
-                          "tablet"
-                        ],
-                        "deviceModels": [
-                          "iphone14,7",
-                          "GT70053G"
-                        ],
-                        "deviceisps": [
-                          "comcast",
-                          "t-mobile"
-                        ],
-                        "deviceLanguages": [
-                          "en-us",
-                          "es-us"
-                        ],
-                        "deviceTimezones": [
-                          "america/new_york",
-                          "america/los_angeles"
-                        ],
-                        "networkLocationStates": [
-                          "ca",
-                          "az"
-                        ],
-                        "networkLocationPostalCodes": [
-                          "12345",
-                          "56789"
-                        ]
-                      }
-                    },
-                    {
-                      "entity": "john@doe.com",
-                      "entityType": "email",
-                      "profile": {
-                        "seenCount": 5,
-                        "firstSeen": "2020-09-10T10:22:45Z",
-                        "lastSeen": "2020-09-15T13:45:32Z",
-                        "deviceTypes": [
-                          "phone",
-                          "desktop"
-                        ],
-                        "deviceModels": [
-                          "moto g"
-                        ],
-                        "deviceisps": [
-                          "at&t"
-                        ],
-                        "deviceLanguages": [
-                          "en-us"
-                        ],
-                        "deviceTimezones": [
-                          "america/los_angeles"
-                        ],
-                        "networkLocationStates": [
-                          "or"
-                        ],
-                        "networkLocationPostalCodes": [
-                          "56789"
-                        ]
-                      }
-                    },
-                    {
-                      "entity": "111223333",
-                      "entityType": "nationalId",
-                      "profile": {
-                        "seenCount": 3,
-                        "firstSeen": "2023-01-15T09:30:00Z",
-                        "lastSeen": "2023-09-10T14:45:00Z",
-                        "deviceTypes": [
-                          "phone",
-                          "tablet"
-                        ],
-                        "deviceModels": [
-                          "GT70053G"
-                        ],
-                        "deviceisps": [
-                          "comcast"
-                        ],
-                        "deviceLanguages": [
-                          "de_us"
-                        ],
-                        "deviceTimezones": [
-                          "america/chicago"
-                        ],
-                        "networkLocationStates": [
-                          "il"
-                        ],
-                        "networkLocationPostalCodes": [
-                          "12345"
-                        ]
-                      }
-                    }
-                  ],
-                  "velocityMetrics": {
-                    "historicalCount": {
-                      "firstName": {
-                        "uniqueCount": 1,
-                        "uniqueSharePercent": 100
-                      },
-                      "surName": {
-                        "uniqueCount": 1,
-                        "uniqueSharePercent": 100
-                      },
-                      "email": {
-                        "uniqueCount": 2,
-                        "uniqueSharePercent": 87
-                      },
-                      "mobileNumber": {
-                        "uniqueCount": 1,
-                        "uniqueSharePercent": 100
-                      }
-                    }
-                  }
-                },
-                "customerProfile": {
-                  "customerUserId": "129",
-                  "userId": "u8JpWn4QsF3R7tA2"
-                }
-              },
-              "is_source_cache": false,
-              "total_attempts": 1
-            }
-          ]
+          "environment_name": "Sandbox"
         }
       },
       "GenericPassthroughResponse": {
@@ -4497,7 +4067,8 @@
               "is_source_cache": false,
               "total_attempts": 1
             }
-          ]
+          ],
+          "environment_name": "Sandbox"
         }
       },
       "TrustAndSafetyResponse": {
@@ -4933,7 +4504,8 @@
               "is_source_cache": false,
               "total_attempts": 1
             }
-          ]
+          ],
+          "environment_name": "Sandbox"
         }
       },
       "BankAccountVerificationResponse": {
@@ -5290,7 +4862,427 @@
               "is_source_cache": false,
               "total_attempts": 1
             }
-          ]
+          ],
+          "environment_name": "Sandbox"
+        }
+      },
+      "BusinessOnboardingResponse": {
+        "description": "Business Onboarding",
+        "value": {
+          "id": "onb-biz-56789",
+          "eval_id": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816",
+          "workflow": "business_onboarding",
+          "eval_status": "evaluation_completed",
+          "decision": "REVIEW",
+          "status": "CLOSED",
+          "sub_status": "In Review",
+          "workflow_id": "472288ff-b3a8-4e69-89dd-069d5e2bcb41",
+          "workflow_version": "3.7.0",
+          "eval_source": "API",
+          "eval_start_time": "2024-12-02T10:28:24.456771162Z",
+          "eval_end_time": "2024-12-02T10:29:10.999Z",
+          "tags": [
+            "Medium Risk",
+            "SOS Missing"
+          ],
+          "score": 15,
+          "review_queues": [],
+          "data_enrichments": [
+            {
+              "enrichment_name": "Socure Address risk",
+              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_provider": "Socure",
+              "status_code": 200,
+              "request": {
+                "city": "bakersfield",
+                "country": "US",
+                "deviceSessionId": "234ac3ff-3ed1-42de-8f33-8f332febfa54",
+                "dob": "1990-05-17",
+                "email": "johnsmith123+test@example.com",
+                "modules": [
+                  "addressrisk"
+                ],
+                "nationalId": "454236793",
+                "segmentation": {
+                  "channel": "mobile",
+                  "eventType": "accountOpen"
+                }
+              },
+              "response": {
+                "addressRisk": {
+                  "reasonCodes": [
+                    "I704",
+                    "I705",
+                    "I708"
+                  ],
+                  "score": 0.01,
+                  "scores": [
+                    {
+                      "name": "addressrisk_cus1",
+                      "score": 0.01,
+                      "version": "10.0"
+                    },
+                    {
+                      "name": "address_risk_pri",
+                      "score": 0.01,
+                      "version": "9.0"
+                    }
+                  ]
+                },
+                "referenceId": "4ca693ee-af2a-45ef-9688-834683ac1b34"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "SocureCNam",
+              "enrichment_endpoint": "https://mfa-orchestrator-service-9.webapps.us-east-1.product-dev.socure.link/api/2.0/cnam",
+              "enrichment_provider": "SocureCNam",
+              "status_code": 200,
+              "request": {
+                "phoneNumber": "+1-312-555-1234"
+              },
+              "response": {
+                "callerName": "John Smith",
+                "callerType": "BUSINESS",
+                "countryCode": "US",
+                "phoneNumber": "+1-415-555-5678",
+                "valid": true
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            }
+          ],
+          "environment_name": "Sandbox"
+        }
+      },
+      "AccountTakeOverResponse": {
+        "description": "Login and Authentication",
+        "value": {
+          "id": "ato-78901",
+          "eval_id": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816",
+          "workflow": "account_takeover",
+          "eval_status": "evaluation_completed",
+          "decision": "REJECT",
+          "status": "CLOSED",
+          "sub_status": "Reject",
+          "workflow_id": "472288ff-b3a8-4e69-89dd-069d5e2bcb41",
+          "workflow_version": "3.7.0",
+          "eval_source": "API",
+          "eval_start_time": "2024-12-02T10:28:24.456771162Z",
+          "eval_end_time": "2024-12-02T10:29:10.999Z",
+          "tags": [
+            "account ta",
+            "high risk"
+          ],
+          "score": -76,
+          "review_queues": [],
+          "data_enrichments": [
+            {
+              "enrichment_name": "SocureCNam",
+              "enrichment_endpoint": "https://mfa-orchestrator-service-9.webapps.us-east-1.product-dev.socure.link/api/2.0/cnam",
+              "enrichment_provider": "SocureCNam",
+              "status_code": 200,
+              "request": {
+                "phoneNumber": "+1-312-555-1234"
+              },
+              "response": {
+                "callerName": "Jane Smith",
+                "callerType": "CONSUMER",
+                "countryCode": "US",
+                "phoneNumber": "+1-312-555-1234",
+                "valid": true
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Digital Intelligence",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_provider": "Socure",
+              "status_code": 200,
+              "request": {
+                "modules": [
+                  "digitalintelligence"
+                ],
+                "deviceSessionId": "7b3c2c04-0e7e-46e4-afe8-b905cdf91833",
+                "customerUserId": "129",
+                "userId": "dwanyedever1975"
+              },
+              "response": {
+                "referenceId": "7b3c2c04-0e7e-46e4-afe8-b905cdf91833",
+                "digitalIntelligence": {
+                  "device": {
+                    "id": "234ac3ff-3ed1-42de-8f33-8f332febfa54",
+                    "sessionCreatedAt": "2024-12-23T18:06:52.248985937Z",
+                    "deviceCapturedAt": "2024-12-23T18:09:12.735992851Z",
+                    "computed": {
+                      "statisticalId": "9349d69fef75cd356744293487462f8cd912",
+                      "isVirtualMachine": false,
+                      "isTamperedAndroidBuild": true
+                    },
+                    "network": {
+                      "connectionIp": "38.48.122.126",
+                      "forwardedForIps": [
+                        "78.32.11.221",
+                        "70.45.2.1"
+                      ],
+                      "webRtcPublicIp": "176.124.54.12",
+                      "webRtcInternalIp": "192.168.1.85",
+                      "realIp": "38.48.122.126",
+                      "isTor": true,
+                      "isProxy": true,
+                      "isVpn": true,
+                      "isConsumerPrivacy": true,
+                      "isRiskyNetwork": true,
+                      "isp": "comcast",
+                      "ispType": "home",
+                      "asn": 27364,
+                      "asnName": "armstrong",
+                      "domainName": "zoominternet.net",
+                      "org": "comcast",
+                      "isMobileCarrier": true,
+                      "speed": "cable",
+                      "networkLocation": {
+                        "countryCode": "US",
+                        "region": "WA",
+                        "city": "Tacoma",
+                        "postalCode": "98401",
+                        "latitude": 47.2529001,
+                        "longitude": -122.4443,
+                        "metroCode": 819,
+                        "continentCode": "na",
+                        "timezoneName": "America/New_York",
+                        "gmtOffset": "-0400"
+                      }
+                    },
+                    "attributes": {
+                      "sdkVersion": "3.0.1",
+                      "platform": "iOS",
+                      "os": "iOS",
+                      "osVersion": 17,
+                      "deviceModel": "iphone14,7",
+                      "deviceManufacturer": "Apple",
+                      "deviceType": "tablet",
+                      "viewportWidth": 600,
+                      "viewportHeight": 400,
+                      "screenHeight": 1080,
+                      "screenWidth": 1920,
+                      "devicePixelRatio": 1.5,
+                      "network": {
+                        "vpnStatus": true
+                      },
+                      "location": {
+                        "latitude": 41.50854591662628,
+                        "longitude": -81.69534315646631,
+                        "horizontalAccuracy": 2.1,
+                        "altitude": 998.2,
+                        "verticalAccuracy": 0,
+                        "bearing": 32,
+                        "bearingAccuracy": 2.1,
+                        "speed": 1.3,
+                        "speedAccuracy": 0.2
+                      },
+                      "battery": {
+                        "batteryState": "charging",
+                        "batteryLevel": 0.47
+                      },
+                      "timeZone": "America/New_York",
+                      "timeZoneOffset": -480,
+                      "language": "en-US",
+                      "deviceArchitecture": "arm64",
+                      "applicationType": "native",
+                      "isEmulator": true,
+                      "deviceContext": "homepage",
+                      "androidAttributes": {
+                        "isRooted": true,
+                        "mobileNetwork": [
+                          null
+                        ]
+                      },
+                      "iOSAttributes": {
+                        "isRooted": true,
+                        "mobileNetwork": [
+                          null
+                        ]
+                      },
+                      "webAttributes": {
+                        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21A5291h [FBAN/FBIOS;FBDV/iPhone15,3;FBMD/iPhone;FBSN/iOS;FBSV/17.0;FBSS/3;FBID/phone;FBLC/fr_FR;FBOP/5]",
+                        "userAgentExtractionRequired": true,
+                        "browser": "Google Chrome",
+                        "browserVersion": 116
+                      }
+                    },
+                    "history": {
+                      "firstSeen": "2023-10-24T15:55:16.368Z",
+                      "lastSeen": "2023-10-24T15:55:16.368Z",
+                      "ips": [
+                        "78.32.11.221",
+                        "70.45.2.1"
+                      ],
+                      "isps": [
+                        "RogersCable",
+                        "T-Mobile"
+                      ],
+                      "daysSeen": [
+                        "2023-10-24"
+                      ],
+                      "networkLocations": [
+                        "chicago, il",
+                        "new york, ny",
+                        "paris, fr"
+                      ]
+                    }
+                  },
+                  "behavioral": {
+                    "sessionId": "d34304a6-a726-4dec-b1cd-9c4a3c192a0d",
+                    "serverCreated": "2021-09-01T11:19:58.796Z",
+                    "serverUpdated": "2021-09-11T16:19:58.796Z",
+                    "clientUpdated": "2021-09-11T16:14:58.796Z",
+                    "duration": 120910,
+                    "source": "https://example.com/",
+                    "aggregations": {
+                      "totalEventCount": 26,
+                      "focusCount": 0,
+                      "blurCount": 3,
+                      "inputChangeCount": 6,
+                      "submissionCount": 1,
+                      "clickCount": 3,
+                      "pasteCount": 0
+                    }
+                  },
+                  "entityProfiler": [
+                    {
+                      "entity": "12223334444",
+                      "entityType": "phone",
+                      "profile": {
+                        "seenCount": 2,
+                        "firstSeen": "2019-08-24T14:15:22Z",
+                        "lastSeen": "2019-08-24T14:15:22Z",
+                        "deviceTypes": [
+                          "phone",
+                          "tablet"
+                        ],
+                        "deviceModels": [
+                          "iphone14,7",
+                          "GT70053G"
+                        ],
+                        "deviceisps": [
+                          "comcast",
+                          "t-mobile"
+                        ],
+                        "deviceLanguages": [
+                          "en-us",
+                          "es-us"
+                        ],
+                        "deviceTimezones": [
+                          "america/new_york",
+                          "america/los_angeles"
+                        ],
+                        "networkLocationStates": [
+                          "ca",
+                          "az"
+                        ],
+                        "networkLocationPostalCodes": [
+                          "12345",
+                          "56789"
+                        ]
+                      }
+                    },
+                    {
+                      "entity": "john@doe.com",
+                      "entityType": "email",
+                      "profile": {
+                        "seenCount": 5,
+                        "firstSeen": "2020-09-10T10:22:45Z",
+                        "lastSeen": "2020-09-15T13:45:32Z",
+                        "deviceTypes": [
+                          "phone",
+                          "desktop"
+                        ],
+                        "deviceModels": [
+                          "moto g"
+                        ],
+                        "deviceisps": [
+                          "at&t"
+                        ],
+                        "deviceLanguages": [
+                          "en-us"
+                        ],
+                        "deviceTimezones": [
+                          "america/los_angeles"
+                        ],
+                        "networkLocationStates": [
+                          "or"
+                        ],
+                        "networkLocationPostalCodes": [
+                          "56789"
+                        ]
+                      }
+                    },
+                    {
+                      "entity": "111223333",
+                      "entityType": "nationalId",
+                      "profile": {
+                        "seenCount": 3,
+                        "firstSeen": "2023-01-15T09:30:00Z",
+                        "lastSeen": "2023-09-10T14:45:00Z",
+                        "deviceTypes": [
+                          "phone",
+                          "tablet"
+                        ],
+                        "deviceModels": [
+                          "GT70053G"
+                        ],
+                        "deviceisps": [
+                          "comcast"
+                        ],
+                        "deviceLanguages": [
+                          "de_us"
+                        ],
+                        "deviceTimezones": [
+                          "america/chicago"
+                        ],
+                        "networkLocationStates": [
+                          "il"
+                        ],
+                        "networkLocationPostalCodes": [
+                          "12345"
+                        ]
+                      }
+                    }
+                  ],
+                  "velocityMetrics": {
+                    "historicalCount": {
+                      "firstName": {
+                        "uniqueCount": 1,
+                        "uniqueSharePercent": 100
+                      },
+                      "surName": {
+                        "uniqueCount": 1,
+                        "uniqueSharePercent": 100
+                      },
+                      "email": {
+                        "uniqueCount": 2,
+                        "uniqueSharePercent": 87
+                      },
+                      "mobileNumber": {
+                        "uniqueCount": 1,
+                        "uniqueSharePercent": 100
+                      }
+                    }
+                  }
+                },
+                "customerProfile": {
+                  "customerUserId": "129",
+                  "userId": "u8JpWn4QsF3R7tA2"
+                }
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            }
+          ],
+          "environment_name": "Sandbox"
         }
       },
       "WorkforceVerificationReponse": {

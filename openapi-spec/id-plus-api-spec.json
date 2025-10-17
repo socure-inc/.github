@@ -1,0 +1,1977 @@
+
+{
+
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Socure Postman Collection",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.socure.com"
+    }
+  ],
+  "paths": {
+    "/api/3.0/EmailAuthScore": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Device Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph",
+                  "surName": "Williams",
+                  "modules": [
+                    "devicerisk"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de",
+                  "deviceSessionId": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJkYXRhIjp7InNlc3Npb25faWQiOiI3NTMwNjUwMy1hNmUwLTQwNWEtOThjMC1jNGE1ZDA4NzQ4ZDYifX0.yuAUOlN-Iz_QYK5L8jjgtReMmX6iw-VFffAYaUKZQPIFb89TUGk2p3EEHBmhr-3GnAZEAE9woUHkYC57_f-CxA"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore2": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "KYC",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "modules": [
+                    "kyc"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore3": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Alert List, Email Risk, Phone Risk, Fraud",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "modules": [
+                    "alertlist",
+                    "emailrisk",
+                    "phonerisk",
+                    "fraud"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore4": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Decision, KYC",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "modules": [
+                    "decision",
+                    "kyc"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore5": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Decision, Alert List, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "modules": [
+                    "decision",
+                    "alertlist",
+                    "phonerisk"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore6": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Alert List, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "modules": [
+                    "alertlist",
+                    "phonerisk"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore7": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "KYC, Prefill",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "nationalId": "8912",
+                  "modules": [
+                    "kyc",
+                    "prefill"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore8": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Email Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "modules": [
+                    "emailrisk"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore9": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, KYC",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "modules": [
+                    "addressrisk",
+                    "kyc"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore10": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Alert List, Email Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "nationalId": "8912",
+                  "modules": [
+                    "alertlist",
+                    "emailrisk"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore11": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Alert List, Email Risk, Fraud",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "nationalId": "8912",
+                  "modules": [
+                    "emailrisk",
+                    "fraud",
+                    "alertlist"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore12": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Fraud",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "nationalId": "8912",
+                  "modules": [
+                    "fraud"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore13": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, All Correlations, Alert List, Email Risk, Phone Risk, Fraud",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "nationalId": "8912",
+                  "modules": [
+                    "addressrisk",
+                    "allcorrelations",
+                    "alertlist",
+                    "emailrisk",
+                    "phonerisk",
+                    "fraud"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore14": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Decision, Alert List, Email Risk, Device Risk, Fraud, KYC, Synthetic, Watchlist Plus, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "modules": [
+                    "addressrisk",
+                    "decision",
+                    "alertlist",
+                    "emailrisk",
+                    "devicerisk",
+                    "fraud",
+                    "kyc",
+                    "synthetic",
+                    "watchlistplus",
+                    "phonerisk"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de",
+                  "deviceSessionId": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJkYXRhIjp7InNlc3Npb25faWQiOiI3NTMwNjUwMy1hNmUwLTQwNWEtOThjMC1jNGE1ZDA4NzQ4ZDYifX0.yuAUOlN-Iz_QYK5L8jjgtReMmX6iw-VFffAYaUKZQPIFb89TUGk2p3EEHBmhr-3GnAZEAE9woUHkYC57_f-CxA"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore15": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Alert List, Email Risk, Fraud, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "firstName": "Joseph ",
+                  "surName": "Williams",
+                  "physicalAddress": "4256 Lincoln Drive",
+                  "city": "Newport",
+                  "state": "PA",
+                  "country": "US",
+                  "debug": false,
+                  "userConsent": true,
+                  "zip": "17074",
+                  "mobileNumber": "8018340146",
+                  "modules": [
+                    "addressrisk",
+                    "alertlist",
+                    "emailrisk",
+                    "fraud",
+                    "phonerisk"
+                  ],
+                  "email": "AaronJRandolph@cuvox.de"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore16": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "ECBSV",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "ecbsv"
+                  ],
+                  "userConsent": true,
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "nationalId": "136582341",
+                  "dob": "1973-06-20"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore17": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Email Risk, Fraud, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "addressrisk",
+                    "emailrisk",
+                    "fraud",
+                    "phonerisk"
+                  ],
+                  "physicalAddress": "test street",
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "email": "test@gmail.com",
+                  "mobileNumber": "+19789765435",
+                  "city": "Newyork",
+                  "state": "CA"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore18": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Decision, KYC, Watchlist Standard",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "decision",
+                    "kyc",
+                    "watchliststandard"
+                  ],
+                  "physicalAddress": "test street",
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "city": "Newyork",
+                  "state": "CA",
+                  "zip": "56032"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore19": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Alert List, Decision, Device Risk, Email Risk, Fraud, KYC, Phone Risk, Watchlist Plus",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "addressrisk",
+                    "alertlist",
+                    "decision",
+                    "devicerisk",
+                    "emailrisk",
+                    "fraud",
+                    "kyc",
+                    "phonerisk",
+                    "watchlistplus"
+                  ],
+                  "physicalAddress": "test street",
+                  "deviceSessionId": "abc",
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "city": "Newyork",
+                  "email": "test@gmail.com",
+                  "mobileNumber": "+19789765435",
+                  "state": "CA",
+                  "zip": "56032"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore20": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "phonerisk"
+                  ],
+                  "country": "US",
+                  "mobileNumber": "+19789765435"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore21": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Alert List, Decision, Email Risk, Fraud, KYC, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "addressrisk",
+                    "alertlist",
+                    "decision",
+                    "emailrisk",
+                    "fraud",
+                    "kyc",
+                    "phonerisk"
+                  ],
+                  "physicalAddress": "test street",
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "city": "Newyork",
+                  "email": "test@gmail.com",
+                  "mobileNumber": "+19789765435",
+                  "state": "CA",
+                  "zip": "56032"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore22": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Alert List, Fraud, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "alertlist",
+                    "fraud",
+                    "phonerisk"
+                  ],
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "mobileNumber": "+19789765435"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore23": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Alert List, Email Risk, Fraud, KYC, Phone Risk, Synthetic",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "addressrisk",
+                    "alertlist",
+                    "emailrisk",
+                    "fraud",
+                    "kyc",
+                    "phonerisk",
+                    "synthetic"
+                  ],
+                  "physicalAddress": "test street",
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "city": "Newyork",
+                  "email": "test@gmail.com",
+                  "mobileNumber": "+19789765435",
+                  "state": "CA",
+                  "zip": "56032"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore24": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Alert List, Decision, Device Risk, Email Risk, Fraud, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "addressrisk",
+                    "alertlist",
+                    "decision",
+                    "devicerisk",
+                    "emailrisk",
+                    "fraud",
+                    "phonerisk"
+                  ],
+                  "physicalAddress": "test street",
+                  "deviceSessionId": "abc",
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "city": "Newyork",
+                  "email": "test@gmail.com",
+                  "mobileNumber": "+19789765435",
+                  "state": "CA",
+                  "zip": "56032"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore25": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Alert List, Decision, Email Risk, Fraud, KYC, Phone Risk, Watchlist Standard",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "addressrisk",
+                    "alertlist",
+                    "decision",
+                    "emailrisk",
+                    "fraud",
+                    "kyc",
+                    "phonerisk",
+                    "watchliststandard"
+                  ],
+                  "physicalAddress": "test street",
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "city": "Newyork",
+                  "email": "test@gmail.com",
+                  "mobileNumber": "+19789765435",
+                  "state": "CA",
+                  "zip": "56032"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore26": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "KYC, Watchlist Standard",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "kyc",
+                    "watchliststandard"
+                  ],
+                  "physicalAddress": "test street",
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "city": "Newyork",
+                  "state": "CA",
+                  "zip": "56032"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore27": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Email Risk, Fraud, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "emailrisk",
+                    "fraud",
+                    "phonerisk"
+                  ],
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "email": "test@gmail.com",
+                  "mobileNumber": "+19789765435"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore28": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Email Risk, Fraud",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "addressrisk",
+                    "emailrisk",
+                    "fraud"
+                  ],
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "email": "test@gmail.com",
+                  "physicalAddress": "test street",
+                  "zip": "56032"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore29": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Address Risk, Device Risk, Email Risk, Fraud, Phone Risk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "addressrisk",
+                    "devicerisk",
+                    "emailrisk",
+                    "fraud",
+                    "phonerisk"
+                  ],
+                  "country": "US",
+                  "firstName": "Jonathan",
+                  "surName": "Mills",
+                  "email": "test@gmail.com",
+                  "physicalAddress": "test street",
+                  "zip": "56032",
+                  "mobileNumber": "+19789765435",
+                  "deviceSessionId": "abc"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore30": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Watchlist Plus",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "watchlistplus"
+                  ],
+                  "firstName": "Jonathan",
+                  "surName": "Mills"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/3.0/EmailAuthScore31": {
+      "post": {
+        "tags": [
+          "General"
+        ],
+        "summary": "Document Verification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "modules": [
+                    "documentverification"
+                  ],
+                  "documentUuid": "139747e7-038c-44f7-aca3-10318d7f8044"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "SocureApiKey {your key here}"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "host",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": " stage.socure.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
