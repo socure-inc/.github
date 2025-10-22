@@ -1,9 +1,9 @@
 ## Socure Documentation
 :books: Our technical guides will assist you with implementing, updating and navigating Socure products.
 
-## OpenAPI Spec
+## OpenAPI Specification
 
-* ### [RiskOS™ APIs](/openapi-spec/riskos-api-spec.json)
+* ### [RiskOS™ API](/openapi-spec/riskos-api-spec.json)
 * ### [ID+ Platform (Commercial) APIs](/openapi-spec/id-plus-api-spec.json)
 
 ## Predictive DocV - Predictive Document Verification SDKs

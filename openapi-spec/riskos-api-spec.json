@@ -27,7 +27,7 @@
   "tags": [
     {
       "name": "Evaluation",
-      "description": "The Evaluation API is the primary endpoint for performing risk evaluations in RiskOS™. It supports a variety of use cases, such as Consumer Onboarding, Business Onboarding, and more. Clients can send requests containing data that aligns with the defined schema for a specific use case. Each request includes parameters that are either **mandatory** or **optional**.\nIf any mandatory parameters are missing, the API will return an error. A successful evaluation returns a response that includes relevant data points and a decision. Possible decision values are: `ACCEPT`, `REJECT`, `REVIEW`, `RESUBMIT`, and `CANCEL`."
+      "description": "The Evaluation API is the primary endpoint for performing Risk Evaluations in RiskOS™. It supports a variety of pre-configured solutions designed for common business challenges and can be customized to align with your organization’s policies, data sources, and workflows.\nRequests must include data that conforms to the schema defined for the specific Solution. If any required parameters are missing, the API returns an error. A successful evaluation response includes relevant data points and a decision.\nPossible decision values are: `ACCEPT`, `REJECT`, `REVIEW`, `RESUBMIT`, and `CANCEL`."
     },
     {
       "name": "Feedback",
@@ -269,10 +269,10 @@
             }
           },
           "400": {
-            "description": "Bad Request - The request was unacceptable."
+            "description": "Bad Request – The request was invalid or cannot be otherwise served."
           },
           "401": {
-            "description": "Unauthorized - An invalid API key was provided."
+            "description": "Unauthorized - No valid API key provided."
           },
           "403": {
             "description": "Forbidden - IP Address was rejected."
@@ -284,10 +284,7 @@
             "description": "Too Many Requests - The rate limit for this API has been exceeded."
           },
           "500": {
-            "description": "500 Internal Server Error – Unexpected server issue."
-          },
-          "502": {
-            "description": "502 Bad Gateway – Upstream server error."
+            "description": "Internal Server Error – An unexpected condition occurred on the server."
           }
         }
       }
@@ -728,10 +725,7 @@
             "description": "Too Many Requests - The rate limit for this API has been exceeded."
           },
           "500": {
-            "description": "500 Internal Server Error – Unexpected server issue."
-          },
-          "502": {
-            "description": "502 Bad Gateway – Upstream server error."
+            "description": "Internal Server Error – An unexpected condition occurred on the server."
           }
         }
       }
@@ -796,7 +790,7 @@
             "description": "Not Found - The requested resource does not exist."
           },
           "500": {
-            "description": "Internal Server Error – Unexpected server issue."
+            "description": "Internal Server Error – An unexpected condition occurred on the server."
           }
         }
       }
@@ -927,10 +921,7 @@
             "description": "Not Found - The requested resource does not exist."
           },
           "500": {
-            "description": "500 Internal Server Error – Unexpected server issue."
-          },
-          "502": {
-            "description": "502 Bad Gateway – Upstream server error."
+            "description": "Internal Server Error – An unexpected condition occurred on the server."
           }
         }
       }
@@ -1057,10 +1048,7 @@
             "description": "Too Many Requests - The rate limit for this API has been exceeded.                                                                                 "
           },
           "500": {
-            "description": "Internal Server Error - We had a problem with our server. Request could be retried."
-          },
-          "502": {
-            "description": "502 Bad Gateway – Upstream server error."
+            "description": "Internal Server Error – An unexpected condition occurred on the server."
           }
         }
       }
@@ -1130,10 +1118,7 @@
             "description": "Too Many Requests - The rate limit for this API has been exceeded."
           },
           "500": {
-            "description": "500 Internal Server Error – Unexpected server issue."
-          },
-          "502": {
-            "description": "502 Bad Gateway – Upstream server error."
+            "description": "Internal Server Error – An unexpected condition occurred on the server."
           }
         }
       }
@@ -3390,7 +3375,8 @@
                     "computed": {
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
-                      "isTamperedAndroidBuild": true
+                      "isTamperedAndroidBuild": true,
+                      "sessionAgeMinutes": 45
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -3805,7 +3791,8 @@
                     "computed": {
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
-                      "isTamperedAndroidBuild": true
+                      "isTamperedAndroidBuild": true,
+                      "sessionAgeMinutes": 45
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -4242,7 +4229,8 @@
                     "computed": {
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
-                      "isTamperedAndroidBuild": true
+                      "isTamperedAndroidBuild": true,
+                      "sessionAgeMinutes": 45
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -4600,7 +4588,8 @@
                     "computed": {
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
-                      "isTamperedAndroidBuild": true
+                      "isTamperedAndroidBuild": true,
+                      "sessionAgeMinutes": 45
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -5019,7 +5008,8 @@
                     "computed": {
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
-                      "isTamperedAndroidBuild": true
+                      "isTamperedAndroidBuild": true,
+                      "sessionAgeMinutes": 45
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -5382,6 +5372,7 @@
                     },
                     "computed": {
                       "isVirtualMachine": false,
+                      "sessionAgeMinutes": 45,
                       "statisticalId": "e81a14d6621cfd2ed9390be9d9eba266851e391aa751881cda9f74377197980b"
                     },
                     "deviceCaptureAt": "2025-01-14T00:10:51.692Z",
