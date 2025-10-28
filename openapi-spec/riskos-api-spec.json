@@ -306,7 +306,7 @@
             "$ref": "#/components/parameters/XApiVersionHeader"
           }
         ],
-        "description": "Enables or disables Watchlist Monitoring for an existing evaluation, allowing RiskOS™ to monitor Watchlist entities for ongoing updates and changes.\n",
+        "description": "Enables or disables watchlist monitoring for data in an existing evaluation. When monitoring is enabled, each entity in the evaluation is automatically checked daily against the specified lists for any additions, modifications, or removals that may affect their watchlist risk.\n",
         "requestBody": {
           "required": true,
           "content": {
@@ -323,7 +323,7 @@
                   "referenceId": {
                     "type": "string",
                     "format": "uuid",
-                    "description": "A unique identifier assigned to the result of a single enrichment process, available in the evaluation response.\n",
+                    "description": "A unique identifier associated with an evaluation that includes a Watchlist enrichment. You can retrieve this value from the response of a successful call to the Evaluation endpoint.\n",
                     "example": "ae94dd2e-46fe-4e58-bf0b-45ef1d4588a2"
                   },
                   "listType": {
@@ -331,7 +331,7 @@
                     "enum": [
                       "watchlist"
                     ],
-                    "description": "Specifies which type of monitoring list to subscribe the entity (via its enrichment referenceId) to. This includes monitoring for changes to sanctions, PEP, enforcement, and adverse media matches.\n",
+                    "description": "Specifies the type of monitoring list to which the entity (identified by its enrichment `referenceId`) will be subscribed.\nPassing `watchlist` enables monitoring for changes across all watchlist types defined in your Monitoring policy.\n",
                     "example": "watchlist"
                   },
                   "operation": {
@@ -340,13 +340,8 @@
                       "enable",
                       "disable"
                     ],
-                    "description": "Action to be taken with respect to monitoring enrollment — 'enable' or 'disable'.\n",
+                    "description": "Specifies the action to be taken for monitoring enrollment.\n- `enable`: Activates Watchlist Monitoring for the specified evaluation.\n- `disable`: Deactivates Watchlist Monitoring for the specified evaluation.         \n",
                     "example": "enable"
-                  },
-                  "userConsent": {
-                    "type": "boolean",
-                    "description": "Indicates whether the end user has provided explicit consent to be enrolled for monitoring.\n",
-                    "example": true
                   }
                 }
               }
