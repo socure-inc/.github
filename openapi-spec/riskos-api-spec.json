@@ -323,7 +323,7 @@
                   "referenceId": {
                     "type": "string",
                     "format": "uuid",
-                    "description": "A unique identifier associated with an evaluation that includes a Watchlist enrichment. You can retrieve this value from the response of a successful call to the Evaluation endpoint.\n",
+                    "description": "Unique identifier assigned to a Watchlist enrichment after a RiskOS™ workflow is finalized. You can retrieve this value from the response of a successful call to the Evaluation endpoint.\n",
                     "example": "ae94dd2e-46fe-4e58-bf0b-45ef1d4588a2"
                   },
                   "listType": {
@@ -415,7 +415,7 @@
             "in": "path",
             "name": "eval_id",
             "required": true,
-            "description": "A unique identifier for an existing risk evaluation request.",
+            "description": "Internally generated unique identifier of an existing Risk Evaluation.",
             "schema": {
               "type": "string"
             }
@@ -808,7 +808,7 @@
             "in": "path",
             "name": "eval_id",
             "required": true,
-            "description": "The unique identifier of an existing risk evaluation.",
+            "description": "Internally generated unique identifier of an existing Risk Evaluation.",
             "schema": {
               "type": "string"
             }
@@ -1469,7 +1469,7 @@
       "PreviousReferenceID": {
         "type": "string",
         "maxLength": 36,
-        "description": "The `referenceId` of a previous Socure transaction. Allows you to link multiple transactions together. See [Transaction Linkage](docs/id-plus/modules/docv/transaction-linkage) for more information.",
+        "description": "The `referenceId` of a previous Socure transaction. Allows you to link multiple transactions together. ",
         "example": "e9c170f2-b3e4-423b-a373-5d6e1e9b23f8"
       },
       "UserName": {
@@ -1565,12 +1565,12 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique customer side identifier for device",
+            "description": "Unique customer side identifier for device.",
             "example": "9876543"
           },
           "session": {
             "type": "string",
-            "description": "Unique customer side identifier for device session",
+            "description": "Unique customer side identifier for device session.",
             "example": "567h89e293r8h3"
           },
           "fingerprint": {
@@ -1580,7 +1580,7 @@
           },
           "fingerprint_provider": {
             "type": "string",
-            "description": "Name of the fingerprint provider used to generate the fingerprint and/or id",
+            "description": "Name of the fingerprint provider used to generate the fingerprint and/or id.",
             "example": "internal"
           },
           "user_agent": {
@@ -1684,7 +1684,7 @@
           },
           "id": {
             "type": "string",
-            "description": "A unique ID provided by the customer to track and reference the evaluation.",
+            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
             "example": "onb-12345"
           },
           "timestamp": {
@@ -1781,7 +1781,7 @@
                   },
                   "di_session_token": {
                     "type": "string",
-                    "description": "The digital intelligence session token retrieved from the consumer's browser. Send this to integrate with Socure's Digital Intelligence solution.",
+                    "description": "Token required to extract Device Intelligence (DI) signals.",
                     "example": "SESSION-ABC123"
                   },
                   "custom": {
@@ -1874,7 +1874,7 @@
                     },
                     "di_session_token": {
                       "type": "string",
-                      "description": "The digital intelligence session token retrieved from the consumer's browser. Send this to integrate with Socure's Digital Intelligence solution.",
+                      "description": "Token required to extract Device Intelligence (DI) signals.",
                       "example": "SESSION-ABC123"
                     },
                     "custom": {
@@ -1912,7 +1912,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "A unique identifier for a consumer provided by the customer, used across various use cases.",
+            "description": "Maps to the `userId` in  enrichments or a customer’s internal identifier.  Can be enabled as a searchable field in RiskOS™ Dashboard.",
             "example": "9876543"
           },
           "given_name": {
@@ -1987,7 +1987,7 @@
           },
           "di_session_token": {
             "type": "string",
-            "description": "The digital intelligence session token retrieved from the consumer's browser. Send this to integrate with Socure's Digital Intelligence solution.",
+            "description": "Token required to extract Device Intelligence (DI) signals.",
             "example": "SESSION-ABC123"
           },
           "custom": {
@@ -2015,7 +2015,7 @@
           },
           "id": {
             "type": "string",
-            "description": "A unique ID provided by the customer to track and reference the evaluation.",
+            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
             "example": "genr-12345"
           },
           "timestamp": {
@@ -2068,7 +2068,7 @@
           },
           "id": {
             "type": "string",
-            "description": "A unique identifier for the evaluation request.",
+            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
             "example": "TS-REQ-123456"
           },
           "timestamp": {
@@ -2137,7 +2137,7 @@
           },
           "id": {
             "type": "string",
-            "description": "A unique identifier for the evaluation request.",
+            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
             "example": "BAV-REQ-123456"
           },
           "timestamp": {
@@ -2238,7 +2238,7 @@
           },
           "id": {
             "type": "string",
-            "description": "A unique identifier for the business risk evaluation request.",
+            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
             "example": "BIZ-123456"
           },
           "timestamp": {
@@ -2362,7 +2362,7 @@
           },
           "id": {
             "type": "string",
-            "description": "A unique identifier for the Login and Authentication evaluation request.",
+            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
             "example": "ATO-REQ-123456"
           },
           "timestamp": {
@@ -2427,7 +2427,7 @@
           "id": {
             "type": "string",
             "format": "uuid",
-            "description": "Unique identifier for the workflow event.",
+            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
             "example": "a86580cc-1733-4188-86b5-717166e1db8c"
           },
           "workflow": {
@@ -2546,7 +2546,7 @@
                   },
                   "di_session_token": {
                     "type": "string",
-                    "description": "Digital Intelligence session token from the DI SDK.",
+                    "description": "Token required to extract Device Intelligence (DI) signals.",
                     "example": "eyJraWQiOiJmMzRiN2YiLCJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.DI_LOW_SCORE"
                   }
                 }
@@ -2561,12 +2561,12 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The customer-provided ID, identical to the one used in the Evaluation API request.",
+            "description": "Your original request `id`, echoed back in the response.",
             "example": "EVAL-ABC123"
           },
           "eval_id": {
             "type": "string",
-            "description": "A unique identifier for the evaluation, generated by RiskOS™.",
+            "description": "Internally generated for each evaluation run and required for `GET` and `PATCH` requests in RiskOS™.",
             "example": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816"
           },
           "workflow": {
@@ -2717,7 +2717,7 @@
           },
           "id": {
             "type": "string",
-            "description": "A unique ID provided by the customer to track and reference the evaluation.",
+            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
             "example": "onb-12345"
           },
           "timestamp": {
@@ -2831,7 +2831,7 @@
                   },
                   "di_session_token": {
                     "type": "string",
-                    "description": "The digital intelligence session token retrieved from the consumer's browser. Send this to integrate with Socure's Digital Intelligence solution.",
+                    "description": "Token required to extract Device Intelligence (DI) signals.",
                     "example": "SESSION-ABC123"
                   },
                   "custom": {
