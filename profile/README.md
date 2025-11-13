@@ -6,7 +6,7 @@
 * ### [RiskOS™ API](/openapi-spec/riskos-api-spec.json)
 * ### [ID+ Platform (Commercial) APIs](/openapi-spec/id-plus-api-spec.json)
 
-## Predictive DocV - Predictive Document Verification SDKs
+## Predictive Document Verification SDKs
 
 * ### [iOS](https://github.com/socure-inc/socure-docv-sdk-ios)
 * ### [Android](https://github.com/socure-inc/socure-docv-sdk-android)
