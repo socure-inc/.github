@@ -27,7 +27,7 @@
   "tags": [
     {
       "name": "Evaluation",
-      "description": "The Evaluation API is the primary endpoint for performing Risk Evaluations in RiskOS™. It supports a variety of pre-configured solutions designed for common business challenges and can be customized to align with your organization’s policies, data sources, and workflows.\nRequests must include data that conforms to the schema defined for the specific Solution. If any required parameters are missing, the API returns an error. A successful evaluation response includes relevant data points and a decision.\nPossible decision values are: `ACCEPT`, `REJECT`, `REVIEW`, `RESUBMIT`, and `CANCEL`."
+      "description": "The Evaluation API is the primary endpoint for performing Risk Evaluations in RiskOS™. \nRequests must include data that conforms to the schema defined for the specific Solution.\nSuccessful evaluation responses include a decision value from the following list: * `ACCEPT`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience. * `REJECT`: The evaluation is declined; terminate the flow and do not proceed. * `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic. * `RESUBMIT`: Additional or corrected information is needed; prompt the user to re‑enter data or re‑capture documents and try again * `CANCEL`: The evaluation was intentionally terminated by business rules or workflow conditions (for example, certain OTP/device‑possession failures may end in Cancel for that path). "
     },
     {
       "name": "Feedback",
@@ -136,7 +136,7 @@
                     "$ref": "#/components/examples/AccountTakeOverResponse"
                   },
                   "Workforce Verification": {
-                    "$ref": "#/components/examples/WorkforceVerificationReponse"
+                    "$ref": "#/components/examples/WorkforceVerificationResponse"
                   }
                 }
               }
@@ -154,7 +154,7 @@
                     "summary": "Example 201 Response (Business Onboarding)",
                     "value": {
                       "id": "BIZ-9876",
-                      "eval_id": "async-239s9-df29dj",
+                      "eval_id": "8a4f6c12-3b9e-4d07-9f2c-e5a1b7d8f3c4",
                       "workflow": "business_onboarding",
                       "eval_status": "evaluation_paused",
                       "decision": "REVIEW",
@@ -405,16 +405,10 @@
             "BearerAuth": []
           }
         ],
-        "description": "Updates risk data or metadata for a previously submitted evaluation request that is in a **paused** state.\nThe request is identified by the `eval_id`, and updates can be **partial**—any data not included in the request will remain unchanged. The body of the `PATCH` request must match the structure used in the original `POST` request.\n> **Note:** Once an evaluation is completed, its data becomes immutable. Any attempt to update it will result in a failed request.\n",
+        "description": "Updates risk data or metadata for a previously submitted evaluation request that is in a **paused** state.\nThe request is identified by the `eval_id`, and updates can be **partial** — any fields present will be updated, and absent fields will be ignored. \n> **Note:** Once an evaluation is completed, its data becomes immutable. Any attempt to update it will result in a failed request.\n",
         "parameters": [
           {
-            "in": "path",
-            "name": "eval_id",
-            "required": true,
-            "description": "Internally generated unique identifier of an existing Risk Evaluation.",
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/EvalId"
           },
           {
             "$ref": "#/components/parameters/XApiVersionHeader"
@@ -545,13 +539,7 @@
         "description": "Retrieves evaluation data for any evaluation type (`individual`, `business`, `account_takeover`, or `login`) by providing the unique Evaluation ID.\n",
         "parameters": [
           {
-            "in": "path",
-            "name": "eval_id",
-            "required": true,
-            "description": "The unique identifier of an existing risk evaluation.",
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/EvalId"
           },
           {
             "$ref": "#/components/parameters/XApiVersionHeader"
@@ -717,7 +705,7 @@
         }
       }
     },
-    "/api/evaluation/{evaluation_id}/documents": {
+    "/api/evaluation/{eval_id}/documents": {
       "get": {
         "tags": [
           "Evaluation"
@@ -732,14 +720,10 @@
         "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. \nThe archive is organized into folders as follows:\n- `user_uploaded/`: Consumer-submitted identity documents.\n  - `document_verification/`\n    - `user_uploaded/document_verification/documentfrontDoc_Front_1_blob.jpg`\n    - `user_uploaded/document_verification/documentbackDoc_Back_1_blob.jpg`\n    - `user_uploaded/vouched_id_verification/Doc_Selfie_1_blob.jpg`\n- `case_attachments/`: Case attachments added via the RiskOS™ Dashboard. \n  - `case_attachments/identity.pdf`\n  - `case_attachments/additional_doc.pdf`\n",
         "parameters": [
           {
-            "name": "evaluation_id",
-            "in": "path",
-            "required": true,
-            "description": "A unique identifier for the evaluation, generated by RiskOS™. This value is returned in the response when you create an evaluation via the Evaluation endpoint.",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "$ref": "#/components/parameters/EvalId"
+          },
+          {
+            "$ref": "#/components/parameters/XApiVersionHeader"
           }
         ],
         "responses": {
@@ -759,7 +743,7 @@
                 "description": "Specifies the filename of the returned ZIP archive.",
                 "schema": {
                   "type": "string",
-                  "example": "attachment; filename=\"{evaluation_id}_document.zip\""
+                  "example": "attachment; filename=\"{eval_id}_document.zip\""
                 }
               }
             }
@@ -797,13 +781,7 @@
         "description": "Updates evaluation metadata such as `decision`, `status`, and `sub_status`, or adds notes and a base64-encoded attachment.\n",
         "parameters": [
           {
-            "in": "path",
-            "name": "eval_id",
-            "required": true,
-            "description": "Internally generated unique identifier of an existing Risk Evaluation.",
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/EvalId"
           },
           {
             "$ref": "#/components/parameters/XApiVersionHeader"
@@ -828,7 +806,7 @@
                   },
                   "decision": {
                     "type": "string",
-                    "description": "The new decision value to apply. Supported values include `ACCEPT`, `REJECT`, `REVIEW`, `RESUBMIT`, `CANCEL`, etc.",
+                    "description": "The new decision value to apply. Supported values include `ACCEPT`, `REJECT`, `REVIEW`, `RESUBMIT`, and `CANCEL`.",
                     "example": "REVIEW"
                   },
                   "status": {
@@ -859,6 +837,7 @@
                         },
                         "file_data": {
                           "type": "string",
+                          "format": "byte",
                           "description": "The file content, encoded as a base64 string.",
                           "example": "JVBERi0xLjUKJeLjz9MKMyAwIG9iago8PC9..."
                         }
@@ -883,7 +862,7 @@
                     "summary": "Example 200 PUT Response",
                     "value": {
                       "id": "STATE-7890",
-                      "eval_id": "sta5ef39c-ecc3-4fe0-9283-fc8e5f99zzz",
+                      "eval_id": "8a4f6c12-3b9e-4d07-9f2c-e5a1b7d8f3c4",
                       "workflow": "account_takeover",
                       "decision": "REVIEW",
                       "status": "OPEN",
@@ -919,14 +898,14 @@
           "Feedback"
         ],
         "operationId": "FeedbackAPI",
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/XApiVersionHeader"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
           }
         ],
         "summary": "Feedback Update",
@@ -1046,14 +1025,14 @@
           "Feedback"
         ],
         "operationId": "FeedbackUpdateCSV",
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/XApiVersionHeader"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
           }
         ],
         "summary": "Feedback Import",
@@ -1076,7 +1055,7 @@
                 }
               },
               "example": {
-                "file": "url/to/the/file.csv"
+                "file": "<binary/csv file content>"
               }
             }
           }
@@ -1124,9 +1103,20 @@
         "name": "X-API-Version",
         "in": "header",
         "description": "Specifies the API version used for the request.",
+        "required": false,
         "schema": {
           "type": "string",
           "example": "2025-01-01.orion"
+        }
+      },
+      "EvalId": {
+        "name": "eval_id",
+        "in": "path",
+        "required": true,
+        "description": "The system-generated unique ID for the Risk Evaluation. Capture this value from the initial `POST` `/api/evaluation` response.",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
         }
       }
     },
@@ -1738,7 +1728,7 @@
                   },
                   "phone_number": {
                     "type": "string",
-                    "description": "The consumer’s phone number in E.164 format, which includes the country code (e.g., `+` followed by international dialing code and number). Hyphens are optional. \n\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
+                    "description": "The consumer’s phone number. The API expects the standard E.164 format (e.g., +12025550147) but tolerates hyphens and spaces for user convenience.\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
                     "example": "+1-202-555-0147"
                   },
                   "alternate_phone_number": {
@@ -1834,12 +1824,12 @@
                     },
                     "phone_number": {
                       "type": "string",
-                      "description": "The consumer’s phone number in E.164 format, which includes the country code (e.g., `+` followed by international dialing code and number). Hyphens are optional. \n\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
+                      "description": "The consumer’s phone number. The API accepts E.164 format (e.g., `+12025550147`) but tolerates hyphens and spaces for user convenience.\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
                       "example": "+1-202-555-0147"
                     },
                     "alternate_phone_number": {
                       "type": "string",
-                      "description": "The consumer’s phone number in E.164 format, which includes the country code (e.g., `+` followed by international dialing code and number). Hyphens are optional. \n",
+                      "description": "The consumer’s alternate phone number. The API accepts E.164 format (e.g., `+12025550147`) but tolerates hyphens and spaces for user convenience.\n",
                       "example": "+1-555-202-0147"
                     },
                     "gender": {
@@ -1947,12 +1937,12 @@
           },
           "phone_number": {
             "type": "string",
-            "description": "The consumer’s phone number in E.164 format, which includes the country code (e.g., `+` followed by international dialing code and number). Hyphens are optional. \n\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
+            "description": "The consumer’s phone number. The API accepts E.164 format (e.g., `+12025550147`) but tolerates hyphens and spaces for user convenience.\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
             "example": "+1-202-555-0147"
           },
           "alternate_phone_number": {
             "type": "string",
-            "description": "The consumer’s phone number in E.164 format, which includes the country code (e.g., `+` followed by international dialing code and number). Hyphens are optional. \n",
+            "description": "The consumer’s alternate phone number. The API accepts E.164 format (e.g., `+12025550147`) but tolerates hyphens and spaces for user convenience.\n",
             "example": "+1-555-202-0147"
           },
           "gender": {
@@ -2269,7 +2259,7 @@
                   },
                   "primary_phone": {
                     "type": "string",
-                    "description": "The phone number associated with the business in E.164 format, which includes the country code (e.g., `+` followed by international dialing code and number). Hyphens are optional. \n\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
+                    "description": "The consumer’s phone number. The API accepts E.164 format (e.g., `+12025550147`) but tolerates hyphens and spaces for user convenience.\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
                     "example": "+1-987-654-3210"
                   },
                   "address": {
@@ -2553,70 +2543,76 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Your original request `id`, echoed back in the response.",
+            "description": "The client-defined request identifier, echoed back in the response.",
             "example": "EVAL-ABC123"
           },
           "eval_id": {
             "type": "string",
-            "description": "Internally generated for each evaluation run and required for `GET` and `PATCH` requests in RiskOS™.",
+            "format": "uuid",
+            "description": "A unique identifier generated by RiskOS™ for this evaluation. Required for all `GET` and `PATCH` operations.",
             "example": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816"
           },
           "workflow": {
             "type": "string",
-            "description": "Your environment-specific workflow identifier, matching the one provided in the Evaluation API request.",
+            "description": "Your environment-specific workflow executed for this evaluation.",
             "example": "consumer_onboarding"
           },
           "eval_status": {
             "type": "string",
-            "description": "The status of the evaluation.",
+            "description": "The current lifecycle state of the evaluation — for example, `evaluation_in_progress`, `evaluation_completed`, or `evaluation_paused`.",
             "example": "evaluation_completed"
           },
           "decision": {
             "type": "string",
-            "description": "The final decision made at the end of the evaluation (e.g., `ACCEPT`, `REJECT`, `REVIEW`).",
+            "description": "The final outcome of the evaluation.",
+            "enum": [
+              "ACCEPT",
+              "REJECT",
+              "REVIEW"
+            ],
             "example": "REVIEW"
           },
           "decision_at": {
             "type": "string",
             "format": "date-time",
-            "description": "The ISO 8601 / RFC 3339 timestamp indicating when the evaluation decision was completed (UTC).\n",
+            "description": "RFC 3339 timestamp marking when the decision was finalized (UTC).\n",
             "example": "2025-10-17T16:17:17.456721157Z"
           },
           "score": {
             "type": "integer",
-            "description": "The computed score from the evaluation, typically a numeric value indicating risk or outcome.",
+            "description": "Numeric score computed during evaluation, representing relative risk or confidence.",
             "example": 91
           },
           "status": {
             "type": "string",
-            "description": "The decision status of the evaluation (e.g., `OPEN`, `CLOSED`).",
+            "description": "The evaluation case status, such as `OPEN`, `ON_HOLD`, or `CLOSED`.",
             "example": "OPEN"
           },
           "sub_status": {
             "type": "string",
-            "description": "The sub-status of the decision, providing additional detail (e.g., `In Review`, `Pending Verification`).",
+            "description": "A workflow-specific secondary status giving more detail on the decision (for example, `Pending Verification` or `In Review`).",
             "example": "In Review"
           },
           "workflow_version": {
             "type": "string",
-            "description": "The version of the Workflow used during the evaluation.",
+            "description": "The workflow configuration version active at evaluation time.",
             "example": "3.7.0"
           },
           "eval_source": {
             "type": "string",
-            "description": "The origin of the evaluation request (e.g., `API`, `SDK`, `UI`).",
+            "description": "Indicates where the evaluation originated — `API`, `SDK`, or `UI`.",
             "example": "API"
           },
           "eval_start_time": {
             "type": "string",
             "format": "date-time",
-            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "description": "RFC 3339 timestamp indicating when evaluation processing began.\n",
             "example": "2022-09-01T12:34:56.789Z"
           },
           "eval_end_time": {
             "type": "string",
             "format": "date-time",
-            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "description": "RFC 3339 timestamp indicating when evaluation processing completed.\n",
             "example": "2022-09-01T12:34:56.789Z"
           },
           "tags": {
@@ -2624,7 +2620,7 @@
             "items": {
               "type": "string"
             },
-            "description": "An array of tags applied to the evaluation to provide categorization or additional context.",
+            "description": "A list of applied tags providing additional context or classification.",
             "example": [
               "email_risk",
               "high_risk"
@@ -2632,7 +2628,7 @@
           },
           "notes": {
             "type": "string",
-            "description": "Optional freeform notes or comments related to the evaluation. Can be left empty if not applicable.\n",
+            "description": "Optional free-form comments or notes attached to the evaluation.\n",
             "example": ""
           },
           "review_queues": {
@@ -2640,14 +2636,14 @@
             "items": {
               "type": "string"
             },
-            "description": "An array of queues to which the evaluation was added, if applicable.",
+            "description": "A list of manual review queues to which the evaluation was routed.",
             "example": [
               "Default Queue"
             ]
           },
           "data_enrichments": {
             "type": "array",
-            "description": "An array of request/response objects detailing all external data enrichments (e.g., identity checks, credit score lookups) invoked as part of the Workflow execution.",
+            "description": "A collection of external enrichment results generated during the workflow (e.g., device risk checks, KYC verifications, fraud models).",
             "items": {
               "type": "object",
               "properties": {
@@ -2658,24 +2654,27 @@
                 },
                 "enrichment_endpoint": {
                   "type": "string",
-                  "description": "The provider's endpoint used for enrichment.",
+                  "description": "The API endpoint used for the enrichment request.",
                   "example": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore"
                 },
                 "status_code": {
                   "type": "integer",
+                  "description": "HTTP response code returned by the enrichment provider.",
                   "example": 200
                 },
                 "request": {
                   "type": "object",
+                  "description": "The payload sent to the enrichment provider.",
                   "additionalProperties": true
                 },
                 "response": {
                   "type": "object",
+                  "description": "The data returned from the enrichment provider.",
                   "additionalProperties": true
                 },
                 "error": {
                   "type": "string",
-                  "description": "Error message or code if the enrichment call failed.",
+                  "description": "Optional error message if the enrichment call failed.",
                   "example": ""
                 }
               }
@@ -2683,11 +2682,12 @@
           },
           "computed": {
             "type": "object",
-            "description": "An object containing all computed data points from the workflow. This field is disabled by default and must be explicitly enabled through support."
+            "description": "Derived and aggregated results produced by RiskOS™ for quick access. Disabled by default; enable through Socure support if required.",
+            "example": {}
           },
           "environment_name": {
             "type": "string",
-            "description": "The name of the environment in which the evaluation is executed\n",
+            "description": "The name of the environment in which the evaluation was executed — for example, `Sandbox` or `Production`.\n",
             "example": "Sandbox"
           }
         }
@@ -5241,7 +5241,7 @@
           "environment_name": "Sandbox"
         }
       },
-      "WorkforceVerificationReponse": {
+      "WorkforceVerificationResponse": {
         "description": "Workforce Verification",
         "value": {
           "id": "a86580cc-1733-4188-86b5-717166e1db8c",
@@ -5473,6 +5473,23 @@
       "python",
       "node",
       "go"
+    ],
+    "parameter-ordering": [
+      "path",
+      "query",
+      "header",
+      "cookie",
+      "body",
+      "form"
+    ],
+    "x-tagGroups": [
+      {
+        "name": "Core Risk Evaluation",
+        "tags": [
+          "Evaluation",
+          "Feedback"
+        ]
+      }
     ]
   }
 }
