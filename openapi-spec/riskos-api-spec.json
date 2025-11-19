@@ -12,11 +12,13 @@
   "servers": [
     {
       "url": "https://riskos.socure.com",
-      "description": "Production server (versioned)"
+      "description": "Production server (versioned)",
+      "x-environment": "production"
     },
     {
       "url": "https://riskos.sandbox.socure.com",
-      "description": "Sandbox server (for testing and development, versioned)"
+      "description": "Sandbox server (for testing and development, versioned)",
+      "x-environment": "sandbox"
     }
   ],
   "security": [
@@ -27,7 +29,7 @@
   "tags": [
     {
       "name": "Evaluation",
-      "description": "The Evaluation API is the primary endpoint for performing Risk Evaluations in RiskOS™. \nRequests must include data that conforms to the schema defined for the specific Solution.\nSuccessful evaluation responses include a decision value from the following list: * `ACCEPT`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience. * `REJECT`: The evaluation is declined; terminate the flow and do not proceed. * `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic. * `RESUBMIT`: Additional or corrected information is needed; prompt the user to re‑enter data or re‑capture documents and try again * `CANCEL`: The evaluation was intentionally terminated by business rules or workflow conditions (for example, certain OTP/device‑possession failures may end in Cancel for that path). "
+      "description": "The Evaluation API is the primary endpoint for performing Risk Evaluations in RiskOS™. \nRequests must include data that conforms to the schema defined for the specific Solution.\nSuccessful evaluation responses include a `decision` value from the following list: * `APPROVE`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience.<br /> * `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic.<br /> * `DECLINE`: The evaluation has failed the required checks and the entity is declined.\n> **Note:** **`APPROVE`**, **`REVIEW`**, and **`DECLINE`** are the default decision values. Customers can customize the response to added or to delete default values based on specific workflow needs."
     },
     {
       "name": "Feedback",
@@ -40,7 +42,7 @@
         "tags": [
           "Evaluation"
         ],
-        "summary": "Start a new Risk Evaluation",
+        "summary": "Start an Evaluation",
         "operationId": "postEvaluation",
         "security": [
           {
@@ -52,7 +54,7 @@
             "$ref": "#/components/parameters/XApiVersionHeader"
           }
         ],
-        "description": "Performs a new Risk Evaluation in RiskOS™.  <br /><br /> Select the type of evaluation below to access the corresponding schema.\n",
+        "description": "Performs a new Evaluation in RiskOS™.  <br /><br /> Select the type of evaluation below to access the corresponding schema.\n",
         "requestBody": {
           "required": true,
           "content": {
@@ -287,6 +289,9 @@
     },
     "/api/evaluation/monitoring": {
       "post": {
+        "x-environments": [
+          "production"
+        ],
         "tags": [
           "Evaluation"
         ],
@@ -398,14 +403,14 @@
         "tags": [
           "Evaluation"
         ],
-        "summary": "Partially update a Risk Evaluation",
+        "summary": "Partially Update an Evaluation",
         "operationId": "patchEvaluation",
         "security": [
           {
             "BearerAuth": []
           }
         ],
-        "description": "Updates risk data or metadata for a previously submitted evaluation request that is in a **paused** state.\nThe request is identified by the `eval_id`, and updates can be **partial** — any fields present will be updated, and absent fields will be ignored. \n> **Note:** Once an evaluation is completed, its data becomes immutable. Any attempt to update it will result in a failed request.\n",
+        "description": "Updates risk data or metadata for a previously submitted evaluation request that is in a **paused** state. The request is identified by `eval_id`, and updates can be partial—any data not included in the request will remain unchanged. The body of the `PATCH` request must follow the same structure as the original `POST` request.\n> **Note:** Once an evaluation is completed, its data becomes immutable. Any attempt to update it will result in a failed request.\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
@@ -529,14 +534,14 @@
         "tags": [
           "Evaluation"
         ],
-        "summary": "Retrieve Risk Evaluation data",
+        "summary": "Retrieve Evaluation Data",
         "operationId": "getEvaluation",
         "security": [
           {
             "BearerAuth": []
           }
         ],
-        "description": "Retrieves evaluation data for any evaluation type (`individual`, `business`, `account_takeover`, or `login`) by providing the unique Evaluation ID.\n",
+        "description": "Retrieves evaluation data for a workflow by providing the unique `eval_id`.\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
@@ -710,14 +715,14 @@
         "tags": [
           "Evaluation"
         ],
-        "summary": "Download Risk Evaluation documents",
+        "summary": "Download Evaluation Documents",
         "operationId": "downloadEvaluationDocuments",
         "security": [
           {
             "BearerAuth": []
           }
         ],
-        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. \nThe archive is organized into folders as follows:\n- `user_uploaded/`: Consumer-submitted identity documents.\n  - `document_verification/`\n    - `user_uploaded/document_verification/documentfrontDoc_Front_1_blob.jpg`\n    - `user_uploaded/document_verification/documentbackDoc_Back_1_blob.jpg`\n    - `user_uploaded/vouched_id_verification/Doc_Selfie_1_blob.jpg`\n- `case_attachments/`: Case attachments added via the RiskOS™ Dashboard. \n  - `case_attachments/identity.pdf`\n  - `case_attachments/additional_doc.pdf`\n",
+        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. \nThe archive is organized into folders as follows:\n``` user_uploaded/    # Consumer-submitted identity documents ├─ document_verification/ │  ├─ documentfrontDoc_Front_1_blob.jpg │  └─ documentbackDoc_Back_1_blob.jpg └─ vouched_id_verification/\n  └─ Doc_Selfie_1_blob.jpg\n\ncase_attachments/   # Case attachments added via the RiskOS™ Dashboard ├─ identity.pdf └─ additional_doc.pdf ```\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
@@ -771,14 +776,14 @@
         "tags": [
           "Evaluation"
         ],
-        "summary": "Update a Risk Evaluation state",
+        "summary": "Update an Evaluation State",
         "operationId": "updateEvaluationState",
         "security": [
           {
             "BearerAuth": []
           }
         ],
-        "description": "Updates evaluation metadata such as `decision`, `status`, and `sub_status`, or adds notes and a base64-encoded attachment.\n",
+        "description": "Updates evaluation metadata, including `decision`, `status`, and `sub_status`, and optionally adds notes or a base64-encoded attachment.\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
@@ -1113,7 +1118,7 @@
         "name": "eval_id",
         "in": "path",
         "required": true,
-        "description": "The system-generated unique ID for the Risk Evaluation. Capture this value from the initial `POST` `/api/evaluation` response.",
+        "description": "The system-generated unique ID for the evaluation. Capture this value from the initial `POST` `/api/evaluation` response.",
         "schema": {
           "type": "string",
           "format": "uuid"
@@ -1774,7 +1779,7 @@
                 }
               },
               "additional_individuals": {
-                "description": "Include details of additional consumers if the risk evaluation involves multiple people. This field allows you to expand the evaluation scope beyond the primary consumer.",
+                "description": "Include details of additional consumers if the evaluation involves multiple people. This field allows you to expand the evaluation scope beyond the primary consumer.",
                 "type": "array",
                 "items": {
                   "type": "object",
@@ -2564,11 +2569,11 @@
           },
           "decision": {
             "type": "string",
-            "description": "The final outcome of the evaluation.",
+            "description": "The final outcome of the evaluation. Possible decision values are:\n* `APPROVE`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience.\n* `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic.\n* `DECLINE`: The evaluation has failed the required checks and the entity is declined.\n> **Note:** `APPROVE`, `REVIEW`, and `DECLINE` are the default decision values. Customers can customize the response to added or to delete default values based on specific workflow needs.",
             "enum": [
-              "ACCEPT",
-              "REJECT",
-              "REVIEW"
+              "APPROVE",
+              "REVIEW",
+              "DECLINE"
             ],
             "example": "REVIEW"
           },
@@ -2585,7 +2590,12 @@
           },
           "status": {
             "type": "string",
-            "description": "The evaluation case status, such as `OPEN`, `ON_HOLD`, or `CLOSED`.",
+            "description": "The evaluation case status.",
+            "enum": [
+              "OPEN",
+              "ON_HOLD",
+              "CLOSED"
+            ],
             "example": "OPEN"
           },
           "sub_status": {
@@ -2600,7 +2610,12 @@
           },
           "eval_source": {
             "type": "string",
-            "description": "Indicates where the evaluation originated — `API`, `SDK`, or `UI`.",
+            "description": "Indicates where the evaluation originated.",
+            "enum": [
+              "API",
+              "SDK",
+              "UI"
+            ],
             "example": "API"
           },
           "eval_start_time": {
@@ -2687,8 +2702,12 @@
           },
           "environment_name": {
             "type": "string",
-            "description": "The name of the environment in which the evaluation was executed — for example, `Sandbox` or `Production`.\n",
-            "example": "Sandbox"
+            "description": "The name of the environment in which the evaluation was execute. \n",
+            "example": "Sandbox",
+            "enum": [
+              "Sandbox",
+              "Production"
+            ]
           }
         }
       },
@@ -2834,7 +2853,7 @@
                 }
               },
               "additional_individuals": {
-                "description": "Include details of additional consumers if the risk evaluation involves multiple people. This field allows you to expand the evaluation scope beyond the primary consumer.",
+                "description": "Include details of additional consumers if the evaluation involves multiple people. This field allows you to expand the evaluation scope beyond the primary consumer.",
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/Individual"
@@ -5478,8 +5497,8 @@
       "path",
       "query",
       "header",
-      "cookie",
       "body",
+      "cookie",
       "form"
     ],
     "x-tagGroups": [
