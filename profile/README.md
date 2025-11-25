@@ -6,7 +6,7 @@ Access the official specifications and SDKs to build fast, secure onboarding and
 
 | Specification | Description |
 | :--- | :--- |
-| [RiskOS™ API](/openapi-spec/riskos-api-spec.json) | Evaluation endpoints for all identity and fraud RiskOS™ workflows. |
+| [RiskOS™ API](/openapi-spec/riskos-api-spec.json) | Evaluation endpoint for all RiskOS™ workflows. |
 | [RiskOS™ Webhooks](/openapi-spec/riskos-webhooks-spec.json) | Schemas for asynchronous RiskOS™ events. |
 | [ID+ Platform APIs](/openapi-spec/id-plus-api-spec.json) | Access schemas for the commercial ID+ Platform. |
 
