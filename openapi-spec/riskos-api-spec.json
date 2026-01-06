@@ -285,7 +285,7 @@
     },
     "/api/evaluation/monitoring": {
       "post": {
-        "x-environments": [
+        "x-environment": [
           "production"
         ],
         "tags": [
@@ -718,7 +718,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. \nThe archive is organized into folders as follows:\n``` user_uploaded/    # Consumer-submitted identity documents ├─ document_verification/ │  ├─ documentfrontDoc_Front_1_blob.jpg │  └─ documentbackDoc_Back_1_blob.jpg └─ vouched_id_verification/\n  └─ Doc_Selfie_1_blob.jpg\n\ncase_attachments/   # Case attachments added via the RiskOS™ Dashboard ├─ identity.pdf └─ additional_doc.pdf ```\n",
+        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. \nThe archive is organized into folders as follows:\n``` user_uploaded/     # Consumer-submitted identity documents ├─ document_verification/ │  ├─ documentfrontDoc_Front_1_blob.jpg │  └─ documentbackDoc_Back_1_blob.jpg └─ vouched_id_verification/\n  └─ Doc_Selfie_1_blob.jpg\n\ncase_attachments/   # Case attachments added via the RiskOS™ Dashboard ├─ identity.pdf └─ additional_doc.pdf ```\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
@@ -1118,7 +1118,8 @@
         "schema": {
           "type": "string",
           "format": "uuid"
-        }
+        },
+        "example": "e9c170f2-b3e4-423b-a373-5d6e1e9b23f8"
       }
     },
     "schemas": {
@@ -1196,6 +1197,8 @@
         }
       },
       "AccountView": {
+        "type": "object",
+        "description": "A read-only snapshot of the account’s balances and recent activity.",
         "properties": {
           "available_balance": {
             "$ref": "#/components/schemas/Amount"
@@ -1254,7 +1257,7 @@
             "example": "CH-123"
           },
           "opened_at": {
-            "description": "ISO 8601/ RFC 3339 date-time. Date the account was openend.",
+            "description": "ISO 8601/ RFC 3339 date-time. Date the account was opened.",
             "type": "string",
             "format": "date-time",
             "example": "2022-05-26T05:02:09.985Z"
@@ -1363,13 +1366,7 @@
           "use_case_key": {
             "type": "string",
             "description": "The name of the flow (created in RiskOS™) to use with this transaction.\n> **Note**: If the value is incorrect or not provided, the transaction uses the flow marked as **Default** in RiskOS™.\n",
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "The name of the flow (created in RiskOS™).",
-                "example": "flow_1"
-              }
-            }
+            "example": "flow_1"
           },
           "redirect": {
             "type": "object",
@@ -1497,7 +1494,7 @@
           },
           "entity_type": {
             "type": "string",
-            "description": "The entity type. Possible values are `Individual`, `Organisation`, `Vessel`, `Aircraft`, `Others`."
+            "description": "The entity type. Possible values are `Individual`, `Organization`, `Vessel`, `Aircraft`, `Others`."
           },
           "entity_name": {
             "type": "string",
@@ -2558,6 +2555,12 @@
             "description": "Your environment-specific workflow executed for this evaluation.",
             "example": "consumer_onboarding"
           },
+          "workflow_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the workflow definition that was executed. This value corresponds to the workflow version configured in RiskOS™.",
+            "example": "81f5383f-1fbb-46d0-8c26-6964bd9dc3a9"
+          },
           "eval_status": {
             "type": "string",
             "description": "The current lifecycle state of the evaluation — for example, `evaluation_in_progress`, `evaluation_completed`, or `evaluation_paused`.",
@@ -2658,6 +2661,11 @@
             "items": {
               "type": "object",
               "properties": {
+                "enrichment_name": {
+                  "type": "string",
+                  "description": "The name of the enrichment service.",
+                  "example": "Socure Digital Intelligence"
+                },
                 "enrichment_provider": {
                   "type": "string",
                   "description": "The name of the enrichment or data provider.",
@@ -2681,7 +2689,24 @@
                 "response": {
                   "type": "object",
                   "description": "The data returned from the enrichment provider.",
+                  "properties": {
+                    "referenceId": {
+                      "type": "string",
+                      "description": "Unique identifier assigned to each enrichment after a RiskOS™ workflow is finalized.",
+                      "example": "b8fbeb31-a2fc-4f1e-a5d1-392c4ed06538"
+                    }
+                  },
                   "additionalProperties": true
+                },
+                "is_source_cache": {
+                  "type": "boolean",
+                  "description": "Indicates whether the enrichment data was returned from cache instead of making a new provider API request.\n",
+                  "example": false
+                },
+                "total_attempts": {
+                  "type": "number",
+                  "description": "Total number of API call attempts made for this operation, including retries.\n",
+                  "example": 1
                 },
                 "error": {
                   "type": "string",
