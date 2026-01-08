@@ -1519,7 +1519,7 @@
       },
       "Channel": {
         "type": "string",
-        "description": "Specifies the mode of interaction on the consumer's end. Available values include: `web`, `mobile`, `pos`, and `other`.\n",
+        "description": "Specifies the mode of interaction on the consumer's end.  <br /><br /> Available values include: `web`, `mobile`, `pos`, and `other`.\n",
         "example": "mobile",
         "enum": [
           "web",
@@ -1664,7 +1664,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
             "example": "onb-12345"
           },
           "timestamp": {
@@ -1995,7 +1995,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
             "example": "genr-12345"
           },
           "timestamp": {
@@ -2048,7 +2048,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
             "example": "TS-REQ-123456"
           },
           "timestamp": {
@@ -2117,7 +2117,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
             "example": "BAV-REQ-123456"
           },
           "timestamp": {
@@ -2218,7 +2218,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
             "example": "BIZ-123456"
           },
           "timestamp": {
@@ -2342,7 +2342,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
             "example": "ATO-REQ-123456"
           },
           "timestamp": {
@@ -2357,7 +2357,7 @@
             "properties": {
               "event_category": {
                 "type": "string",
-                "description": "Specifies the category of the event occurring on a consumer profile or account.",
+                "description": "Specifies the high-level category of the event occurring within a consumer profile or account. Use this field to indicate the general type of user interaction for risk evaluation purposes. <br />  <br /> Use the following guidance when selecting a value:\n- `authenticate`: Use for authentication-related events where a user is\n  proving identity or access, such as login, logout, or session\n  re-authentication.\n- `information`: Use for events where a user requests or views information\n  without modifying account data, such as requesting a bank statement,\n  viewing account balances, or retrieving transaction history.\n- `update`: Use for events where a user updates or modifies account or profile\n  data, such as changing a password, updating an address, or modifying\n  contact information.\n- `action`: Use for all other user-initiated actions where a risk evaluation\n  is useful but the event does not fit into authentication, information,\n  or update categories.",
                 "enum": [
                   "authenticate",
                   "action",
@@ -2367,7 +2367,7 @@
               },
               "event_type": {
                 "type": "string",
-                "description": "Specifies the event types to be tracked for a consumer, such as `address_update` or `card_update`.",
+                "description": "A free-form, application-defined sub-category of the `event_category` that provides additional context about the specific event performed.  <br />  <br /> Examples include: `login`, `address_update`, `statement_download`, or `password_reset`.",
                 "example": "address_update"
               },
               "individual": {
@@ -2407,7 +2407,7 @@
           "id": {
             "type": "string",
             "format": "uuid",
-            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
             "example": "a86580cc-1733-4188-86b5-717166e1db8c"
           },
           "workflow": {
@@ -2568,11 +2568,11 @@
           },
           "decision": {
             "type": "string",
-            "description": "The final outcome of the evaluation. Possible decision values are:\n* `APPROVE`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience.\n* `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic.\n* `DECLINE`: The evaluation has failed the required checks and the entity is declined.\n> **Note:** `APPROVE`, `REVIEW`, and `DECLINE` are the default decision values. Customers can customize the response to added or to delete default values based on specific workflow needs.",
+            "description": "The final outcome of the evaluation. Possible decision values are:\n* `ACCEPT`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience.\n* `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic.\n* `REJECT`: The evaluation has failed the required checks and the entity is declined.\n> **Note:** `ACCEPT`, `REVIEW`, and `REJECT` are the default decision values. Your integration can be customized to use different default decision values based on specific workflow needs.",
             "enum": [
-              "APPROVE",
+              "ACCEPT",
               "REVIEW",
-              "DECLINE"
+              "REJECT"
             ],
             "example": "REVIEW"
           },
@@ -2584,12 +2584,12 @@
           },
           "score": {
             "type": "integer",
-            "description": "Numeric score computed during evaluation, representing relative risk or confidence.",
+            "description": "If configured for a workflow, provides an aggregate score of all steps. This can be used for risk banding, additional routing, or analytics alongside the primary `decision` value.",
             "example": 91
           },
           "status": {
             "type": "string",
-            "description": "The evaluation case status.",
+            "description": "Case-level status of the evaluation.",
             "enum": [
               "OPEN",
               "ON_HOLD",
@@ -2599,34 +2599,33 @@
           },
           "sub_status": {
             "type": "string",
-            "description": "A workflow-specific secondary status giving more detail on the decision (for example, `Pending Verification` or `In Review`).",
+            "description": "Provides additional detail about the evaluation status (for example, `Pending Verification` or `In Review`).",
             "example": "In Review"
           },
           "workflow_version": {
             "type": "string",
-            "description": "The workflow configuration version active at evaluation time.",
+            "description": "Version of the executed workflow.",
             "example": "3.7.0"
           },
           "eval_source": {
             "type": "string",
-            "description": "Indicates where the evaluation originated.",
+            "description": "Indicates where the evaluation was initiated from. <br />  <br /> Possible values include: \n\n  * `API`: Request submitted via the Evaluation API.\n  * `Dashboard`: Case created or evaluated through the RiskOS™ Dashboard.",
             "enum": [
               "API",
-              "SDK",
-              "UI"
+              "Dashboard"
             ],
             "example": "API"
           },
           "eval_start_time": {
             "type": "string",
             "format": "date-time",
-            "description": "RFC 3339 timestamp indicating when evaluation processing began.\n",
+            "description": "RFC 3339 timestamp for when RiskOS™ started processing the evaluation. Useful for latency and performance monitoring.\n",
             "example": "2022-09-01T12:34:56.789Z"
           },
           "eval_end_time": {
             "type": "string",
             "format": "date-time",
-            "description": "RFC 3339 timestamp indicating when evaluation processing completed.\n",
+            "description": "RFC 3339 timestamp for when RiskOS™ finished processing the evaluation. Can be paired with `eval_start_time` to compute total processing time.\n",
             "example": "2022-09-01T12:34:56.789Z"
           },
           "tags": {
@@ -2634,7 +2633,7 @@
             "items": {
               "type": "string"
             },
-            "description": "A list of applied tags providing additional context or classification.",
+            "description": "Array of labels applied during the workflow to highlight routing choices, notable signals, or rule outcomes. Useful for reporting, segmentation, or UI highlighting in the RiskOS™ Dashboard.",
             "example": [
               "email_risk",
               "high_risk"
@@ -2642,7 +2641,7 @@
           },
           "notes": {
             "type": "string",
-            "description": "Optional free-form comments or notes attached to the evaluation.\n",
+            "description": "Freeform text field for analyst or system comments about the evaluation. Often used to capture manual review rationale or investigation context.\n",
             "example": ""
           },
           "review_queues": {
@@ -2650,7 +2649,7 @@
             "items": {
               "type": "string"
             },
-            "description": "A list of manual review queues to which the evaluation was routed.",
+            "description": "Lists any manual review queues the evaluation was sent to. Empty when the case is fully auto-resolved without human review.",
             "example": [
               "Default Queue"
             ]
@@ -2663,7 +2662,7 @@
               "properties": {
                 "enrichment_name": {
                   "type": "string",
-                  "description": "The name of the enrichment service.",
+                  "description": "\tName of the enrichment executed.\n",
                   "example": "Socure Digital Intelligence"
                 },
                 "enrichment_provider": {
@@ -2723,7 +2722,7 @@
           },
           "environment_name": {
             "type": "string",
-            "description": "The name of the environment in which the evaluation was execute. \n",
+            "description": "Indicates which environment the evaluation ran in. Typically `Sandbox` for testing or `Production` for live traffic.\n",
             "example": "Sandbox",
             "enum": [
               "Sandbox",
@@ -2749,7 +2748,7 @@
           },
           "id": {
             "type": "string",
-            "description": "Mandatory identifier set by the customer when initiating a request in RiskOS™.",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
             "example": "onb-12345"
           },
           "timestamp": {
