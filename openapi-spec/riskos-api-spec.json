@@ -3,7 +3,7 @@
   "info": {
     "title": "Socure RiskOS™ API",
     "version": "2025-01-01.orion",
-    "description": "TestS*RiskOS™ documentation site is Socure confidential and proprietary information, and is only intended for viewing by authorized persons.*\n\nThe Socure RiskOS™ APIs provide a unified API framework for risk evaluation. They use predictable, resource-oriented URLs, accept JSON-formatted request bodies, return JSON-formatted responses, and follow standard HTTP methods, status codes, and authentication practices.\n\nYou can test RiskOS™ APIs in the **Sandbox environment**, which allows you to simulate requests without impacting live data. The request endpoint determines whether the request is directed to the Sandbox or Production (live) environment.\n"
+    "description": "*RiskOS™ documentation site is Socure confidential and proprietary information, and is only intended for viewing by authorized persons.*\n\nThe Socure RiskOS™ APIs provide a unified API framework for risk evaluation. They use predictable, resource-oriented URLs, accept JSON-formatted request bodies, return JSON-formatted responses, and follow standard HTTP methods, status codes, and authentication practices.\n\nYou can test RiskOS™ APIs in the **Sandbox environment**, which allows you to simulate requests without impacting live data. The request endpoint determines whether the request is directed to the Sandbox or Production (live) environment.\n"
   },
   "servers": [
     {
