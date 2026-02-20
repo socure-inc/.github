@@ -3,7 +3,7 @@
   "info": {
     "title": "Socure RiskOS™ API",
     "version": "2025-01-01.orion",
-    "description": "*RiskOS™ documentation site is Socure confidential and proprietary information, and is only intended for viewing by authorized persons.*\n\nThe Socure RiskOS™ APIs provide a unified API framework for risk evaluation. They use predictable, resource-oriented URLs, accept JSON-formatted request bodies, return JSON-formatted responses, and follow standard HTTP methods, status codes, and authentication practices.\n\nYou can test RiskOS™ APIs in the **Sandbox environment**, which allows you to simulate requests without impacting live data. The request endpoint determines whether the request is directed to the Sandbox or Production (live) environment.\n"
+    "description": "TEST TEST*RiskOS™ documentation site is Socure confidential and proprietary information, and is only intended for viewing by authorized persons.*\n\nThe Socure RiskOS™ APIs provide a unified API framework for risk evaluation. They use predictable, resource-oriented URLs, accept JSON-formatted request bodies, return JSON-formatted responses, and follow standard HTTP methods, status codes, and authentication practices.\n\nYou can test RiskOS™ APIs in the **Sandbox environment**, which allows you to simulate requests without impacting live data. The request endpoint determines whether the request is directed to the Sandbox or Production (live) environment.\n"
   },
   "servers": [
     {
@@ -1660,7 +1660,7 @@
           "workflow": {
             "type": "string",
             "example": "consumer_onboarding",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard."
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist."
           },
           "id": {
             "type": "string",
@@ -1991,7 +1991,7 @@
           "workflow": {
             "type": "string",
             "example": "generic_passthrough",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard."
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist."
           },
           "id": {
             "type": "string",
@@ -2043,7 +2043,7 @@
         "properties": {
           "workflow": {
             "type": "string",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "trust_and_safety"
           },
           "id": {
@@ -2112,7 +2112,7 @@
         "properties": {
           "workflow": {
             "type": "string",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "bank_account_verification"
           },
           "id": {
@@ -2135,9 +2135,6 @@
               },
               "ip_address": {
                 "$ref": "#/components/schemas/IPAddress"
-              },
-              "additional_context": {
-                "$ref": "#/components/schemas/AdditionalContext"
               },
               "external_device": {
                 "$ref": "#/components/schemas/Device"
@@ -2213,7 +2210,7 @@
         "properties": {
           "workflow": {
             "type": "string",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "business_onboarding"
           },
           "id": {
@@ -2337,7 +2334,7 @@
         "properties": {
           "workflow": {
             "type": "string",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "account_takeover"
           },
           "id": {
@@ -2412,7 +2409,7 @@
           },
           "workflow": {
             "type": "string",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "trust_and_safety"
           },
           "timestamp": {
@@ -2744,7 +2741,7 @@
           "workflow": {
             "type": "string",
             "example": "consumer_onboarding",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard."
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist."
           },
           "id": {
             "type": "string",
