@@ -447,6 +447,7 @@
                     "timestamp": "2023-12-01T08:15:30.456Z",
                     "workflow": "consumer_onboarding",
                     "data": {
+                      "event_type": "email_update",
                       "individual": {
                         "email": "updated.email@example.com"
                       }
@@ -795,24 +796,47 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "workflow",
-                  "decision",
-                  "status"
+                  "workflow"
+                ],
+                "oneOf": [
+                  {
+                    "required": [
+                      "decision"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "status",
+                      "sub_status"
+                    ]
+                  }
                 ],
                 "properties": {
                   "workflow": {
                     "type": "string",
                     "example": "consumer_onboarding",
-                    "description": "Your environment-specific Workflow identifier. You can find this value in the RiskOS™ Platform."
+                    "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard."
                   },
                   "decision": {
                     "type": "string",
-                    "description": "The new decision value to apply. Supported values include `ACCEPT`, `REJECT`, `REVIEW`, `RESUBMIT`, and `CANCEL`.",
+                    "description": "The new decision value to apply. Required if status/sub_status are not provided.",
+                    "enum": [
+                      "ACCEPT",
+                      "REJECT",
+                      "REVIEW",
+                      "RESUBMIT",
+                      "CANCEL"
+                    ],
                     "example": "REVIEW"
                   },
                   "status": {
                     "type": "string",
-                    "description": "The new status to apply. Supported values include `OPEN`, `CLOSED`, and `ON HOLD`.",
+                    "description": "The new status to apply. Required if decision is not provided.",
+                    "enum": [
+                      "OPEN",
+                      "CLOSED",
+                      "ON HOLD"
+                    ],
                     "example": "OPEN"
                   },
                   "sub_status": {
@@ -2355,6 +2379,9 @@
               "event_category": {
                 "type": "string",
                 "description": "Specifies the high-level category of the event occurring within a consumer profile or account. Use this field to indicate the general type of user interaction for risk evaluation purposes. <br />  <br /> Use the following guidance when selecting a value:\n- `authenticate`: Use for authentication-related events where a user is\n  proving identity or access, such as login, logout, or session\n  re-authentication.\n- `information`: Use for events where a user requests or views information\n  without modifying account data, such as requesting a bank statement,\n  viewing account balances, or retrieving transaction history.\n- `update`: Use for events where a user updates or modifies account or profile\n  data, such as changing a password, updating an address, or modifying\n  contact information.\n- `action`: Use for all other user-initiated actions where a risk evaluation\n  is useful but the event does not fit into authentication, information,\n  or update categories.",
+                "required": [
+                  "event_type"
+                ],
                 "enum": [
                   "authenticate",
                   "action",
