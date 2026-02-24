@@ -461,7 +461,6 @@
                     "timestamp": "2023-12-01T08:15:30.456Z",
                     "workflow": "consumer_onboarding",
                     "data": {
-                      "event_type": "phone_update",
                       "individual": {
                         "phone_number": "+1-202-555-9999"
                       }
@@ -475,7 +474,6 @@
                     "timestamp": "2023-12-01T08:15:30.456Z",
                     "workflow": "consumer_onboarding",
                     "data": {
-                      "event_type": "device_update",
                       "device": {
                         "id": "DEVICE-123456",
                         "ip_address": "192.168.1.10",
@@ -796,112 +794,82 @@
           "content": {
             "application/json": {
               "schema": {
+                "type": "object",
+                "required": [
+                  "workflow"
+                ],
                 "oneOf": [
                   {
-                    "title": "Update Decision",
-                    "type": "object",
                     "required": [
-                      "workflow",
                       "decision"
-                    ],
-                    "properties": {
-                      "workflow": {
-                        "type": "string",
-                        "example": "consumer_onboarding",
-                        "description": "Your environment-specific workflow identifier."
-                      },
-                      "decision": {
-                        "type": "string",
-                        "description": "The new decision value to apply.",
-                        "enum": [
-                          "ACCEPT",
-                          "REJECT",
-                          "REVIEW",
-                          "RESUBMIT",
-                          "CANCEL"
-                        ],
-                        "example": "REVIEW"
-                      },
-                      "notes": {
-                        "type": "string",
-                        "description": "Optional notes to add context to the evaluation.",
-                        "example": "Verification documents pending re-check"
-                      },
-                      "attachments": {
-                        "type": "array",
-                        "description": "An array of base64-encoded attachment files.",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "file_name": {
-                              "type": "string",
-                              "example": "case.jpeg"
-                            },
-                            "file_data": {
-                              "type": "string",
-                              "format": "byte",
-                              "example": "ZmlsZWRhdGE="
-                            }
-                          }
-                        }
-                      }
-                    }
+                    ]
                   },
                   {
-                    "title": "Update Status",
-                    "type": "object",
                     "required": [
-                      "workflow",
                       "status",
                       "sub_status"
+                    ]
+                  }
+                ],
+                "properties": {
+                  "workflow": {
+                    "type": "string",
+                    "example": "consumer_onboarding",
+                    "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard."
+                  },
+                  "decision": {
+                    "type": "string",
+                    "description": "The new decision value to apply. Required if status/sub_status are not provided.",
+                    "enum": [
+                      "ACCEPT",
+                      "REJECT",
+                      "REVIEW",
+                      "RESUBMIT",
+                      "CANCEL"
                     ],
-                    "properties": {
-                      "workflow": {
-                        "type": "string",
-                        "example": "consumer_onboarding",
-                        "description": "Your environment-specific workflow identifier."
-                      },
-                      "status": {
-                        "type": "string",
-                        "description": "The new status to apply.",
-                        "enum": [
-                          "OPEN",
-                          "CLOSED",
-                          "ON HOLD"
-                        ],
-                        "example": "OPEN"
-                      },
-                      "sub_status": {
-                        "type": "string",
-                        "description": "An optional sub-status providing more detail (e.g., `In Review`).",
-                        "example": "In Review"
-                      },
-                      "notes": {
-                        "type": "string",
-                        "description": "Optional notes to add context to the evaluation.",
-                        "example": "Verification documents pending re-check"
-                      },
-                      "attachments": {
-                        "type": "array",
-                        "description": "An array of base64-encoded attachment files.",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "file_name": {
-                              "type": "string",
-                              "example": "case.jpeg"
-                            },
-                            "file_data": {
-                              "type": "string",
-                              "format": "byte",
-                              "example": "ZmlsZWRhdGE="
-                            }
-                          }
+                    "example": "REVIEW"
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "The new status to apply. Required if decision is not provided.",
+                    "enum": [
+                      "OPEN",
+                      "CLOSED",
+                      "ON HOLD"
+                    ],
+                    "example": "OPEN"
+                  },
+                  "sub_status": {
+                    "type": "string",
+                    "description": "An optional sub-status to provide more detail about the current status (e.g., `In Review`, `Pending Docs`).",
+                    "example": "In Review"
+                  },
+                  "notes": {
+                    "type": "string",
+                    "description": "Optional notes to add context or additional information to the evaluation.",
+                    "example": "Verification documents pending re-check"
+                  },
+                  "attachments": {
+                    "type": "array",
+                    "description": "An array of attachment files, where each item includes a `name` and a base64-encoded `file` string.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "file_name": {
+                          "type": "string",
+                          "example": "case.jpeg",
+                          "description": "The name of the file to be attached."
+                        },
+                        "file_data": {
+                          "type": "string",
+                          "format": "byte",
+                          "description": "The file content, encoded as a base64 string.",
+                          "example": "JVBERi0xLjUKJeLjz9MKMyAwIG9iago8PC9..."
                         }
                       }
                     }
                   }
-                ]
+                }
               }
             }
           }
