@@ -2405,12 +2405,13 @@
             "type": "object",
             "description": "The main payload for the Login and Authentication workflow.",
             "required": [
-              "event_type"
+              "event_type",
+              "event_category"
             ],
             "properties": {
               "event_category": {
                 "type": "string",
-                "description": "Specifies the high-level category of the event occurring within a consumer profile or account. Use this field to indicate the general type of user interaction for risk evaluation purposes. <br />  <br /> Use the following guidance when selecting a value:\n- `authenticate`: Use for authentication-related events where a user is\n  proving identity or access, such as login, logout, or session\n  re-authentication.\n- `information`: Use for events where a user requests or views information\n  without modifying account data, such as requesting a bank statement,\n  viewing account balances, or retrieving transaction history.\n- `update`: Use for events where a user updates or modifies account or profile\n  data, such as changing a password, updating an address, or modifying\n  contact information.\n- `action`: Use for all other user-initiated actions where a risk evaluation\n  is useful but the event does not fit into authentication, information,\n  or update categories.",
+                "description": "Specifies the high-level category of the event occurring within a consumer profile or account. Use this field to indicate the general type of user interaction for risk evaluation purposes. <br />  <br /> Use the following guidance when selecting a value:\n- `authenticate`: Use for authentication-related events where a user is\n  proving identity or access, such as login, logout, or session\n  re-authentication.\n- `information`: Use for events where a user requests or views\n  information without modifying account data, such as requesting a bank\n  statement, viewing account balances, or retrieving transaction history.\n- `update`: Use for events where a user updates or modifies account or\n  profile data, such as changing a password, updating an address, or\n  modifying contact information.\n- `action`: Use for all other user-initiated actions where a risk\n  evaluation is useful but the event does not fit into authentication,\n  information, or update categories.",
                 "enum": [
                   "authenticate",
                   "action",
@@ -2422,6 +2423,20 @@
                 "type": "string",
                 "description": "A free-form, application-defined sub-category of the `event_category` that provides additional context about the specific event performed.  <br />  <br /> Examples include: `login`, `address_update`, `statement_download`, or `password_reset`.",
                 "example": "address_update"
+              },
+              "event_details": {
+                "type": "object",
+                "description": "Contextual details about the specific event, such as previous and  updated state values.",
+                "properties": {
+                  "previous": {
+                    "type": "object",
+                    "description": "Data reflecting the state prior to the update."
+                  },
+                  "updated": {
+                    "type": "object",
+                    "description": "Data reflecting the new state after the update."
+                  }
+                }
               },
               "individual": {
                 "$ref": "#/components/schemas/Individual"
