@@ -1784,7 +1784,7 @@
                   },
                   "alternate_phone_number": {
                     "type": "string",
-                    "description": "The consumer’s phone number in E.164 format, which includes the country code (e.g., `+` followed by international dialing code and number). Hyphens are optional. \n",
+                    "description": "The consumer’s phone number in E.164 format, which includes the country code (e.g., `+` followed by international dialing code and number). The API expects the standard E.164 format but tolerates hyphens and spaces for user convenience. \n",
                     "example": "+1-555-202-0147"
                   },
                   "gender": {
