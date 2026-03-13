@@ -1104,12 +1104,9 @@
                   "file": {
                     "type": "string",
                     "format": "binary",
-                    "description": "The CSV file containing feedback data. The file must include all columns as shown in the sample format below. Columns without data can be left empty, but they must still be present in the file.\n\nSample CSV data:\n```csv\nid,workflow,fraud_label,fraud_type,notes,recorded_at,recorded_by,tags\nEL-1234ABC123,personal_loans,fraud,synthetic,notes,2022-05-20,jonathan@effectiv.ai,\nEL-1234ABC,personal_loans,fraud,synthetic,notes,2022-05-20,jonathan@effectiv.ai,\n```\n"
+                    "description": "CSV file containing feedback records.\n\nThe file must contain **8 columns in the required order**.\nA header row is required, but header names are ignored.\n\nSee the endpoint description for the full CSV format specification.\n"
                   }
                 }
-              },
-              "example": {
-                "file": "<binary/csv file content>"
               }
             }
           }
