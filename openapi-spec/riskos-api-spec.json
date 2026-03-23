@@ -1717,13 +1717,13 @@
                   },
                   "given_name": {
                     "type": "string",
-                    "description": "The consumer's given name.",
+                    "description": "The consumer's given name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "Dwayne",
                     "maxLength": 240
                   },
                   "family_name": {
                     "type": "string",
-                    "description": "The consumer's family name.",
+                    "description": "The consumer's family name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "Denver",
                     "maxLength": 240
                   },
@@ -1926,13 +1926,13 @@
           },
           "given_name": {
             "type": "string",
-            "description": "The consumer's given name.",
+            "description": "The consumer's given name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
             "example": "Dwayne",
             "maxLength": 240
           },
           "family_name": {
             "type": "string",
-            "description": "The consumer's family name.",
+            "description": "The consumer's family name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
             "example": "Denver",
             "maxLength": 240
           },
@@ -1964,7 +1964,7 @@
           },
           "phone_number": {
             "type": "string",
-            "description": "The consumer’s phone number. The API accepts E.164 format (e.g., `+12025550147`) but tolerates hyphens and spaces for user convenience.\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
+            "description": "The consumer’s phone number. The API expects the standard E.164 format (e.g., +12025550147) but tolerates hyphens and spaces for user convenience.\n\n**Examples:**\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
             "example": "+1-202-555-0147"
           },
           "alternate_phone_number": {
@@ -2283,7 +2283,7 @@
                   },
                   "primary_phone": {
                     "type": "string",
-                    "description": "The consumer’s phone number. The API accepts E.164 format (e.g., `+12025550147`) but tolerates hyphens and spaces for user convenience.\nExample formats:\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
+                    "description": "The consumer’s phone number. The API expects the standard E.164 format (e.g., +12025550147) but tolerates hyphens and spaces for user convenience.\n\n**Examples:**\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
                     "example": "+1-987-654-3210"
                   },
                   "address": {
@@ -2511,13 +2511,15 @@
                   },
                   "given_name": {
                     "type": "string",
-                    "description": "Individual's given (first) name.",
-                    "example": "John"
+                    "description": "The consumer's given name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+                    "example": "John",
+                    "maxLength": 240
                   },
                   "family_name": {
                     "type": "string",
-                    "description": "Individual's family (last) name.",
-                    "example": "Smith"
+                    "description": "The consumer's family name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+                    "example": "Smith",
+                    "maxLength": 240
                   },
                   "email": {
                     "type": "string",
@@ -2821,13 +2823,13 @@
                   },
                   "given_name": {
                     "type": "string",
-                    "description": "The consumer's given name.",
+                    "description": "The consumer's given name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "Dwayne",
                     "maxLength": 240
                   },
                   "family_name": {
                     "type": "string",
-                    "description": "The consumer's family name.",
+                    "description": "The consumer's family name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "Denver",
                     "maxLength": 240
                   },
