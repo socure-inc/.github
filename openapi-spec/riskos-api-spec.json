@@ -1717,13 +1717,13 @@
                   },
                   "given_name": {
                     "type": "string",
-                    "description": "The consumer's given name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+                    "description": "The consumer's given name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "Dwayne",
                     "maxLength": 240
                   },
                   "family_name": {
                     "type": "string",
-                    "description": "The consumer's family name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+                    "description": "The consumer's family name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "Denver",
                     "maxLength": 240
                   },
@@ -1926,13 +1926,13 @@
           },
           "given_name": {
             "type": "string",
-            "description": "The consumer's given name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+            "description": "The consumer's given name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
             "example": "Dwayne",
             "maxLength": 240
           },
           "family_name": {
             "type": "string",
-            "description": "The consumer's family name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+            "description": "The consumer's family name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
             "example": "Denver",
             "maxLength": 240
           },
@@ -2511,13 +2511,13 @@
                   },
                   "given_name": {
                     "type": "string",
-                    "description": "The consumer's given name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+                    "description": "The consumer's given name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "John",
                     "maxLength": 240
                   },
                   "family_name": {
                     "type": "string",
-                    "description": "The consumer's family name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+                    "description": "The consumer's family name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "Smith",
                     "maxLength": 240
                   },
@@ -2823,13 +2823,13 @@
                   },
                   "given_name": {
                     "type": "string",
-                    "description": "The consumer's given name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+                    "description": "The consumer's given name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "Dwayne",
                     "maxLength": 240
                   },
                   "family_name": {
                     "type": "string",
-                    "description": "The consumer's family name.\n\n**Requirements:**\n- Maximum length: 240 characters\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+                    "description": "The consumer's family name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
                     "example": "Denver",
                     "maxLength": 240
                   },
