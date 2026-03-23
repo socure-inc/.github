@@ -905,28 +905,7 @@
         },
         "responses": {
           "200": {
-            "description": "The evaluation state was updated successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EvalResponseWithOutSocureData"
-                },
-                "examples": {
-                  "stateUpdateSuccess": {
-                    "summary": "Example 200 PUT Response",
-                    "value": {
-                      "id": "STATE-7890",
-                      "eval_id": "8a4f6c12-3b9e-4d07-9f2c-e5a1b7d8f3c4",
-                      "workflow": "account_takeover",
-                      "decision": "REVIEW",
-                      "status": "OPEN",
-                      "sub_status": "Further Analysis",
-                      "eval_status": "evaluation_in_progress"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "The evaluation state was updated successfully. No response body is returned."
           },
           "400": {
             "description": "Bad Request - The request was unacceptable."
