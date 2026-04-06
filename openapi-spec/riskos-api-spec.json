@@ -3062,9 +3062,9 @@
                 "major_admin_division": "CA",
                 "country": "US",
                 "postal_code": "94105"
-              }
+              },
+              "di_session_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ...PiUsws9D6O3DjSjNDCbIJKciX44s"
             },
-            "di_session_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ...PiUsws9D6O3DjSjNDCbIJKciX44s",
             "custom": {}
           }
         }
@@ -3092,6 +3092,7 @@
                 "country": "US",
                 "postal_code": "94105"
               },
+              "di_session_token": "eyJraWQiOiJmMzRiN2YiLCJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.DI_LOW_SCORE",
               "account": {
                 "type": "CHECKING",
                 "account_number": "12345678901",
@@ -3717,7 +3718,7 @@
           "eval_id": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816",
           "workflow": "generic_passthrough",
           "eval_status": "evaluation_completed",
-          "decision": "PASSTHROUGH",
+          "decision": "REJECT",
           "status": "CLOSED",
           "sub_status": "passthrough",
           "workflow_id": "472288ff-b3a8-4e69-89dd-069d5e2bcb41",
