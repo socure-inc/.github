@@ -2281,7 +2281,7 @@
                     "description": "The registered legal name of the business.",
                     "example": "XYZ Inc."
                   },
-                  "primary_phone": {
+                  "phone_number": {
                     "type": "string",
                     "description": "The consumer’s phone number. The API expects the standard E.164 format (e.g., +12025550147) but tolerates hyphens and spaces for user convenience.\n\n**Examples:**\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
                     "example": "+1-987-654-3210"
@@ -3142,7 +3142,7 @@
             "business": {
               "name": "Tech Innovators LLC",
               "ein": "12-3456789",
-              "primary_phone": "+1-800-555-6789",
+              "phone_number": "+1-800-555-6789",
               "address": {
                 "line_1": "456 Innovation Drive",
                 "line_2": "Floor 5",
