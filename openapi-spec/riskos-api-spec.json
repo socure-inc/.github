@@ -3,7 +3,12 @@
   "info": {
     "title": "Socure RiskOS™ API",
     "version": "2025-01-01.orion",
-    "description": "*RiskOS™ documentation site is Socure confidential and proprietary information, and is only intended for viewing by authorized persons.*\n\nThe Socure RiskOS™ APIs provide a unified API framework for risk evaluation. They use predictable, resource-oriented URLs, accept JSON-formatted request bodies, return JSON-formatted responses, and follow standard HTTP methods, status codes, and authentication practices.\n\nYou can test RiskOS™ APIs in the **Sandbox environment**, which allows you to simulate requests without impacting live data. The request endpoint determines whether the request is directed to the Sandbox or Production (live) environment.\n"
+    "description": "*RiskOS™ documentation site is Socure confidential and proprietary information, and is only intended for viewing by authorized persons.*\n\nThe Socure RiskOS™ APIs provide a unified API framework for risk evaluation. They use predictable, resource-oriented URLs, accept JSON-formatted request bodies, return JSON-formatted responses, and follow standard HTTP methods, status codes, and authentication practices.\n\nYou can test RiskOS™ APIs in the **Sandbox environment**, which allows you to simulate requests without impacting live data. The request endpoint determines whether the request is directed to the Sandbox or Production (live) environment.\n",
+    "contact": {
+      "name": "Socure Support",
+      "url": "https://help.socure.com",
+      "email": "support@socure.com"
+    }
   },
   "servers": [
     {
@@ -78,7 +83,10 @@
                   {
                     "$ref": "#/components/schemas/WorkforceVerification"
                   }
-                ]
+                ],
+                "discriminator": {
+                  "propertyName": "workflow"
+                }
               },
               "examples": {
                 "Consumer Onboarding": {
@@ -437,6 +445,9 @@
                     "$ref": "#/components/schemas/AccountTakeover"
                   }
                 ],
+                "discriminator": {
+                  "propertyName": "workflow"
+                },
                 "description": "A subset of the request body used in flows such as Consumer Onboarding, Business Onboarding, and Bank Account Verification.\n"
               },
               "examples": {
@@ -473,7 +484,7 @@
                     "timestamp": "2023-12-01T08:15:30.456Z",
                     "workflow": "consumer_onboarding",
                     "data": {
-                      "device": {
+                      "external_device": {
                         "id": "DEVICE-123456",
                         "ip_address": "192.168.1.10",
                         "session": "UPDATED-SESSION-1234"
@@ -1688,6 +1699,9 @@
         "properties": {
           "workflow": {
             "type": "string",
+            "enum": [
+              "consumer_onboarding"
+            ],
             "example": "consumer_onboarding",
             "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist."
           },
@@ -2019,6 +2033,9 @@
         "properties": {
           "workflow": {
             "type": "string",
+            "enum": [
+              "generic_passthrough"
+            ],
             "example": "generic_passthrough",
             "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist."
           },
@@ -2072,6 +2089,9 @@
         "properties": {
           "workflow": {
             "type": "string",
+            "enum": [
+              "trust_and_safety"
+            ],
             "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "trust_and_safety"
           },
@@ -2141,6 +2161,9 @@
         "properties": {
           "workflow": {
             "type": "string",
+            "enum": [
+              "bank_account_verification"
+            ],
             "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "bank_account_verification"
           },
@@ -2239,6 +2262,9 @@
         "properties": {
           "workflow": {
             "type": "string",
+            "enum": [
+              "business_onboarding"
+            ],
             "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "business_onboarding"
           },
@@ -2363,6 +2389,9 @@
         "properties": {
           "workflow": {
             "type": "string",
+            "enum": [
+              "account_takeover"
+            ],
             "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "account_takeover"
           },
@@ -2456,6 +2485,9 @@
           },
           "workflow": {
             "type": "string",
+            "enum": [
+              "trust_and_safety"
+            ],
             "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
             "example": "trust_and_safety"
           },
@@ -2789,6 +2821,9 @@
         "properties": {
           "workflow": {
             "type": "string",
+            "enum": [
+              "consumer_onboarding"
+            ],
             "example": "consumer_onboarding",
             "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist."
           },
