@@ -3,6 +3,10 @@
   "info": {
     "title": "Socure RiskOS™ API",
     "version": "2025-01-01.orion",
+    "license": {
+      "name": "Proprietary",
+      "url": "https://socure.com"
+    },
     "description": "*RiskOS™ documentation site is Socure confidential and proprietary information, and is only intended for viewing by authorized persons.*\n\nThe Socure RiskOS™ APIs provide a unified API framework for risk evaluation. They use predictable, resource-oriented URLs, accept JSON-formatted request bodies, return JSON-formatted responses, and follow standard HTTP methods, status codes, and authentication practices.\n\nYou can test RiskOS™ APIs in the **Sandbox environment**, which allows you to simulate requests without impacting live data. The request endpoint determines whether the request is directed to the Sandbox or Production (live) environment.\n",
     "contact": {
       "name": "Socure Support",
@@ -61,7 +65,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "oneOf": [
+                "anyOf": [
                   {
                     "$ref": "#/components/schemas/ConsumerOnboarding"
                   },
@@ -83,10 +87,7 @@
                   {
                     "$ref": "#/components/schemas/WorkforceVerification"
                   }
-                ],
-                "discriminator": {
-                  "propertyName": "workflow"
-                }
+                ]
               },
               "examples": {
                 "Consumer Onboarding": {
@@ -347,6 +348,11 @@
                     ],
                     "description": "Specifies the action to be taken for monitoring enrollment.\n- `enable`: Activates Watchlist Monitoring for the specified evaluation.\n- `disable`: Deactivates Watchlist Monitoring for the specified evaluation.         \n",
                     "example": "enable"
+                  },
+                  "userConsent": {
+                    "type": "boolean",
+                    "description": "Indicates whether the consumer has provided consent for monitoring enrollment.",
+                    "example": true
                   }
                 }
               }
