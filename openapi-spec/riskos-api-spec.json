@@ -3259,7 +3259,7 @@
               "properties": {
                 "enrichment_name": {
                   "type": "string",
-                  "description": "\tName of the enrichment executed.\n",
+                  "description": "Name of the enrichment executed.",
                   "example": "Socure Digital Intelligence"
                 },
                 "enrichment_provider": {
