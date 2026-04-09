@@ -86,6 +86,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/WorkforceVerification"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PaymentScreening"
                   }
                 ]
               },
@@ -110,6 +113,9 @@
                 },
                 "Workforce Verification": {
                   "$ref": "#/components/examples/WorkforceVerificationRequest"
+                },
+                "Payment Screening": {
+                  "$ref": "#/components/examples/PaymentScreeningRequest"
                 }
               }
             }
@@ -144,6 +150,9 @@
                   },
                   "Workforce Verification": {
                     "$ref": "#/components/examples/WorkforceVerificationResponse"
+                  },
+                  "Payment Screening": {
+                    "$ref": "#/components/examples/PaymentScreeningResponse"
                   }
                 }
               }
@@ -2619,6 +2628,510 @@
           }
         }
       },
+      "PaymentScreening": {
+        "title": "Payment Screening",
+        "type": "object",
+        "required": [
+          "workflow",
+          "id",
+          "timestamp",
+          "data"
+        ],
+        "properties": {
+          "workflow": {
+            "type": "string",
+            "enum": [
+              "payment_screening"
+            ],
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
+            "example": "payment_screening"
+          },
+          "id": {
+            "type": "string",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
+            "example": "8a4f6c12-3b9e-4d07-9f2c-e5a1b7d8f3c4"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.",
+            "example": "2025-05-02T12:44:22.059Z"
+          },
+          "data": {
+            "type": "object",
+            "description": "The main payload for the Payment Screening workflow.",
+            "required": [
+              "transaction_type",
+              "direction"
+            ],
+            "properties": {
+              "transaction_type": {
+                "type": "string",
+                "description": "Specifies the type of transaction being screened.",
+                "enum": [
+                  "transfer",
+                  "payment",
+                  "top_up",
+                  "withdrawal",
+                  "on_ramp",
+                  "off_ramp"
+                ],
+                "example": "transfer"
+              },
+              "direction": {
+                "type": "string",
+                "description": "Indicates the direction of funds movement for the transaction.",
+                "enum": [
+                  "credit",
+                  "debit"
+                ],
+                "example": "debit"
+              },
+              "transaction_details": {
+                "type": "object",
+                "description": "Additional metadata associated with the transaction.",
+                "properties": {
+                  "memo": {
+                    "type": "string",
+                    "description": "Optional free-form memo associated with the transaction.",
+                    "example": "Invoice 1048"
+                  },
+                  "statement_descriptor": {
+                    "type": "string",
+                    "description": "Optional transaction descriptor that may appear on account statements.",
+                    "example": "ACME PAYMENTS"
+                  }
+                }
+              },
+              "source": {
+                "description": "Information about the source party or originating side of the transaction.",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "type",
+                      "individual"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "INDIVIDUAL"
+                        ],
+                        "description": "The entity type of the source party.",
+                        "example": "INDIVIDUAL"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "Amount associated with the source side of the transaction.",
+                        "example": 15000
+                      },
+                      "currency": {
+                        "type": "string",
+                        "pattern": "^[A-Z]{3}$",
+                        "description": "Currency code in ISO 4217 format.",
+                        "example": "USD"
+                      },
+                      "channel": {
+                        "$ref": "#/components/schemas/Channel"
+                      },
+                      "line_of_business": {
+                        "$ref": "#/components/schemas/LineOfBusiness"
+                      },
+                      "ip_address": {
+                        "$ref": "#/components/schemas/IPAddress"
+                      },
+                      "individual": {
+                        "$ref": "#/components/schemas/Individual"
+                      },
+                      "external_device": {
+                        "$ref": "#/components/schemas/Device"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "type",
+                      "business"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "BUSINESS"
+                        ],
+                        "description": "The entity type of the source party.",
+                        "example": "BUSINESS"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "Amount associated with the source side of the transaction.",
+                        "example": 15000
+                      },
+                      "currency": {
+                        "type": "string",
+                        "pattern": "^[A-Z]{3}$",
+                        "description": "Currency code in ISO 4217 format.",
+                        "example": "USD"
+                      },
+                      "channel": {
+                        "$ref": "#/components/schemas/Channel"
+                      },
+                      "line_of_business": {
+                        "$ref": "#/components/schemas/LineOfBusiness"
+                      },
+                      "ip_address": {
+                        "$ref": "#/components/schemas/IPAddress"
+                      },
+                      "business": {
+                        "type": "object",
+                        "description": "Information related to the business entity on the source side.",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "A unique identifier for the business entity.",
+                            "example": "029659c7-733e-444b-9d19-7d119c035bc6"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The registered legal name of the business.",
+                            "example": "XYZ Inc."
+                          },
+                          "primary_phone": {
+                            "type": "string",
+                            "description": "The primary phone number of the business.",
+                            "example": "+1-800-555-6789"
+                          },
+                          "ein": {
+                            "type": "string",
+                            "description": "The Employer Identification Number (EIN) of the business.",
+                            "example": "XX-1899918"
+                          },
+                          "website_url": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "The website URL of the business.",
+                            "example": "https://example.com"
+                          },
+                          "address": {
+                            "$ref": "#/components/schemas/Address"
+                          },
+                          "instrument": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "instrument_type",
+                                  "account"
+                                ],
+                                "properties": {
+                                  "instrument_type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "bank_account"
+                                    ],
+                                    "description": "Type of financial instrument.",
+                                    "example": "bank_account"
+                                  },
+                                  "account": {
+                                    "$ref": "#/components/schemas/Account"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "instrument_type",
+                                  "crypto_address"
+                                ],
+                                "properties": {
+                                  "instrument_type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "crypto_address"
+                                    ],
+                                    "description": "Type of financial instrument.",
+                                    "example": "crypto_address"
+                                  },
+                                  "crypto_address": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "required": [
+                                      "address"
+                                    ],
+                                    "properties": {
+                                      "currency": {
+                                        "type": "string",
+                                        "enum": [
+                                          "BTC",
+                                          "XBT",
+                                          "ETH",
+                                          "USDT",
+                                          "XMR",
+                                          "ZEC",
+                                          "DASH",
+                                          "XRP",
+                                          "LTC",
+                                          "BCH",
+                                          "TRX",
+                                          "ETC",
+                                          "BNB",
+                                          "SOL"
+                                        ],
+                                        "example": "ETH"
+                                      },
+                                      "network": {
+                                        "type": "string",
+                                        "enum": [
+                                          "bitcoin",
+                                          "ethereum",
+                                          "tron",
+                                          "solana",
+                                          "bnb_chain",
+                                          "polygon",
+                                          "avalanche_c_chain",
+                                          "ethereum_classic",
+                                          "xrp_ledger",
+                                          "monero",
+                                          "zcash",
+                                          "dash",
+                                          "litecoin",
+                                          "bitcoin_cash"
+                                        ],
+                                        "example": "ethereum"
+                                      },
+                                      "address": {
+                                        "type": "string",
+                                        "description": "Cryptocurrency wallet address.",
+                                        "example": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "formation": {
+                            "type": "object",
+                            "additionalProperties": true,
+                            "description": "Formation details for the business entity."
+                          }
+                        }
+                      },
+                      "external_device": {
+                        "$ref": "#/components/schemas/Device"
+                      }
+                    }
+                  }
+                ]
+              },
+              "destination": {
+                "description": "Information about the destination party or receiving side of the transaction.",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "type",
+                      "individual"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "INDIVIDUAL"
+                        ],
+                        "description": "The entity type of the destination party.",
+                        "example": "INDIVIDUAL"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "Amount associated with the destination side of the transaction.",
+                        "example": 15000
+                      },
+                      "currency": {
+                        "type": "string",
+                        "pattern": "^[A-Z]{3}$",
+                        "description": "Currency code in ISO 4217 format.",
+                        "example": "USD"
+                      },
+                      "individual": {
+                        "$ref": "#/components/schemas/Individual"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "type",
+                      "business"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "BUSINESS"
+                        ],
+                        "description": "The entity type of the destination party.",
+                        "example": "BUSINESS"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "Amount associated with the destination side of the transaction.",
+                        "example": 15000
+                      },
+                      "currency": {
+                        "type": "string",
+                        "pattern": "^[A-Z]{3}$",
+                        "description": "Currency code in ISO 4217 format.",
+                        "example": "USD"
+                      },
+                      "business": {
+                        "type": "object",
+                        "description": "Information related to the business entity on the destination side.",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "A unique identifier for the business entity.",
+                            "example": "8cbf2b5f-2f3d-41b2-a8e8-6d2f92f0d8f4"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The registered legal name of the business.",
+                            "example": "ABC Marketplace LLC"
+                          },
+                          "primary_phone": {
+                            "type": "string",
+                            "description": "The primary phone number of the business.",
+                            "example": "+1-877-555-0199"
+                          },
+                          "ein": {
+                            "type": "string",
+                            "description": "The Employer Identification Number (EIN) of the business.",
+                            "example": "XX-1234567"
+                          },
+                          "website_url": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "The website URL of the business.",
+                            "example": "https://example.org"
+                          },
+                          "address": {
+                            "$ref": "#/components/schemas/Address"
+                          },
+                          "instrument": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "instrument_type",
+                                  "account"
+                                ],
+                                "properties": {
+                                  "instrument_type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "bank_account"
+                                    ],
+                                    "description": "Type of financial instrument.",
+                                    "example": "bank_account"
+                                  },
+                                  "account": {
+                                    "$ref": "#/components/schemas/Account"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "instrument_type",
+                                  "crypto_address"
+                                ],
+                                "properties": {
+                                  "instrument_type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "crypto_address"
+                                    ],
+                                    "description": "Type of financial instrument.",
+                                    "example": "crypto_address"
+                                  },
+                                  "crypto_address": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "required": [
+                                      "address"
+                                    ],
+                                    "properties": {
+                                      "currency": {
+                                        "type": "string",
+                                        "enum": [
+                                          "BTC",
+                                          "XBT",
+                                          "ETH",
+                                          "USDT",
+                                          "XMR",
+                                          "ZEC",
+                                          "DASH",
+                                          "XRP",
+                                          "LTC",
+                                          "BCH",
+                                          "TRX",
+                                          "ETC",
+                                          "BNB",
+                                          "SOL"
+                                        ],
+                                        "example": "BTC"
+                                      },
+                                      "network": {
+                                        "type": "string",
+                                        "enum": [
+                                          "bitcoin",
+                                          "ethereum",
+                                          "tron",
+                                          "solana",
+                                          "bnb_chain",
+                                          "polygon",
+                                          "avalanche_c_chain",
+                                          "ethereum_classic",
+                                          "xrp_ledger",
+                                          "monero",
+                                          "zcash",
+                                          "dash",
+                                          "litecoin",
+                                          "bitcoin_cash"
+                                        ],
+                                        "example": "bitcoin"
+                                      },
+                                      "address": {
+                                        "type": "string",
+                                        "description": "Cryptocurrency wallet address.",
+                                        "example": "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
       "EvalResponseWithOutSocureData": {
         "type": "object",
         "description": "The standard Socure RiskOS™ evaluation response.",
@@ -3282,6 +3795,79 @@
                 "postal_code": "10001"
               },
               "di_session_token": "eyJraWQiOiJmMzRiN2YiLCJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.DI_LOW_SCORE"
+            }
+          }
+        }
+      },
+      "PaymentScreeningRequest": {
+        "description": "Payment Screening",
+        "value": {
+          "id": "8a4f6c12-3b9e-4d07-9f2c-e5a1b7d8f3c4",
+          "timestamp": "2025-05-02T12:44:22.059Z",
+          "workflow": "payment_screening",
+          "data": {
+            "transaction_type": "transfer",
+            "direction": "debit",
+            "transaction_details": {
+              "memo": "Invoice 1048",
+              "statement_descriptor": "ACME PAYMENTS"
+            },
+            "source": {
+              "type": "INDIVIDUAL",
+              "amount": 15000,
+              "currency": "USD",
+              "channel": "web",
+              "line_of_business": "consumer_payments",
+              "ip_address": "203.0.113.10",
+              "individual": {
+                "id": "ind-123456",
+                "given_name": "John",
+                "family_name": "Doe",
+                "national_id": "123-45-6789",
+                "date_of_birth": "1990-01-15",
+                "email": "john.doe@example.com",
+                "phone_number": "+1-415-555-1111",
+                "address": {
+                  "line_1": "500 Market Street",
+                  "line_2": "Apt 10A",
+                  "locality": "San Francisco",
+                  "major_admin_division": "CA",
+                  "country": "US",
+                  "postal_code": "94105"
+                },
+                "di_session_token": "eyJraWQiOiJmMzRiN2YiLCJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.DI_LOW_SCORE"
+              },
+              "external_device": {
+                "id": "DEVICE-123456",
+                "session": "SESSION-ABC123",
+                "ip_address": "203.0.113.10"
+              }
+            },
+            "destination": {
+              "type": "BUSINESS",
+              "amount": 15000,
+              "currency": "USD",
+              "business": {
+                "id": "biz-789012",
+                "name": "ABC Marketplace LLC",
+                "ein": "12-3456789",
+                "website_url": "https://abcmarketplace.com",
+                "address": {
+                  "line_1": "1 Infinite Loop",
+                  "locality": "Cupertino",
+                  "major_admin_division": "CA",
+                  "country": "US",
+                  "postal_code": "95014"
+                },
+                "instrument": {
+                  "instrument_type": "crypto_address",
+                  "crypto_address": {
+                    "currency": "ETH",
+                    "network": "ethereum",
+                    "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+                  }
+                }
+              }
             }
           }
         }
@@ -5588,6 +6174,59 @@
           "eval_status": "evaluation_completed",
           "score": 72,
           "environment_name": "Sandbox"
+        }
+      },
+      "PaymentScreeningResponse": {
+        "description": "Payment Screening",
+        "value": {
+          "id": "28340239423",
+          "eval_id": "9d2b0c1e-1b6a-4e1a-8b2f-7f5c8a3d1e22",
+          "workflow": "payment_screening",
+          "eval_status": "evaluation_completed",
+          "decision": "REVIEW",
+          "status": "OPEN",
+          "sub_status": "In Review",
+          "workflow_id": "7b5b3d61-2b9a-4f8a-9c11-1f3b2f4e9a12",
+          "workflow_version": "1.0.0",
+          "eval_source": "API",
+          "eval_start_time": "2026-02-11T18:22:31Z",
+          "eval_end_time": "2026-02-11T18:22:40.835789195Z",
+          "decision_at": "2026-02-11T18:22:40.835789195Z",
+          "tags": [
+            "Sanctions Hit"
+          ],
+          "notes": "Watchlist: Screening Alert Found for payment parties and rails",
+          "review_queues": [
+            "Sanctions Review"
+          ],
+          "data_enrichments": [
+            {
+              "enrichment_name": "Watchlist - Sender Entity Name Screening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_provider": "Socure",
+              "status_code": 200,
+              "request": {
+                "firstName": "Vladimir",
+                "surName": "Putin",
+                "country": "US",
+                "modules": [
+                  "watchlistpremier"
+                ]
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    ""
+                  ]
+                },
+                "referenceId": "ref-sender-name-5e6a3934"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            }
+          ],
+          "environment_name": "Production"
         }
       }
     }
