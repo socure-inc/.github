@@ -831,7 +831,7 @@
                       "workflow": {
                         "type": "string",
                         "example": "consumer_onboarding",
-                        "description": "Your environment-specific workflow identifier."
+                        "description": "Your environment-specific workflow identifier. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request."
                       },
                       "decision": {
                         "type": "string",
@@ -882,7 +882,7 @@
                       "workflow": {
                         "type": "string",
                         "example": "consumer_onboarding",
-                        "description": "Your environment-specific workflow identifier."
+                        "description": "Your environment-specific workflow identifier. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request."
                       },
                       "status": {
                         "type": "string",
@@ -989,7 +989,7 @@
                   "workflow": {
                     "type": "string",
                     "example": "consumer_onboarding",
-                    "description": "The environment-specific Workflow identifier that the ID is associated with."
+                    "description": "The environment-specific Workflow identifier that the ID is associated with. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request."
                   },
                   "fraud_label": {
                     "type": "string",
@@ -1718,7 +1718,7 @@
               "consumer_onboarding"
             ],
             "example": "consumer_onboarding",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist."
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request."
           },
           "id": {
             "type": "string",
@@ -2052,7 +2052,7 @@
               "generic_passthrough"
             ],
             "example": "generic_passthrough",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist."
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request."
           },
           "id": {
             "type": "string",
@@ -2107,7 +2107,7 @@
             "enum": [
               "trust_and_safety"
             ],
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request.",
             "example": "trust_and_safety"
           },
           "id": {
@@ -2179,7 +2179,7 @@
             "enum": [
               "bank_account_verification"
             ],
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request.",
             "example": "bank_account_verification"
           },
           "id": {
@@ -2280,7 +2280,7 @@
             "enum": [
               "business_onboarding"
             ],
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request.",
             "example": "business_onboarding"
           },
           "id": {
@@ -2407,7 +2407,7 @@
             "enum": [
               "account_takeover"
             ],
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request.",
             "example": "account_takeover"
           },
           "id": {
@@ -2503,7 +2503,7 @@
             "enum": [
               "trust_and_safety"
             ],
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request.",
             "example": "trust_and_safety"
           },
           "timestamp": {
@@ -2643,7 +2643,7 @@
             "enum": [
               "payment_screening"
             ],
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request.",
             "example": "payment_screening"
           },
           "id": {
@@ -3344,7 +3344,7 @@
               "consumer_onboarding"
             ],
             "example": "consumer_onboarding",
-            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist."
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request."
           },
           "id": {
             "type": "string",
