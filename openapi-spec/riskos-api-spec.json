@@ -331,8 +331,7 @@
                 "required": [
                   "reference_id",
                   "list_type",
-                  "operation",
-                  "userConsent"
+                  "operation"
                 ],
                 "properties": {
                   "reference_id": {
@@ -357,11 +356,6 @@
                     ],
                     "description": "Specifies the action to be taken for monitoring enrollment.\n- `enable`: Activates Watchlist Monitoring for the specified evaluation.\n- `disable`: Deactivates Watchlist Monitoring for the specified evaluation.         \n",
                     "example": "enable"
-                  },
-                  "userConsent": {
-                    "type": "boolean",
-                    "description": "Indicates whether the consumer has provided consent for monitoring enrollment.",
-                    "example": true
                   }
                 }
               }
@@ -890,7 +884,7 @@
                         "enum": [
                           "OPEN",
                           "CLOSED",
-                          "ON HOLD"
+                          "ON_HOLD"
                         ],
                         "example": "OPEN"
                       },
@@ -3304,9 +3298,9 @@
                   "description": "Total number of API call attempts made for this operation, including retries.\n",
                   "example": 1
                 },
-                "error": {
+                "error_message": {
                   "type": "string",
-                  "description": "Optional error message if the enrichment call failed.",
+                  "description": "Error message returned if the enrichment call failed.",
                   "example": ""
                 }
               }
