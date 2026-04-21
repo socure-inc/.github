@@ -564,6 +564,16 @@
           },
           {
             "$ref": "#/components/parameters/XApiVersionHeader"
+          },
+          {
+            "name": "include_input",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Set to `true` to include the original input data and any transformed data in the response under the `input` field.\n"
           }
         ],
         "responses": {
@@ -839,6 +849,16 @@
                         ],
                         "example": "REVIEW"
                       },
+                      "tags": {
+                        "type": "string",
+                        "description": "Comma-separated list of tags to apply to the evaluation.",
+                        "example": "high_risk,email_risk"
+                      },
+                      "queue": {
+                        "type": "string",
+                        "description": "The review queue to assign the evaluation to.",
+                        "example": "Default Queue"
+                      },
                       "notes": {
                         "type": "string",
                         "description": "Optional notes to add context to the evaluation.",
@@ -892,6 +912,16 @@
                         "type": "string",
                         "description": "An optional sub-status providing more detail (e.g., `In Review`).",
                         "example": "In Review"
+                      },
+                      "tags": {
+                        "type": "string",
+                        "description": "Comma-separated list of tags to apply to the evaluation.",
+                        "example": "high_risk,email_risk"
+                      },
+                      "queue": {
+                        "type": "string",
+                        "description": "The review queue to assign the evaluation to.",
+                        "example": "Default Queue"
                       },
                       "notes": {
                         "type": "string",
@@ -3305,6 +3335,37 @@
                 }
               }
             }
+          },
+          "aggregations": {
+            "type": "object",
+            "description": "Aggregated data computed across historical evaluations for this entity. Returned when the extended evaluation response is enabled for your account.",
+            "additionalProperties": true
+          },
+          "group_id": {
+            "type": "string",
+            "description": "Identifier linking related evaluations that belong to the same group (for example, multiple evaluations triggered as part of a single workflow with grouped enrichments).",
+            "example": "grp-abc123"
+          },
+          "input": {
+            "type": "object",
+            "description": "The original input data submitted with the evaluation request. Only returned when the `include_input` query parameter is set to `true`.",
+            "properties": {
+              "data": {
+                "type": "object",
+                "description": "The input data as submitted.",
+                "additionalProperties": true
+              },
+              "updated_data": {
+                "type": "object",
+                "description": "The input data after any transformations applied by the workflow.",
+                "additionalProperties": true
+              }
+            }
+          },
+          "redirect_uri": {
+            "type": "string",
+            "description": "Redirect URI for the hosted experience. Returned when the evaluation is initiated through the Hosted UX flow.",
+            "example": "https://hosted.socure.com/session/abc123"
           },
           "computed": {
             "type": "object",
