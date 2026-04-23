@@ -34,7 +34,7 @@
   "tags": [
     {
       "name": "Evaluation",
-      "description": "The Evaluation API is the primary endpoint for performing Risk Evaluations in RiskOS™. \nRequests must include data that conforms to the schema defined for the specific Solution.\nSuccessful evaluation responses include a `decision` value from the following list: * `ACCEPT`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience.<br /> * `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic.<br /> * `REJECT`: The evaluation has failed the required checks and the entity is declined.\n> **Note:** **`ACCEPT`**, **`REVIEW`**, and **`REJECT`** are the default decision values. Customers can customize the response to added or to delete default values based on specific workflow needs."
+      "description": "The Evaluation API is the primary endpoint for performing Risk Evaluations in RiskOS™. \nRequests must include data that conforms to the schema defined for the specific Solution.\nSuccessful evaluation responses include a `decision` value from the following list: * `ACCEPT`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience.<br /> * `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic.<br /> * `REJECT`: The evaluation has failed the required checks and the entity is rejected.\n> **Note:** **`ACCEPT`**, **`REVIEW`**, and **`REJECT`** are the default decision values. Customers can customize the response to added or to delete default values based on specific workflow needs."
     },
     {
       "name": "Feedback",
@@ -3189,7 +3189,7 @@
           },
           "decision": {
             "type": "string",
-            "description": "The final outcome of the evaluation. Possible decision values are:\n* `ACCEPT`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience.\n* `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic.\n* `REJECT`: The evaluation has failed the required checks and the entity is declined.\n> **Note:** `ACCEPT`, `REVIEW`, and `REJECT` are the default decision values. Your integration can be customized to use different default decision values based on specific workflow needs.",
+            "description": "The final outcome of the evaluation. Possible decision values are:\n* `ACCEPT`: The evaluation is approved; proceed with fulfillment/onboarding and the happy‑path experience.\n* `REVIEW`: Additional assessment is required; route to manual review and/or configured step‑up checks per workflow logic.\n* `REJECT`: The evaluation has failed the required checks and the entity is rejected.\n> **Note:** `ACCEPT`, `REVIEW`, and `REJECT` are the default decision values. Your integration can be customized to use different default decision values based on specific workflow needs.",
             "enum": [
               "ACCEPT",
               "REVIEW",
@@ -3498,7 +3498,7 @@
                     "$ref": "#/components/schemas/Docv"
                   },
                   "otp": {
-                    "description": "Contains the OTP data for the transaction.\n\n> **Note:** In a `PATCH` request, the `OTP` object uses the following: \n  - The `code` field to send the OTP code to RiskOS for verification. \n  - The `resend` flag to re-trigger the send OTP block. \n",
+                    "description": "Contains the OTP data for the transaction.\n\n> **Note:** In a `PATCH` request, the `OTP` object uses the following: \n  - The `code` field to send the OTP code to RiskOS™ for verification. \n  - The `resend` flag to re-trigger the send OTP block. \n",
                     "properties": {
                       "code": {
                         "type": "string",
