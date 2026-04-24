@@ -4127,7 +4127,8 @@
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
                       "isTamperedAndroidBuild": true,
-                      "sessionAgeMinutes": 45
+                      "sessionAgeMinutes": 45,
+                      "deviceNetworkTimezoneOffsetDiffMinutes": 60
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -4539,7 +4540,8 @@
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
                       "isTamperedAndroidBuild": true,
-                      "sessionAgeMinutes": 45
+                      "sessionAgeMinutes": 45,
+                      "deviceNetworkTimezoneOffsetDiffMinutes": 60
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -4973,7 +4975,8 @@
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
                       "isTamperedAndroidBuild": true,
-                      "sessionAgeMinutes": 45
+                      "sessionAgeMinutes": 45,
+                      "deviceNetworkTimezoneOffsetDiffMinutes": 60
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -5327,7 +5330,8 @@
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
                       "isTamperedAndroidBuild": true,
-                      "sessionAgeMinutes": 45
+                      "sessionAgeMinutes": 45,
+                      "deviceNetworkTimezoneOffsetDiffMinutes": 60
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -5743,7 +5747,8 @@
                       "statisticalId": "9349d69fef75cd356744293487462f8cd912",
                       "isVirtualMachine": false,
                       "isTamperedAndroidBuild": true,
-                      "sessionAgeMinutes": 45
+                      "sessionAgeMinutes": 45,
+                      "deviceNetworkTimezoneOffsetDiffMinutes": 60
                     },
                     "network": {
                       "connectionIp": "38.48.122.126",
@@ -6107,6 +6112,7 @@
                     "computed": {
                       "isVirtualMachine": false,
                       "sessionAgeMinutes": 45,
+                      "deviceNetworkTimezoneOffsetDiffMinutes": 60,
                       "statisticalId": "e81a14d6621cfd2ed9390be9d9eba266851e391aa751881cda9f74377197980b"
                     },
                     "deviceCaptureAt": "2025-01-14T00:10:51.692Z",
