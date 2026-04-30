@@ -1037,12 +1037,12 @@
                     "type": "string",
                     "example": "2022-05-19",
                     "format": "date",
-                    "description": "The timestamp indicating when the event was recorded. Use the `YYYY-MM-DD` format as defined by the [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) standard."
+                    "description": "The date when the event was recorded. Use the `YYYY-MM-DD` format as defined by the [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) full-date standard. If omitted, defaults to the current date."
                   },
                   "recorded_by": {
                     "type": "string",
                     "example": "John Doe",
-                    "description": "The name or identifier of the person who recorded the fraud."
+                    "description": "The name or identifier of the person who recorded the fraud. If omitted, defaults to the authenticated user."
                   },
                   "tags": {
                     "type": "array",
@@ -1053,7 +1053,7 @@
                       "tag1",
                       "tag2"
                     ],
-                    "description": "Tags to categorize or label the fraud case. Useful for filtering, reporting, or internal tracking."
+                    "description": "Tags to categorize or label the fraud case. Useful for filtering, reporting, or internal tracking. Tags are validated against the namespace's configured tag definitions. If any tag is invalid, the request returns a `400` error."
                   }
                 }
               },
@@ -3563,11 +3563,11 @@
         "properties": {
           "message": {
             "type": "string",
-            "example": "feedback updated successfully for id 123456 as fraud"
+            "example": "Fraud feedback updated successfully : id=123456, fraud_label=fraud"
           }
         },
         "example": {
-          "message": "feedback updated successfully for id 123456 as fraud"
+          "message": "Fraud feedback updated successfully : id=123456, fraud_label=fraud"
         }
       },
       "FraudFeedbackImportResponse": {
@@ -3578,11 +3578,11 @@
         "properties": {
           "message": {
             "type": "string",
-            "example": "feedback file has been submitted successfully for processing"
+            "example": "Fraud feedback file has been submitted successfully for processing"
           }
         },
         "example": {
-          "message": "feedback file has been submitted successfully for processing"
+          "message": "Fraud feedback file has been submitted successfully for processing"
         }
       }
     },
