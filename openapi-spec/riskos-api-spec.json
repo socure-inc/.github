@@ -47,7 +47,7 @@
         "tags": [
           "Evaluation"
         ],
-        "summary": "Start an Evaluation",
+        "summary": "Start a New Evaluation",
         "operationId": "postEvaluation",
         "security": [
           {
@@ -59,7 +59,7 @@
             "$ref": "#/components/parameters/XApiVersionHeader"
           }
         ],
-        "description": "Performs a new Evaluation in RiskOS™.  <br /><br /> Select the type of evaluation below to access the corresponding schema.\n",
+        "description": "Performs a new evaluation in RiskOS™.  <br /><br /> Select the type of evaluation below to access the corresponding schema.",
         "requestBody": {
           "required": true,
           "content": {
