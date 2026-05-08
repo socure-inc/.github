@@ -47,7 +47,7 @@
         "tags": [
           "Evaluation"
         ],
-        "summary": "Start a New Evaluation",
+        "summary": "Start an Evaluation",
         "operationId": "postEvaluation",
         "security": [
           {
@@ -59,7 +59,7 @@
             "$ref": "#/components/parameters/XApiVersionHeader"
           }
         ],
-        "description": "Performs a new evaluation in RiskOS™.  <br /><br /> Select the type of evaluation below to access the corresponding schema.",
+        "description": "Performs a new Evaluation in RiskOS™.  <br /><br /> Select the type of evaluation below to access the corresponding schema.\n",
         "requestBody": {
           "required": true,
           "content": {
@@ -739,7 +739,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation.",
+        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. \nThe archive is organized into folders as follows:\n``` user_uploaded/     # Consumer-submitted identity documents ├─ document_verification/ │  ├─ documentfrontDoc_Front_1_blob.jpg │  └─ documentbackDoc_Back_1_blob.jpg └─ vouched_id_verification/\n  └─ Doc_Selfie_1_blob.jpg\n\ncase_attachments/   # Case attachments added via the RiskOS™ Dashboard ├─ identity.pdf └─ additional_doc.pdf ```\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
