@@ -272,22 +272,64 @@
             }
           },
           "400": {
-            "description": "Bad Request – The request was invalid or cannot be otherwise served."
+            "description": "Bad Request – The request was invalid or cannot be otherwise served.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized - No valid API key provided."
+            "description": "Unauthorized – No valid API key provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Forbidden - IP Address was rejected."
+            "description": "Forbidden – IP address was rejected.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Not Found - The requested resource does not exist."
+            "description": "Not Found – The requested resource does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "429": {
-            "description": "Too Many Requests - The rate limit for this API has been exceeded."
+            "description": "Too Many Requests – The rate limit for this API has been exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error – An unexpected condition occurred on the server."
+            "description": "Internal Server Error – An unexpected condition occurred on the server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -739,7 +781,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. ",
+        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. \nThe archive is organized into folders as follows:\n``` user_uploaded/     # Consumer-submitted identity documents ├─ document_verification/ │  ├─ documentfrontDoc_Front_1_blob.jpg │  └─ documentbackDoc_Back_1_blob.jpg └─ vouched_id_verification/\n  └─ Doc_Selfie_1_blob.jpg\n\ncase_attachments/   # Case attachments added via the RiskOS™ Dashboard ├─ identity.pdf └─ additional_doc.pdf ```\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
@@ -1173,7 +1215,7 @@
       "XApiVersionHeader": {
         "name": "X-API-Version",
         "in": "header",
-        "description": "Specifies the API version used for the request.",
+        "description": "Specifies the API version used for the request. If omitted, the default version is used. Socure recommends pinning a version to avoid unexpected behavioral changes when new versions are released.",
         "required": false,
         "schema": {
           "type": "string",
@@ -1242,7 +1284,11 @@
         "description": "The inquiry type. Below are the possible values.\n- `AVAILABILITY`: Used to confirm a bank account's availability.\n- `OWNERSHIP`: Used to verify a bank account's ownership.\n",
         "type": "array",
         "items": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "AVAILABILITY",
+            "OWNERSHIP"
+          ]
         },
         "example": [
           "AVAILABILITY",
@@ -1676,6 +1722,7 @@
           "ip_risk_score": {
             "type": "number",
             "format": "float",
+            "description": "A numeric score indicating the risk level associated with the IP address. Higher values indicate greater risk. This score is derived from the IP enrichment provider. Use alongside `is_ip_proxy` and `is_ip_bad_proxy` for a comprehensive IP risk assessment.",
             "example": 52.5
           },
           "ip_isp": {
@@ -2867,6 +2914,65 @@
               "Sandbox",
               "Production"
             ]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "description": "Structured error response returned for all non-2xx status codes.",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "A human-readable error message describing what went wrong.",
+            "example": "invalid request payload. please refer invalid_args for details"
+          },
+          "code": {
+            "type": "string",
+            "description": "A machine-readable error code for programmatic handling.",
+            "example": "INVALID_REQUEST",
+            "enum": [
+              "AUTHENTICATION_FAILED",
+              "PERMISSION_DENIED",
+              "WORKFLOW_NOT_FOUND",
+              "WORKFLOW_NOT_PUBLISHED",
+              "INVALID_REQUEST",
+              "INVALID_PAYLOAD",
+              "INVALID_ID",
+              "INVALID_FRAUD_TYPE",
+              "INTERNAL_ERROR"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Additional details or context about the error.",
+            "example": "workflow 'test_workflow' does not exist"
+          },
+          "details": {
+            "type": "object",
+            "description": "Additional context about the error, such as size limits or constraint details. Present only when extra context is available.",
+            "additionalProperties": true
+          },
+          "invalid_args": {
+            "type": "array",
+            "description": "Validation errors for specific request fields. Present only for request validation failures.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "description": "The name of the invalid field.",
+                  "example": "workflow"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "An explanation of why the field is invalid.",
+                  "example": "field 'workflow' is required"
+                }
+              }
+            }
           }
         }
       },
