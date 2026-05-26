@@ -2974,12 +2974,7 @@
               "transaction_type": {
                 "type": "string",
                 "enum": [
-                  "transfer",
-                  "payment",
-                  "top_up",
-                  "withdrawal",
-                  "on_ramp",
-                  "off_ramp"
+                  "transfer"
                 ],
                 "description": "Single-select transaction type.",
                 "example": "transfer"
