@@ -86,6 +86,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/WorkforceVerification"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PaymentScreening"
                   }
                 ]
               },
@@ -110,6 +113,9 @@
                 },
                 "Workforce Verification": {
                   "$ref": "#/components/examples/WorkforceVerificationRequest"
+                },
+                "Payment Screening": {
+                  "$ref": "#/components/examples/PaymentScreeningIndividualRequest"
                 }
               }
             }
@@ -144,6 +150,9 @@
                   },
                   "Workforce Verification": {
                     "$ref": "#/components/examples/WorkforceVerificationResponse"
+                  },
+                  "Payment Screening": {
+                    "$ref": "#/components/examples/PaymentScreeningIndividualResponse"
                   }
                 }
               }
@@ -2690,6 +2699,399 @@
           }
         }
       },
+      "PaymentScreeningInstrument": {
+        "type": "object",
+        "description": "Financial instrument details for Payment Screening.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "BANK_ACCOUNT",
+              "CRYPTO_ADDRESS"
+            ],
+            "description": "Financial instrument type.",
+            "example": "BANK_ACCOUNT"
+          },
+          "account": {
+            "type": "object",
+            "description": "Bank account details. Required when `type` is `BANK_ACCOUNT`.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Client-provided unique account identifier.",
+                "example": "78456158930"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "CHECKING",
+                  "SAVINGS"
+                ],
+                "description": "Bank account type.",
+                "example": "CHECKING"
+              },
+              "account_number": {
+                "type": "string",
+                "description": "Bank account number.",
+                "example": "12345678901"
+              },
+              "routing_number": {
+                "type": "string",
+                "description": "Routing number associated with the account.",
+                "example": "122199983"
+              },
+              "swift_bic": {
+                "type": "string",
+                "description": "SWIFT/BIC code.",
+                "example": "CHASUS33"
+              },
+              "iban": {
+                "type": "string",
+                "description": "International Bank Account Number (IBAN).",
+                "example": "FR14 2004 1010 0505 0001 3M02 606"
+              },
+              "opened_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Date and time the account was opened, in ISO 8601 / RFC 3339 format.",
+                "example": "2022-05-26T05:02:09.985Z"
+              },
+              "institution_name": {
+                "type": "string",
+                "description": "Financial institution name.",
+                "example": "Chase"
+              },
+              "account_inquiries": {
+                "type": "array",
+                "description": "Inquiry types requested for the account.",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "AVAILABILITY",
+                    "OWNERSHIP"
+                  ]
+                },
+                "example": [
+                  "AVAILABILITY"
+                ]
+              },
+              "institution_address": {
+                "$ref": "#/components/schemas/Address"
+              },
+              "account_snapshot": {
+                "$ref": "#/components/schemas/AccountSnapshot"
+              }
+            }
+          },
+          "crypto_address": {
+            "type": "object",
+            "description": "Crypto address details. Required when `type` is `CRYPTO_ADDRESS`.",
+            "properties": {
+              "currency": {
+                "type": "string",
+                "description": "Crypto asset code.",
+                "example": "XBT"
+              },
+              "network": {
+                "type": "string",
+                "description": "Blockchain network name.",
+                "example": "bitcoin"
+              },
+              "address": {
+                "type": "string",
+                "description": "Wallet address.",
+                "example": "18uKfaUjgG52rVeXEi3wxnveww7zZuECtE"
+              }
+            }
+          }
+        }
+      },
+      "PaymentScreeningIndividual": {
+        "type": "object",
+        "description": "Individual party details for Payment Screening.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique internal identifier for the consumer.",
+            "example": "src-ind-001"
+          },
+          "given_name": {
+            "type": "string",
+            "maxLength": 240,
+            "description": "The consumer's given name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- Certain special characters are not supported\n",
+            "example": "Emily"
+          },
+          "family_name": {
+            "type": "string",
+            "maxLength": 240,
+            "description": "The consumer's family name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- Certain special characters are not supported\n",
+            "example": "Chen"
+          },
+          "suffix": {
+            "type": "string",
+            "description": "Suffix for the consumer's name, if applicable (e.g., Jr., Sr., III).",
+            "example": "JR."
+          },
+          "national_id": {
+            "type": "string",
+            "description": "The consumer's national identification number. For US consumers, this can be a nine-digit Social Security Number (SSN) or Individual Tax Identification Number (ITIN). Partial SSNs (last four digits) are also accepted. Hyphens are optional.\n",
+            "example": "123456789"
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "date",
+            "description": "Consumer date of birth in YYYY-MM-DD format.",
+            "example": "1988-04-12"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Consumer email address.",
+            "example": "jane.smith@example.com"
+          },
+          "alternate_email": {
+            "type": "string",
+            "format": "email",
+            "description": "Consumer alternate email address.",
+            "example": "doe.john@example.com"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "The consumer's phone number. The API expects the standard E.164 format (e.g., +12025550147) but tolerates hyphens and spaces for user convenience.\n\n**Examples:**\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
+            "example": "+1-312-555-1234"
+          },
+          "alternate_phone_number": {
+            "type": "string",
+            "description": "The consumer's alternate phone number in E.164 format. The API expects the standard E.164 format but tolerates hyphens and spaces for user convenience.\n",
+            "example": "+1-555-202-0147"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "Male",
+              "Female",
+              "Self Identify"
+            ],
+            "description": "The consumer's gender.",
+            "example": "Female"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "instrument": {
+            "$ref": "#/components/schemas/PaymentScreeningInstrument"
+          },
+          "additional_context": {
+            "$ref": "#/components/schemas/AdditionalContext"
+          },
+          "di_session_token": {
+            "type": "string",
+            "description": "Device intelligence session token.",
+            "example": "eyJ0eXAiOiJK..."
+          }
+        }
+      },
+      "PaymentScreeningBusiness": {
+        "type": "object",
+        "description": "Business party details for Payment Screening.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the business entity.",
+            "example": "029659c7-733e-444b-9d19-7d119c035bc6"
+          },
+          "name": {
+            "type": "string",
+            "description": "Legal business name. Recommended when party type is BUSINESS.",
+            "example": "Tech Innovators LLC"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Business phone number. E.164 is expected, but hyphens and spaces are tolerated.\n",
+            "example": "+1-800-555-6789"
+          },
+          "ein": {
+            "type": "string",
+            "description": "Employer Identification Number (EIN) of the business.",
+            "example": "12-3456789"
+          },
+          "website_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Business website URL.",
+            "example": "https://techinnovators.com"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "instrument": {
+            "$ref": "#/components/schemas/PaymentScreeningInstrument"
+          },
+          "formation": {
+            "type": "object",
+            "description": "Business formation details.",
+            "additionalProperties": true
+          }
+        }
+      },
+      "PaymentScreening": {
+        "title": "Payment Screening",
+        "type": "object",
+        "required": [
+          "workflow",
+          "id",
+          "timestamp",
+          "data"
+        ],
+        "properties": {
+          "workflow": {
+            "type": "string",
+            "enum": [
+              "payment_screening"
+            ],
+            "example": "payment_screening",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request."
+          },
+          "id": {
+            "type": "string",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
+            "example": "txn-007341829056"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2026-05-19T14:22:03.000Z"
+          },
+          "data": {
+            "type": "object",
+            "description": "The main payload for the Payment Screening workflow.",
+            "required": [
+              "transaction_type"
+            ],
+            "properties": {
+              "transaction_type": {
+                "type": "string",
+                "enum": [
+                  "transfer",
+                  "payment",
+                  "top_up",
+                  "withdrawal",
+                  "on_ramp",
+                  "off_ramp"
+                ],
+                "description": "Single-select transaction type.",
+                "example": "transfer"
+              },
+              "line_of_business": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Optional free-form field identifying the line of business the request originates from."
+              },
+              "transaction_details": {
+                "type": "object",
+                "description": "Transaction detail fields.",
+                "properties": {
+                  "memo": {
+                    "type": "string",
+                    "description": "Short transaction description.",
+                    "example": "Rent July"
+                  },
+                  "statement_descriptor": {
+                    "type": "string",
+                    "description": "Descriptor that may appear on bank statements.",
+                    "example": "XYZ Services"
+                  }
+                }
+              },
+              "source": {
+                "type": "object",
+                "description": "Source party information.",
+                "properties": {
+                  "amount": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Amount in minor currency units.",
+                    "example": 25000
+                  },
+                  "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$",
+                    "description": "ISO 4217 currency code for the amount.",
+                    "example": "USD"
+                  },
+                  "channel": {
+                    "type": "string",
+                    "enum": [
+                      "web",
+                      "mobile",
+                      "pos",
+                      "other"
+                    ],
+                    "description": "Mode of interaction on the consumer's end.",
+                    "example": "mobile"
+                  },
+                  "ip_address": {
+                    "type": "string",
+                    "description": "Consumer IP address in IPv4 or IPv6 format.",
+                    "example": "203.0.113.10"
+                  },
+                  "individual": {
+                    "$ref": "#/components/schemas/PaymentScreeningIndividual"
+                  },
+                  "business": {
+                    "$ref": "#/components/schemas/PaymentScreeningBusiness"
+                  },
+                  "external_device": {
+                    "$ref": "#/components/schemas/Device"
+                  }
+                }
+              },
+              "destination": {
+                "type": "object",
+                "description": "Destination party information.",
+                "properties": {
+                  "amount": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Amount in minor currency units.",
+                    "example": 24500
+                  },
+                  "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$",
+                    "description": "ISO 4217 currency code for the amount.",
+                    "example": "USD"
+                  },
+                  "channel": {
+                    "type": "string",
+                    "enum": [
+                      "web",
+                      "mobile",
+                      "pos",
+                      "other"
+                    ],
+                    "description": "Mode of interaction on the consumer's end.",
+                    "example": "mobile"
+                  },
+                  "ip_address": {
+                    "type": "string",
+                    "description": "Consumer IP address in IPv4 or IPv6 format.",
+                    "example": "203.0.113.10"
+                  },
+                  "individual": {
+                    "$ref": "#/components/schemas/PaymentScreeningIndividual"
+                  },
+                  "business": {
+                    "$ref": "#/components/schemas/PaymentScreeningBusiness"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "EvalResponseWithOutSocureData": {
         "type": "object",
         "description": "The standard Socure RiskOS™ evaluation response.",
@@ -3447,6 +3849,75 @@
           }
         }
       },
+      "PaymentScreeningIndividualRequest": {
+        "description": "Payment Screening: Individual to Individual",
+        "value": {
+          "workflow": "payment_screening",
+          "id": "txn-007341829056",
+          "timestamp": "2026-05-19T14:22:03.000Z",
+          "data": {
+            "transaction_type": "transfer",
+            "transaction_details": {
+              "memo": "Personal transfer",
+              "statement_descriptor": "XFR 007341829056"
+            },
+            "source": {
+              "amount": 25000,
+              "currency": "USD",
+              "individual": {
+                "id": "src-ind-001",
+                "given_name": "Emily",
+                "family_name": "Chen",
+                "date_of_birth": "1988-04-12",
+                "address": {
+                  "line_1": "4521 Westwood Blvd",
+                  "locality": "Los Angeles",
+                  "major_admin_division": "CA",
+                  "country": "US",
+                  "postal_code": "90064",
+                  "type": "HOME"
+                },
+                "instrument": {
+                  "type": "BANK_ACCOUNT",
+                  "account": {
+                    "id": "src-acct-001",
+                    "type": "CHECKING",
+                    "account_number": "483920175634",
+                    "routing_number": "021000021",
+                    "institution_name": "JPMorgan Chase Bank",
+                    "swift_bic": "CHASUS33"
+                  }
+                }
+              }
+            },
+            "destination": {
+              "amount": 24500,
+              "currency": "USD",
+              "individual": {
+                "id": "dst-ind-001",
+                "given_name": "Andrey",
+                "family_name": "Kostin",
+                "date_of_birth": "1956-09-21",
+                "address": {
+                  "line_1": "29 Degtyarny Pereulok",
+                  "locality": "Moscow",
+                  "country": "RU",
+                  "postal_code": "127994"
+                },
+                "instrument": {
+                  "type": "BANK_ACCOUNT",
+                  "account": {
+                    "id": "dst-acct-001",
+                    "type": "CHECKING",
+                    "institution_name": "Raiffeisen Bank International",
+                    "swift_bic": "RZBAATWW"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "ConsumerOnboardingResponse": {
         "description": "Consumer Onboarding",
         "value": {
@@ -3725,15 +4196,11 @@
                       "deviceContext": "homepage",
                       "androidAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "iOSAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "webAttributes": {
                         "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21A5291h [FBAN/FBIOS;FBDV/iPhone15,3;FBMD/iPhone;FBSN/iOS;FBSV/17.0;FBSS/3;FBID/phone;FBLC/fr_FR;FBOP/5]",
@@ -4138,15 +4605,11 @@
                       "deviceContext": "homepage",
                       "androidAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "iOSAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "webAttributes": {
                         "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21A5291h [FBAN/FBIOS;FBDV/iPhone15,3;FBMD/iPhone;FBSN/iOS;FBSV/17.0;FBSS/3;FBID/phone;FBLC/fr_FR;FBOP/5]",
@@ -4573,15 +5036,11 @@
                       "deviceContext": "homepage",
                       "androidAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "iOSAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "webAttributes": {
                         "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21A5291h [FBAN/FBIOS;FBDV/iPhone15,3;FBMD/iPhone;FBSN/iOS;FBSV/17.0;FBSS/3;FBID/phone;FBLC/fr_FR;FBOP/5]",
@@ -4928,15 +5387,11 @@
                       "deviceContext": "homepage",
                       "androidAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "iOSAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "webAttributes": {
                         "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21A5291h [FBAN/FBIOS;FBDV/iPhone15,3;FBMD/iPhone;FBSN/iOS;FBSV/17.0;FBSS/3;FBID/phone;FBLC/fr_FR;FBOP/5]",
@@ -5345,15 +5800,11 @@
                       "deviceContext": "homepage",
                       "androidAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "iOSAttributes": {
                         "isRooted": true,
-                        "mobileNetwork": [
-                          null
-                        ]
+                        "mobileNetwork": []
                       },
                       "webAttributes": {
                         "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21A5291h [FBAN/FBIOS;FBDV/iPhone15,3;FBMD/iPhone;FBSN/iOS;FBSV/17.0;FBSS/3;FBID/phone;FBLC/fr_FR;FBOP/5]",
@@ -5694,7 +6145,7 @@
                     {
                       "entity": "test123@tester.com",
                       "entityType": "email",
-                      "profile": null
+                      "profile": {}
                     },
                     {
                       "entity": "+14159999999",
@@ -5755,6 +6206,238 @@
           "eval_status": "evaluation_completed",
           "score": 72,
           "environment_name": "Sandbox"
+        }
+      },
+      "PaymentScreeningIndividualResponse": {
+        "description": "Payment Screening: Individual to Individual",
+        "value": {
+          "id": "txn-007341829056",
+          "workflow": "payment_screening",
+          "workflow_id": "b030778a-e8b9-4bba-8a1a-4126ad6e90c4",
+          "workflow_version": "2.9.0",
+          "eval_source": "API",
+          "eval_id": "809a7984-63ca-4571-9ab9-70beb202fc5f",
+          "eval_start_time": "2026-05-20T05:09:09.737955462Z",
+          "eval_end_time": "2026-05-20T05:09:11.046489573Z",
+          "decision": "REJECT",
+          "decision_at": "2026-05-20T05:09:11.046371316Z",
+          "status": "CLOSED",
+          "sub_status": "Reject",
+          "tags": [],
+          "notes": "",
+          "review_queues": [],
+          "data_enrichments": [
+            {
+              "enrichment_name": "Socure Payment Screening - Source (Individual)",
+              "enrichment_endpoint": "https://idplus-service.webapps.us-east-1.prod.socure.link/api/3.0/EmailAuthScore",
+              "enrichment_provider": "SocurePaymentScreening",
+              "status_code": 200,
+              "request": {
+                "accountNumber": "483920175634",
+                "bankIdentifierCode": "CHASUS33",
+                "city": "Los Angeles",
+                "country": "US",
+                "dob": "1988-04-12",
+                "entityType": "individual",
+                "firstName": "Emily",
+                "modules": [
+                  "watchlistplus"
+                ],
+                "parentTxnId": "809a7984-63ca-4571-9ab9-70beb202fc5f",
+                "physicalAddress": "4521 Westwood Blvd",
+                "riskOSId": "txn-007341829056",
+                "routingNumber": "021000021",
+                "state": "CA",
+                "surName": "Chen",
+                "workflow": "payment_screening",
+                "zip": "90064"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "c0bc3ae6-32d6-4f71-b77a-cdf538f8c14f"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Source (Individual Account)",
+              "enrichment_endpoint": "https://idplus-service.webapps.us-east-1.prod.socure.link/api/3.0/EmailAuthScore",
+              "enrichment_provider": "SocurePaymentScreening",
+              "status_code": 200,
+              "request": {
+                "accountNumber": "483920175634",
+                "bankIdentifierCode": "CHASUS33",
+                "entityName": "JPMorgan Chase Bank",
+                "entityType": "organization",
+                "modules": [
+                  "watchlistplus"
+                ],
+                "parentTxnId": "809a7984-63ca-4571-9ab9-70beb202fc5f",
+                "riskOSId": "txn-007341829056",
+                "routingNumber": "021000021",
+                "workflow": "payment_screening"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "5c1d9c5f-341c-4532-ac26-ae147f33187a"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Destination (Individual)",
+              "enrichment_endpoint": "https://idplus-service.webapps.us-east-1.prod.socure.link/api/3.0/EmailAuthScore",
+              "enrichment_provider": "SocurePaymentScreening",
+              "status_code": 200,
+              "request": {
+                "bankIdentifierCode": "RZBAATWW",
+                "city": "Moscow",
+                "country": "RU",
+                "dob": "1956-09-21",
+                "entityType": "individual",
+                "firstName": "Andrey",
+                "modules": [
+                  "watchlistplus"
+                ],
+                "parentTxnId": "809a7984-63ca-4571-9ab9-70beb202fc5f",
+                "physicalAddress": "29 Degtyarny Pereulok",
+                "riskOSId": "txn-007341829056",
+                "surName": "Kostin",
+                "workflow": "payment_screening",
+                "zip": "127994"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {
+                    "OFAC SDN List": [
+                      {
+                        "comments": {
+                          "additionalSanctionsInformation": [
+                            "Secondary sanctions risk: - Ukraine-/Russia-Related Sanctions Regulations, 31 CFR 589.201 and/or 589.209"
+                          ],
+                          "address": [
+                            "Moscow, Russia"
+                          ],
+                          "aka": [
+                            "Andrei",
+                            "Andrej Leonidovič KOSTIN",
+                            "Андрей Леонидович КОСТИН"
+                          ],
+                          "countries": [
+                            "RU"
+                          ],
+                          "dateOfBirth": [
+                            "1956-09-21"
+                          ],
+                          "entityType": [
+                            "Individual"
+                          ],
+                          "gender": [
+                            "Male"
+                          ],
+                          "listName": [
+                            "SDN List"
+                          ],
+                          "listingId": [
+                            "OFAC-24063"
+                          ],
+                          "name": [
+                            "ANDREY KOSTIN"
+                          ],
+                          "offence": [
+                            "Sanction"
+                          ],
+                          "offense": [
+                            "Sanction"
+                          ],
+                          "originalCountryText": [
+                            "Russia"
+                          ],
+                          "placeOfBirthList": [
+                            "Moscow, Russian Federation"
+                          ],
+                          "program": [
+                            "UKRAINE-EO13661"
+                          ],
+                          "secondarySanctionsRisk": [
+                            "Ukraine-/Russia-Related Sanctions Regulations, 31 CFR 589.201 and/or 589.209"
+                          ],
+                          "sourceCode": [
+                            "OFAC"
+                          ],
+                          "url": [
+                            "https://sanctionssearch.ofac.treas.gov/"
+                          ],
+                          "yearOfBirth": [
+                            "1956"
+                          ]
+                        },
+                        "entityCorrelationScore": 100,
+                        "entityId": "ZaP+/U4QRtIsYGxKb1EO",
+                        "matchFields": [
+                          "dobExact",
+                          "nameExact",
+                          "akaExact"
+                        ],
+                        "matchScore": 100,
+                        "sourceUrls": [
+                          "https://sanctionssearch.ofac.treas.gov/"
+                        ]
+                      }
+                    ]
+                  },
+                  "reasonCodes": [
+                    "R173",
+                    "R186",
+                    "R180"
+                  ]
+                },
+                "referenceId": "ae81104d-a23c-426d-ac1c-f01f208399a8"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Destination (Individual Account)",
+              "enrichment_endpoint": "https://idplus-service.webapps.us-east-1.prod.socure.link/api/3.0/EmailAuthScore",
+              "enrichment_provider": "SocurePaymentScreening",
+              "status_code": 200,
+              "request": {
+                "bankIdentifierCode": "RZBAATWW",
+                "entityName": "Raiffeisen Bank International",
+                "entityType": "organization",
+                "modules": [
+                  "watchlistplus"
+                ],
+                "parentTxnId": "809a7984-63ca-4571-9ab9-70beb202fc5f",
+                "riskOSId": "txn-007341829056",
+                "workflow": "payment_screening"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "d8187606-0c2c-4da7-93f1-e1c18161838c"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            }
+          ],
+          "eval_status": "evaluation_completed",
+          "environment_name": "Production"
         }
       }
     }
