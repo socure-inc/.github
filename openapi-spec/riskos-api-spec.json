@@ -465,7 +465,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Updates risk data or metadata for a previously submitted evaluation request that is in a **paused** state. The request is identified by `eval_id`, and updates can be partial—any data not included in the request will remain unchanged. The body of the `PATCH` request must follow the same structure as the original `POST` request.\n> **Note:** Once an evaluation is completed, its data becomes immutable. Any attempt to update it will result in a failed request.\n",
+        "description": "Updates risk data or metadata for a previously submitted evaluation request that is in a **paused** state. The request is identified by `eval_id`, and updates can be partial—any data not included in the request will remain unchanged. The body of the `PATCH` request must follow the same structure as the original `POST` request.\n> **Note:** Once an evaluation is completed, its data becomes immutable. Any attempt to update it results in a failed request.\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
@@ -567,7 +567,27 @@
                       "status": "OPEN",
                       "sub_status": "Verification Pending",
                       "eval_start_time": "2024-12-02T10:30:00.123Z",
-                      "eval_end_time": "2024-12-02T10:32:00.456Z"
+                      "eval_end_time": "2024-12-02T10:32:00.456Z",
+                      "tags": [
+                        "none"
+                      ],
+                      "score": 51,
+                      "review_queues": [
+                        "Default Queue"
+                      ],
+                      "data_enrichments": [
+                        {
+                          "enrichment_name": "Socure Phone Risk",
+                          "enrichment_provider": "Socure",
+                          "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+                          "status_code": 200,
+                          "response": {
+                            "referenceId": "68bb36f1-7e32-4600-bebf-26a6cdd39f8b"
+                          },
+                          "is_source_cache": false,
+                          "total_attempts": 1
+                        }
+                      ]
                     }
                   }
                 }
