@@ -39,6 +39,10 @@
     {
       "name": "Feedback",
       "description": "Use the Feedback APIs to submit decision feedback, either individually or in bulk, to enhance fraud detection models and improve decision accuracy."
+    },
+    {
+      "name": "Reason Codes",
+      "description": "Use the Reason Codes API to retrieve the catalog of reason codes available to your account, including each code's name, provider, description, and product. Filter the catalog by product, name, free text, or active status."
     }
   ],
   "paths": {
@@ -59,7 +63,7 @@
             "$ref": "#/components/parameters/XApiVersionHeader"
           }
         ],
-        "description": "Performs a new Evaluation in RiskOS™.  <br /><br /> Select the type of evaluation below to access the corresponding schema.\n",
+        "description": "Submit a new evaluation in RiskOS™. Select the evaluation type below to view the corresponding request schema.\n",
         "requestBody": {
           "required": true,
           "content": {
@@ -363,7 +367,7 @@
             "$ref": "#/components/parameters/XApiVersionHeader"
           }
         ],
-        "description": "Enables or disables watchlist monitoring for data in an existing evaluation. When monitoring is enabled, each entity in the evaluation is automatically checked daily against the specified lists for any additions, modifications, or removals that may affect their watchlist risk.\n",
+        "description": "Enable or disable daily watchlist monitoring for an existing evaluation. Monitored entities are checked automatically for additions, modifications, or removals across specified lists.\n",
         "requestBody": {
           "required": true,
           "content": {
@@ -465,7 +469,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Updates risk data or metadata for a previously submitted evaluation request that is in a **paused** state. The request is identified by `eval_id`, and updates can be partial—any data not included in the request will remain unchanged. The body of the `PATCH` request must follow the same structure as the original `POST` request.\n> **Note:** Once an evaluation is completed, its data becomes immutable. Any attempt to update it results in a failed request.\n",
+        "description": "Update risk data or metadata for a paused evaluation identified by `eval_id`. Partial updates are supported — omitted fields remain unchanged. Completed evaluations are immutable.\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
@@ -810,7 +814,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Retrieves a structured ZIP archive of documents associated with a specific evaluation ID. Contents may include consumer-uploaded identity documents and attachments added by reviewers during a case evaluation. ",
+        "description": "Retrieve a ZIP archive of documents associated with an evaluation, including user-uploaded identity documents and reviewer-added case attachments.\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/EvalId"
@@ -1227,6 +1231,173 @@
           },
           "500": {
             "description": "Internal Server Error – An unexpected condition occurred on the server."
+          }
+        }
+      }
+    },
+    "/api/reason-codes": {
+      "get": {
+        "tags": [
+          "Reason Codes"
+        ],
+        "summary": "Retrieve the Reason Code Catalog",
+        "operationId": "getReasonCodes",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Returns the catalog of reason codes available to your account, including each code's name, provider, description, and product. Use this endpoint to cache reason code descriptions in your own systems or to keep an internal mapping in sync, rather than reading the **Reason Codes** page in the RiskOS™ Dashboard manually.\n\nBy default, the response includes every active reason code and excludes deprecated codes. Use the query parameters to filter the catalog. You can combine parameters, and you can repeat `product` and `name` to match several values.\n\nThe catalog changes infrequently. Cache the response and refresh it periodically rather than calling the endpoint on every transaction.\n",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "Account Intelligence",
+                  "Address Risk",
+                  "Deceased Check",
+                  "Device Risk",
+                  "Email Risk",
+                  "Global Watchlist Screening",
+                  "Phone Risk",
+                  "Predictive DocV",
+                  "Sigma First-Party Fraud",
+                  "Sigma Identity Fraud",
+                  "Sigma Synthetic",
+                  "Socure Verify (KYC)"
+                ]
+              }
+            },
+            "example": [
+              "Email Risk"
+            ],
+            "description": "Returns only codes for the named product. Repeat the parameter to match several products.\n"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Returns only the codes whose name exactly matches the value. Repeat the parameter to request several codes.\n"
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns codes whose name or description contains the substring, case-insensitive. Useful for keyword search.\n"
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Set to `true` to return only active codes, or `false` to include deprecated codes. When omitted, only active codes are returned.\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The reason code catalog was retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reasonCodes": {
+                      "type": "array",
+                      "description": "The list of reason codes that match the request.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "The reason code identifier."
+                          },
+                          "provider": {
+                            "type": "string",
+                            "description": "The provider that produces the code."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Human-readable explanation of the signal."
+                          },
+                          "product": {
+                            "type": "string",
+                            "description": "The product the code belongs to. Omitted when the code is not product-specific.\n"
+                          },
+                          "isActive": {
+                            "type": "boolean",
+                            "description": "Whether the code is currently in use."
+                          },
+                          "releaseDate": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "The date the code was released (`YYYY-MM-DD`), when available.\n"
+                          },
+                          "deprecatedDate": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "The date the code was deprecated (`YYYY-MM-DD`), when applicable.\n"
+                          },
+                          "additionalNote": {
+                            "type": "string",
+                            "description": "Supplementary guidance for the code, when available."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "catalogExample": {
+                    "summary": "Example Response",
+                    "value": {
+                      "reasonCodes": [
+                        {
+                          "name": "RXXXX",
+                          "provider": "Socure",
+                          "description": "Description of a risk signal.",
+                          "product": "Email Risk",
+                          "isActive": true,
+                          "releaseDate": "2024-03-15"
+                        },
+                        {
+                          "name": "IXXXX",
+                          "provider": "Socure",
+                          "description": "Description of an informational signal.",
+                          "product": "Address Risk",
+                          "isActive": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - The API key is missing or invalid."
+          },
+          "500": {
+            "description": "Internal Server Error - RiskOS™ could not retrieve the catalog. Retry, then contact Socure support if the problem persists.\n"
           }
         }
       }
@@ -6480,6 +6651,12 @@
         "tags": [
           "Evaluation",
           "Feedback"
+        ]
+      },
+      {
+        "name": "Reference Data",
+        "tags": [
+          "Reason Codes"
         ]
       }
     ]
