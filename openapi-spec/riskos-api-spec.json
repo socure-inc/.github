@@ -324,6 +324,16 @@
               }
             }
           },
+          "413": {
+            "description": "Payload Too Large – The `customer_metadata` object exceeds the maximum allowed size.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "429": {
             "description": "Too Many Requests – The rate limit for this API has been exceeded.",
             "content": {
@@ -606,6 +616,9 @@
           },
           "404": {
             "description": "Not Found - The requested resource does not exist."
+          },
+          "413": {
+            "description": "Payload Too Large - The `customer_metadata` object exceeds the maximum allowed size."
           },
           "500": {
             "description": "500 Internal Server Error – Unexpected server issue."
@@ -1435,6 +1448,18 @@
       }
     },
     "schemas": {
+      "CustomerMetadata": {
+        "title": "Customer Metadata",
+        "type": "object",
+        "nullable": true,
+        "additionalProperties": true,
+        "description": "Optional, opaque JSON object echoed back unchanged on the response and at the top level of webhook callbacks — use it to route and correlate requests. Must be a JSON object of up to 200 characters total (the entire serialized JSON); larger payloads return `413 CUSTOMER_METADATA_TOO_LARGE`. Omit it or send `null` to skip. Don't include PII or secrets. See [Customer Metadata](https://help.socure.com/riskos/docs/customer-metadata).",
+        "example": {
+          "service": "checkout-api",
+          "business_unit": "consumer-lending",
+          "internal_ref": "order-998877"
+        }
+      },
       "Address": {
         "type": "object",
         "properties": {
@@ -1993,6 +2018,9 @@
             "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2022-09-01T12:34:56.789Z"
           },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
+          },
           "data": {
             "type": "object",
             "description": "The main payload for the Consumer Onboarding workflow.",
@@ -2327,6 +2355,9 @@
             "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2022-09-01T12:34:56.789Z"
           },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
+          },
           "data": {
             "type": "object",
             "description": "The main payload for the Pass-Through workflow.",
@@ -2382,6 +2413,9 @@
             "format": "date-time",
             "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2022-09-01T12:34:56.789Z"
+          },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
           },
           "data": {
             "type": "object",
@@ -2454,6 +2488,9 @@
             "format": "date-time",
             "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2022-09-01T12:34:56.789Z"
+          },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
           },
           "data": {
             "type": "object",
@@ -2555,6 +2592,9 @@
             "format": "date-time",
             "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2022-09-01T12:34:56.789Z"
+          },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
           },
           "data": {
             "type": "object",
@@ -2683,6 +2723,9 @@
             "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2022-09-01T12:34:56.789Z"
           },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
+          },
           "data": {
             "type": "object",
             "description": "The main payload for the Login and Authentication workflow.",
@@ -2773,6 +2816,9 @@
             "format": "date-time",
             "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2022-09-01T12:34:56.789Z"
+          },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
           },
           "data": {
             "type": "object",
@@ -3155,6 +3201,9 @@
             "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2026-05-19T14:22:03.000Z"
           },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
+          },
           "data": {
             "type": "object",
             "description": "The main payload for the Payment Screening workflow.",
@@ -3286,6 +3335,9 @@
             "type": "string",
             "description": "The client-defined request identifier, echoed back in the response.",
             "example": "EVAL-ABC123"
+          },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
           },
           "eval_id": {
             "type": "string",
@@ -3530,7 +3582,8 @@
               "INVALID_PAYLOAD",
               "INVALID_ID",
               "INVALID_FRAUD_TYPE",
-              "INTERNAL_ERROR"
+              "INTERNAL_ERROR",
+              "CUSTOMER_METADATA_TOO_LARGE"
             ]
           },
           "message": {
@@ -3592,6 +3645,9 @@
             "format": "date-time",
             "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
             "example": "2022-09-01T12:34:56.789Z"
+          },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
           },
           "data": {
             "type": "object",
@@ -3774,6 +3830,11 @@
           "id": "onb-12345",
           "timestamp": "2023-12-01T08:15:30.456Z",
           "workflow": "consumer_onboarding",
+          "customer_metadata": {
+            "service": "checkout-api",
+            "business_unit": "consumer-lending",
+            "internal_ref": "order-998877"
+          },
           "data": {
             "line_of_business": "ACME Inc",
             "channel": "web",
@@ -4110,6 +4171,11 @@
           "id": "onb-12345",
           "eval_id": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816",
           "workflow": "consumer_onboarding",
+          "customer_metadata": {
+            "service": "checkout-api",
+            "business_unit": "consumer-lending",
+            "internal_ref": "order-998877"
+          },
           "eval_status": "evaluation_completed",
           "decision": "REJECT",
           "status": "CLOSED",
