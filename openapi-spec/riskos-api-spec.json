@@ -3379,7 +3379,7 @@
           },
           "score": {
             "type": "integer",
-            "description": "If configured for a workflow, provides an aggregate score of all steps. This can be used for risk banding, additional routing, or analytics alongside the primary `decision` value.",
+            "description": "If configured for a workflow, provides an aggregate sum of the scores assigned to each matched step. Use it for risk banding, additional routing, or analytics alongside the primary `decision` value. The value is determined entirely by your workflow configuration: because you can assign positive or negative scores to individual steps, the aggregate is unbounded and can be negative. Whether a higher value indicates more or less risk depends on how you configure those step scores.",
             "example": 91
           },
           "status": {
