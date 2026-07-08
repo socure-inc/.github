@@ -1453,7 +1453,7 @@
         "type": "object",
         "nullable": true,
         "additionalProperties": true,
-        "description": "Optional, opaque JSON object echoed back unchanged on the response and at the top level of webhook callbacks — use it to route and correlate requests. Must be a JSON object of up to 200 characters total (the entire serialized JSON); larger payloads return `413 CUSTOMER_METADATA_TOO_LARGE`. Omit it or send `null` to skip. Don't include PII or secrets. See [Customer Metadata](https://help.socure.com/riskos/docs/customer-metadata).",
+        "description": "Optional, opaque, caller-owned JSON object attached to the evaluation request. RiskOS™ stores it, forwards it to the workflow engine, and returns it unchanged on the synchronous response and at the top level of webhook callbacks. Use it to carry your own context — such as the originating service, product, or business flow — for routing and correlation, without adding custom fields per customer. Must be a JSON object of up to 200 characters total (measured across the entire serialized JSON). Exceeding this returns `413` with error code `CUSTOMER_METADATA_TOO_LARGE`. Sending `null` or omitting the field is treated as absent. Do not include PII, secrets, or regulated data; the object is stored and echoed verbatim. See [Customer Metadata](https://help.socure.com/riskos/docs/customer-metadata) for usage details.",
         "example": {
           "service": "checkout-api",
           "business_unit": "consumer-lending",
@@ -3379,7 +3379,7 @@
           },
           "score": {
             "type": "integer",
-            "description": "If configured for a workflow, provides an aggregate sum of the scores assigned to each matched step. Use it for risk banding, additional routing, or analytics alongside the primary `decision` value. The value is determined entirely by your workflow configuration: because you can assign positive or negative scores to individual steps, the aggregate is unbounded and can be negative. Whether a higher value indicates more or less risk depends on how you configure those step scores.",
+            "description": "If configured for a workflow, provides an aggregate score of all steps. This can be used for risk banding, additional routing, or analytics alongside the primary `decision` value.",
             "example": 91
           },
           "status": {
