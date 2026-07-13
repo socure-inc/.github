@@ -4515,7 +4515,7 @@
                           "iphone14,7",
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast",
                           "t-mobile"
                         ],
@@ -4551,7 +4551,7 @@
                         "deviceModels": [
                           "moto g"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "at&t"
                         ],
                         "deviceLanguages": [
@@ -4582,7 +4582,7 @@
                         "deviceModels": [
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast"
                         ],
                         "deviceLanguages": [
@@ -4924,7 +4924,7 @@
                           "iphone14,7",
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast",
                           "t-mobile"
                         ],
@@ -4960,7 +4960,7 @@
                         "deviceModels": [
                           "moto g"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "at&t"
                         ],
                         "deviceLanguages": [
@@ -4991,7 +4991,7 @@
                         "deviceModels": [
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast"
                         ],
                         "deviceLanguages": [
@@ -5355,7 +5355,7 @@
                           "iphone14,7",
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast",
                           "t-mobile"
                         ],
@@ -5391,7 +5391,7 @@
                         "deviceModels": [
                           "moto g"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "at&t"
                         ],
                         "deviceLanguages": [
@@ -5422,7 +5422,7 @@
                         "deviceModels": [
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast"
                         ],
                         "deviceLanguages": [
@@ -5706,7 +5706,7 @@
                           "iphone14,7",
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast",
                           "t-mobile"
                         ],
@@ -5742,7 +5742,7 @@
                         "deviceModels": [
                           "moto g"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "at&t"
                         ],
                         "deviceLanguages": [
@@ -5773,7 +5773,7 @@
                         "deviceModels": [
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast"
                         ],
                         "deviceLanguages": [
@@ -6119,7 +6119,7 @@
                           "iphone14,7",
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast",
                           "t-mobile"
                         ],
@@ -6155,7 +6155,7 @@
                         "deviceModels": [
                           "moto g"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "at&t"
                         ],
                         "deviceLanguages": [
@@ -6186,7 +6186,7 @@
                         "deviceModels": [
                           "GT70053G"
                         ],
-                        "deviceisps": [
+                        "deviceIsps": [
                           "comcast"
                         ],
                         "deviceLanguages": [
