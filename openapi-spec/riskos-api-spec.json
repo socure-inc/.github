@@ -3649,6 +3649,17 @@
           "customer_metadata": {
             "$ref": "#/components/schemas/CustomerMetadata"
           },
+          "actions": {
+            "type": "object",
+            "description": "A top-level container for instructions that modify the lifecycle of the current evaluation session.",
+            "properties": {
+              "resume": {
+                "type": "boolean",
+                "description": "Set to `true` to force the workflow out of an `ON_HOLD` state. This bypasses the current paused step (for example, OTP entry) so the consumer can fix a typo or switch delivery channels. Functionally equivalent to the `data.individual.force_resume_evaluation` flag.",
+                "example": true
+              }
+            }
+          },
           "data": {
             "type": "object",
             "description": "The main payload for the Consumer Onboarding workflow.",
