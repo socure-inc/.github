@@ -1855,6 +1855,11 @@
           },
           "driver_license_state": {
             "$ref": "#/components/schemas/DriverLicenseState"
+          },
+          "mno_status": {
+            "type": "boolean",
+            "description": "Set to `true` to run Socure Phone Risk with Real-Time SIM Swap Verification. When enabled, the Phone Risk response returns additional SIM Swap reason codes. Requires the Phone Risk with SIM Swap enrichment to be configured in your workflow.\n",
+            "example": true
           }
         }
       },
