@@ -240,7 +240,6 @@
                                 "I705",
                                 "I708"
                               ],
-                              "score": 0.01,
                               "scores": [
                                 {
                                   "name": "addressrisk_cus1",
@@ -709,7 +708,6 @@
                                 "I705",
                                 "I708"
                               ],
-                              "score": 0.01,
                               "scores": [
                                 {
                                   "name": "addressrisk_cus1",
@@ -745,7 +743,6 @@
                                 "I520",
                                 "I555"
                               ],
-                              "score": 0.01,
                               "scores": [
                                 {
                                   "name": "email_risk_cus1",
@@ -776,7 +773,6 @@
                                 "I618",
                                 "I608"
                               ],
-                              "score": 0.01,
                               "scores": [
                                 {
                                   "name": "RiskPhoneUS.V6.Norm.V1",
@@ -4263,7 +4259,6 @@
                     "I705",
                     "I708"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "addressrisk_cus1",
@@ -4299,7 +4294,6 @@
                     "I520",
                     "I555"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "email_risk_cus1",
@@ -4330,7 +4324,6 @@
                     "I618",
                     "I608"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "RiskPhoneUS.V6.Norm.V1",
@@ -4690,7 +4683,6 @@
                     "I705",
                     "I708"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "addressrisk_cus1",
@@ -4726,7 +4718,6 @@
                     "I520",
                     "I555"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "email_risk_cus1",
@@ -4757,7 +4748,6 @@
                     "I618",
                     "I608"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "RiskPhoneUS.V6.Norm.V1",
@@ -5103,7 +5093,6 @@
                     "I705",
                     "I708"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "addressrisk_cus1",
@@ -5139,7 +5128,6 @@
                     "I520",
                     "I555"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "email_risk_cus1",
@@ -5170,7 +5158,6 @@
                     "I618",
                     "I608"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "RiskPhoneUS.V6.Norm.V1",
@@ -5885,7 +5872,6 @@
                     "I705",
                     "I708"
                   ],
-                  "score": 0.01,
                   "scores": [
                     {
                       "name": "addressrisk_cus1",
