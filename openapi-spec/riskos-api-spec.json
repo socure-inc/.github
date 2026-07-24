@@ -3866,7 +3866,12 @@
                 "country": "US",
                 "postal_code": "62704"
               },
-              "di_session_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ...PiUsws9D6O3DjSjNDCbIJKciX44s"
+              "di_session_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ...PiUsws9D6O3DjSjNDCbIJKciX44s",
+              "additional_context": {
+                "user_consent": true,
+                "consent_timestamp": "2020-09-13T23:11:12.000Z",
+                "mno_status": true
+              }
             },
             "ip_address": "203.0.113.10"
           }
@@ -4209,54 +4214,231 @@
           "review_queues": [],
           "data_enrichments": [
             {
-              "enrichment_name": "Deliver OTP SMS",
-              "enrichment_endpoint": "https://idplus.dev.socure.com/api/1.0/otp/send",
-              "enrichment_provider": "SocureOTP",
-              "status_code": 200,
-              "request": {
-                "channel": "email",
-                "destination": "darshanvaishnav24@gmail.com"
-              },
-              "response": {
-                "error": "",
-                "verificationId": "5ac71c12-32df-4fb2-ab76-5493444f3f97"
-              },
-              "is_source_cache": false
-            },
-            {
-              "enrichment_name": "Verify OTP SMS",
-              "enrichment_endpoint": "https://idplus.dev.socure.com/api/1.0/otp/verify",
-              "enrichment_provider": "SocureOTP",
-              "status_code": 200,
-              "request": {
-                "otp": "508070",
-                "verificationId": "5ac71c12-32df-4fb2-ab76-5493444f3f97"
-              },
-              "response": {
-                "attemptCount": 1,
-                "error": "",
-                "status": "approved",
-                "verificationId": "5ac71c12-32df-4fb2-ab76-5493444f3f97"
-              },
-              "is_source_cache": false
-            },
-            {
-              "enrichment_name": "Socure Address risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_name": "Socure Verify",
               "enrichment_provider": "Socure",
+              "enrichment_endpoint": "/api/3.0/EmailAuthScore",
               "status_code": 200,
               "request": {
-                "city": "bakersfield",
+                "modules": [
+                  "kyc"
+                ],
+                "firstName": "Jonathan",
+                "surName": "Reyes",
+                "dob": "1979-07-30",
+                "nationalId": "1234",
+                "physicalAddress": "123 Rizal Avenue",
+                "city": "Portland",
+                "state": "OR",
+                "zip": "97223",
                 "country": "US",
-                "deviceSessionId": "234ac3ff-3ed1-42de-8f33-8f332febfa54",
-                "dob": "1990-05-17",
-                "email": "johnsmith123+test@example.com",
+                "mobileNumber": "+639171234567",
+                "email": "jonathan.reyes1979@gmail.com"
+              },
+              "response": {
+                "referenceId": "b8fbeb31-a2fc-4f1e-a5d1-392c4ed06538",
+                "kyc": {
+                  "socureId": "46fd3b11-a130-4915-8cc4-074bbd799669",
+                  "reasonCodes": [
+                    "I919"
+                  ],
+                  "fieldValidations": {
+                    "firstName": 0.99,
+                    "surName": 0.99,
+                    "streetAddress": 0.99,
+                    "city": 0.99,
+                    "state": 0.99,
+                    "zip": 0.99,
+                    "mobileNumber": 0.99,
+                    "dob": 0.99,
+                    "ssn": 0.99
+                  },
+                  "fieldSourceAttribution": {
+                    "ssn": [
+                      "Social Security Administration"
+                    ],
+                    "address": [
+                      "USPS",
+                      "Utility Records"
+                    ],
+                    "mobileNumber": [
+                      "Telecom Carrier"
+                    ]
+                  },
+                  "matchCounts": {
+                    "tradelines": 3
+                  },
+                  "creditFileNumber": "00512123456",
+                  "additionalInfo": {
+                    "tradelines": 3
+                  },
+                  "transactionScope": "international"
+                }
+              },
+              "is_source_cache": false
+            },
+            {
+              "enrichment_name": "Socure Verify Plus",
+              "enrichment_provider": "Socure",
+              "enrichment_endpoint": "/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "modules": [
+                  "kycplus"
+                ],
+                "firstName": "Jonathan",
+                "surName": "Reyes",
+                "dob": "1979-07-30",
+                "nationalId": "1234",
+                "physicalAddress": "123 Rizal Avenue",
+                "city": "Portland",
+                "state": "OR",
+                "zip": "97223",
+                "country": "US",
+                "mobileNumber": "+639171234567",
+                "email": "jonathan.reyes1979@gmail.com"
+              },
+              "response": {
+                "referenceId": "b8fbeb31-a2fc-4f1e-a5d1-392c4ed06538",
+                "kycPlus": {
+                  "socureId": "46fd3b11-a130-4915-8cc4-074bbd799669",
+                  "reasonCodes": [
+                    "I919"
+                  ],
+                  "fieldValidations": {
+                    "firstName": 0.99,
+                    "surName": 0.99,
+                    "streetAddress": 0.99,
+                    "city": 0.99,
+                    "state": 0.99,
+                    "zip": 0.99,
+                    "mobileNumber": 0.99,
+                    "dob": 0.99,
+                    "ssn": 0.99
+                  },
+                  "fieldSourceAttribution": {
+                    "ssn": [
+                      "Social Security Administration"
+                    ],
+                    "address": [
+                      "USPS",
+                      "Utility Records"
+                    ],
+                    "mobileNumber": [
+                      "Telecom Carrier"
+                    ]
+                  },
+                  "bestMatchedEntity": {
+                    "firstName": "John",
+                    "middleName": "Michael",
+                    "surName": "Doe"
+                  }
+                }
+              },
+              "is_source_cache": false
+            },
+            {
+              "enrichment_name": "Socure Sigma Synthetic",
+              "enrichment_provider": "Socure",
+              "enrichment_endpoint": "/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "modules": [
+                  "synthetic"
+                ],
+                "firstName": "Shannon",
+                "surName": "Zhao",
+                "nationalId": "123456789",
+                "dob": "1958-01-31",
+                "email": "j.smith@example.com",
+                "phone": "+13475551234",
+                "streetAddress": "234 Main Street",
+                "city": "Jersey City",
+                "state": "NJ",
+                "zip": "07307",
+                "ipAddress": "10.10.10.10",
+                "country": "US"
+              },
+              "response": {
+                "referenceId": "f9012345-6789-abcd-ef01-234567890abc",
+                "synthetic": {
+                  "reasonCodes": [
+                    "I912",
+                    "R557",
+                    "R615"
+                  ],
+                  "scores": [
+                    {
+                      "name": "synthetic",
+                      "version": "4.0",
+                      "score": 0.911
+                    }
+                  ]
+                }
+              },
+              "is_source_cache": false
+            },
+            {
+              "enrichment_name": "Socure Sigma Identity Fraud",
+              "enrichment_provider": "Socure",
+              "enrichment_endpoint": "/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "modules": [
+                  "fraud"
+                ],
+                "firstName": "Shannon",
+                "surName": "Zhao",
+                "nationalId": "461118208",
+                "dob": "1975-04-02",
+                "email": "shannon.zhao@example.com",
+                "phone": "+14155550100",
+                "ipAddress": "10.10.10.10",
+                "country": "US"
+              },
+              "response": {
+                "referenceId": "d7e8f901-2345-6789-abcd-ef0123456789",
+                "fraud": {
+                  "reasonCodes": [
+                    "I301",
+                    "I303"
+                  ],
+                  "scores": [
+                    {
+                      "name": "Sigma Identity Fraud (US)",
+                      "version": "5.0",
+                      "score": 0.923
+                    }
+                  ]
+                }
+              },
+              "is_source_cache": false
+            },
+            {
+              "enrichment_name": "Socure Address Risk",
+              "enrichment_provider": "Socure",
+              "enrichment_endpoint": "/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
                 "modules": [
                   "addressrisk"
                 ],
-                "nationalId": "454236793"
+                "firstName": "Maria",
+                "surName": "Lopez",
+                "mobileNumber": "+13051234567",
+                "physicalAddress": "123 Main Street",
+                "city": "Miami",
+                "state": "FL",
+                "zip": "33101",
+                "country": "US"
               },
               "response": {
+                "referenceId": "4ca693ee-af2a-45ef-9688-834683ac1b34",
+                "nameAddressCorrelation": {
+                  "score": 0.84,
+                  "reasonCodes": [
+                    "I700"
+                  ]
+                },
                 "addressRisk": {
                   "reasonCodes": [
                     "I704",
@@ -4265,378 +4447,368 @@
                   ],
                   "scores": [
                     {
-                      "name": "addressrisk_cus1",
-                      "score": 0.01,
-                      "version": "10.0"
-                    },
-                    {
-                      "name": "address_risk_pri",
-                      "score": 0.01,
-                      "version": "9.0"
+                      "name": "Address Risk Model (US) Norm",
+                      "version": "3.2",
+                      "score": 0.921
                     }
                   ]
-                },
-                "referenceId": "4ca693ee-af2a-45ef-9688-834683ac1b34"
+                }
               },
-              "is_source_cache": false,
-              "total_attempts": 1
+              "is_source_cache": false
             },
             {
-              "enrichment_name": "Socure Email Risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_name": "Socure eCBSV",
               "enrichment_provider": "Socure",
+              "enrichment_endpoint": "/api/3.0/EmailAuthScore",
               "status_code": 200,
               "request": {
                 "modules": [
-                  "emailrisk"
+                  "ecbsv"
                 ],
-                "email": "johnsmith123+test@example.com"
+                "firstName": "Shannon",
+                "surName": "Zhao",
+                "dob": "1973-06-20",
+                "nationalId": "136582341",
+                "country": "US",
+                "userConsent": true,
+                "consentTimestamp": "2025-01-15T10:30:00Z"
               },
               "response": {
-                "emailRisk": {
+                "referenceId": "f3863a33-69ca-43c2-90e0-8b4344a41a09",
+                "socureId": "ab06216f-b88b-4be8-8075-933bb5c2303c",
+                "eCBSV": {
                   "reasonCodes": [
-                    "I520",
-                    "I555"
-                  ],
+                    "I998",
+                    "I999"
+                  ]
+                }
+              },
+              "is_source_cache": false
+            },
+            {
+              "enrichment_name": "Socure Sigma First-Party Fraud",
+              "enrichment_provider": "Socure",
+              "enrichment_endpoint": "/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "modules": [
+                  "firstpartyfraud"
+                ],
+                "disclosurePurpose": "GLBA_502(e)",
+                "firstName": "Shannon",
+                "surName": "Zhao",
+                "nationalId": "461118208",
+                "dob": "1975-04-02",
+                "email": "shannon.zhao@example.com",
+                "mobileNumber": "+14155550100",
+                "physicalAddress": "234 Main Street",
+                "city": "Jersey City",
+                "state": "NJ",
+                "zip": "07307",
+                "country": "US"
+              },
+              "response": {
+                "referenceId": "e8f90123-4567-89ab-cdef-012345678901",
+                "firstPartyFraud": {
                   "scores": [
                     {
-                      "name": "email_risk_cus1",
-                      "score": 0.01,
-                      "version": "10.0"
+                      "name": "Identity Manipulation",
+                      "version": "3.0",
+                      "score": 0.847
                     }
+                  ],
+                  "reasonCodes": [
+                    "I401",
+                    "I405"
+                  ]
+                }
+              },
+              "is_source_cache": false
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Source (Individual)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "individual",
+                "firstName": "Jane",
+                "surName": "Smith",
+                "entityName": "Jane Smith",
+                "dob": "1990-05-15",
+                "nationalId": "123456789",
+                "email": "jane.smith@example.com",
+                "mobileNumber": "+13125551234",
+                "physicalAddress": "742 Evergreen Terrace",
+                "physicalAddress2": "Apt 12B",
+                "city": "Springfield",
+                "state": "IL",
+                "zip": "62704",
+                "country": "US",
+                "cryptoAddress": "18uKfaUjgG52rVeXEi3wxnveww7zZuECtE",
+                "cryptoNetwork": "XBT"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
                   ]
                 },
-                "referenceId": "92201637-1ec8-46b4-9537-236971eb6f9b"
+                "referenceId": "ref-src-ind-5e6a3934"
               },
               "is_source_cache": false,
               "total_attempts": 1
             },
             {
-              "enrichment_name": "Socure Phone Risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_name": "Socure Payment Screening - Source (Business)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Tech Innovators LLC",
+                "mobileNumber": "+18005556789",
+                "physicalAddress": "456 Innovation Drive",
+                "physicalAddress2": "Floor 5",
+                "city": "Mountain View",
+                "state": "CA",
+                "zip": "94043",
+                "country": "US",
+                "cryptoAddress": "18uKfaUjgG52rVeXEi3wxnveww7zZuECtE",
+                "cryptoNetwork": "XBT"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-src-biz-19af2c11"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Source (Individual Account)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Chase",
+                "physicalAddress": "200 Key Square St",
+                "physicalAddress2": "New York",
+                "city": "New York City",
+                "state": "NY",
+                "zip": "12345",
+                "country": "US",
+                "bankIdentifierCode": "CH-123",
+                "internationalBankAccountNumber": "FR1420041010050500013M02606"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-src-indacct-83bb01d2"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Source (Business Account)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Chase",
+                "physicalAddress": "200 Key Square St",
+                "physicalAddress2": "New York",
+                "city": "New York City",
+                "state": "NY",
+                "zip": "12345",
+                "country": "US",
+                "bankIdentifierCode": "CH-123",
+                "internationalBankAccountNumber": "FR1420041010050500013M02606"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-src-bizacct-2a1c9e77"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Destination (Individual)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "individual",
+                "firstName": "Jane",
+                "surName": "Smith",
+                "entityName": "Jane Smith",
+                "dob": "1990-05-15",
+                "nationalId": "123456789",
+                "email": "jane.smith@example.com",
+                "mobileNumber": "+13125551234",
+                "physicalAddress": "742 Evergreen Terrace",
+                "physicalAddress2": "Apt 12B",
+                "city": "Springfield",
+                "state": "IL",
+                "zip": "62704",
+                "country": "US",
+                "cryptoAddress": "18uKfaUjgG52rVeXEi3wxnveww7zZuECtE",
+                "cryptoNetwork": "XBT"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-dst-ind-3fbb2e10"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Destination (Business)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Tech Innovators LLC",
+                "mobileNumber": "+18005556789",
+                "physicalAddress": "456 Innovation Drive",
+                "physicalAddress2": "Floor 5",
+                "city": "Mountain View",
+                "state": "CA",
+                "zip": "94043",
+                "country": "US",
+                "cryptoAddress": "18uKfaUjgG52rVeXEi3wxnveww7zZuECtE",
+                "cryptoNetwork": "XBT",
+                "nationalId": "12-3456789"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-dst-biz-7c4d5e88"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Destination (Individual Account)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Chase",
+                "physicalAddress": "200 Key Square St",
+                "physicalAddress2": "New York",
+                "city": "New York City",
+                "state": "NY",
+                "zip": "12345",
+                "country": "US",
+                "bankIdentifierCode": "CH-123",
+                "internationalBankAccountNumber": "FR1420041010050500013M02606"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-dst-indacct-9a1b2c33"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Destination (Business Account)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Chase",
+                "physicalAddress": "200 Key Square St",
+                "physicalAddress2": "New York",
+                "city": "New York City",
+                "state": "NY",
+                "zip": "12345",
+                "country": "US",
+                "bankIdentifierCode": "CH-123",
+                "internationalBankAccountNumber": "FR1420041010050500013M02606"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-dst-bizacct-4e5f6a77"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Phone Risk SIM Swap",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
               "enrichment_provider": "Socure",
               "status_code": 200,
               "request": {
-                "modules": [
-                  "phonerisk"
-                ],
-                "email": "johnsmith123+test@example.com"
+                "mobileNumber": "+13475550100",
+                "firstName": "Guillermo",
+                "surName": "McNeil",
+                "physicalAddress": "742 Evergreen Terrace",
+                "city": "San Francisco",
+                "state": "CA",
+                "zip": "94105",
+                "country": "US",
+                "mnoStatus": true
               },
               "response": {
+                "referenceId": "68bb36f1-7e32-4600-bebf-26a6cdd39f8b",
+                "namePhoneCorrelation": {
+                  "score": 0.92,
+                  "reasonCodes": [
+                    "I600"
+                  ]
+                },
                 "phoneRisk": {
                   "reasonCodes": [
                     "I618",
-                    "I608"
+                    "I608",
+                    "I699"
                   ],
                   "scores": [
                     {
-                      "name": "RiskPhoneUS.V6.Norm.V1",
-                      "score": 0.01,
-                      "version": "6.0"
+                      "name": "Phone Risk Model (US) Norm",
+                      "version": "6.0",
+                      "score": 0.781
                     }
                   ]
-                },
-                "referenceId": "68bb36f1-7e32-4600-bebf-26a6cdd39f8b"
-              },
-              "is_source_cache": false,
-              "total_attempts": 1
-            },
-            {
-              "enrichment_name": "SocureCNam",
-              "enrichment_endpoint": "https://mfa-orchestrator-service-9.webapps.us-east-1.product-dev.socure.link/api/2.0/cnam",
-              "enrichment_provider": "SocureCNam",
-              "status_code": 200,
-              "request": {
-                "phoneNumber": "+1-312-555-1234"
-              },
-              "response": {
-                "callerName": "Jane Smith",
-                "callerType": "CONSUMER",
-                "countryCode": "US",
-                "phoneNumber": "+1-312-555-1234",
-                "valid": true
-              },
-              "is_source_cache": false,
-              "total_attempts": 1
-            },
-            {
-              "enrichment_name": "Socure Digital Intelligence",
-              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
-              "enrichment_provider": "Socure",
-              "status_code": 200,
-              "request": {
-                "modules": [
-                  "digitalintelligence"
-                ],
-                "deviceSessionId": "7b3c2c04-0e7e-46e4-afe8-b905cdf91833",
-                "customerUserId": "129",
-                "userId": "dwanyedever1975"
-              },
-              "response": {
-                "referenceId": "7b3c2c04-0e7e-46e4-afe8-b905cdf91833",
-                "digitalIntelligence": {
-                  "device": {
-                    "id": "234ac3ff-3ed1-42de-8f33-8f332febfa54",
-                    "sessionCreatedAt": "2024-12-23T18:06:52.248985937Z",
-                    "deviceCapturedAt": "2024-12-23T18:09:12.735992851Z",
-                    "computed": {
-                      "statisticalId": "9349d69fef75cd356744293487462f8cd912",
-                      "isVirtualMachine": false,
-                      "isTamperedAndroidBuild": true,
-                      "sessionAgeMinutes": 45,
-                      "deviceNetworkTimezoneOffsetDiffMinutes": 60
-                    },
-                    "network": {
-                      "connectionIp": "38.48.122.126",
-                      "forwardedForIps": [
-                        "78.32.11.221",
-                        "70.45.2.1"
-                      ],
-                      "webRtcPublicIp": "176.124.54.12",
-                      "webRtcInternalIp": "192.168.1.85",
-                      "realIp": "38.48.122.126",
-                      "isTor": true,
-                      "isProxy": true,
-                      "isVpn": true,
-                      "isConsumerPrivacy": true,
-                      "isRiskyNetwork": true,
-                      "isp": "comcast",
-                      "ispType": "home",
-                      "asn": 27364,
-                      "asnName": "armstrong",
-                      "domainName": "zoominternet.net",
-                      "org": "comcast",
-                      "isMobileCarrier": true,
-                      "speed": "cable",
-                      "networkLocation": {
-                        "countryCode": "US",
-                        "region": "WA",
-                        "city": "Tacoma",
-                        "postalCode": "98401",
-                        "latitude": 47.2529001,
-                        "longitude": -122.4443,
-                        "metroCode": 819,
-                        "continentCode": "na",
-                        "timezoneName": "America/New_York",
-                        "gmtOffset": "-0400"
-                      }
-                    },
-                    "attributes": {
-                      "sdkVersion": "3.0.1",
-                      "platform": "iOS",
-                      "os": "iOS",
-                      "osVersion": 17,
-                      "deviceModel": "iphone14,7",
-                      "deviceManufacturer": "Apple",
-                      "deviceType": "tablet",
-                      "viewportWidth": 600,
-                      "viewportHeight": 400,
-                      "screenHeight": 1080,
-                      "screenWidth": 1920,
-                      "devicePixelRatio": 1.5,
-                      "network": {
-                        "vpnStatus": true
-                      },
-                      "location": {
-                        "latitude": 41.50854591662628,
-                        "longitude": -81.69534315646631,
-                        "horizontalAccuracy": 2.1,
-                        "altitude": 998.2,
-                        "verticalAccuracy": 0,
-                        "bearing": 32,
-                        "bearingAccuracy": 2.1,
-                        "speed": 1.3,
-                        "speedAccuracy": 0.2
-                      },
-                      "battery": {
-                        "batteryState": "charging",
-                        "batteryLevel": 0.47
-                      },
-                      "timeZone": "America/New_York",
-                      "timeZoneOffset": -480,
-                      "language": "en-US",
-                      "deviceArchitecture": "arm64",
-                      "applicationType": "native",
-                      "isEmulator": true,
-                      "deviceContext": "homepage",
-                      "androidAttributes": {
-                        "isRooted": true,
-                        "mobileNetwork": []
-                      },
-                      "iOSAttributes": {
-                        "isRooted": true,
-                        "mobileNetwork": []
-                      },
-                      "webAttributes": {
-                        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21A5291h [FBAN/FBIOS;FBDV/iPhone15,3;FBMD/iPhone;FBSN/iOS;FBSV/17.0;FBSS/3;FBID/phone;FBLC/fr_FR;FBOP/5]",
-                        "userAgentExtractionRequired": true,
-                        "browser": "Google Chrome",
-                        "browserVersion": 116
-                      }
-                    },
-                    "history": {
-                      "firstSeen": "2023-10-24T15:55:16.368Z",
-                      "lastSeen": "2023-10-24T15:55:16.368Z",
-                      "ips": [
-                        "78.32.11.221",
-                        "70.45.2.1"
-                      ],
-                      "isps": [
-                        "RogersCable",
-                        "T-Mobile"
-                      ],
-                      "daysSeen": [
-                        "2023-10-24"
-                      ],
-                      "networkLocations": [
-                        "chicago, il",
-                        "new york, ny",
-                        "paris, fr"
-                      ]
-                    }
-                  },
-                  "behavioral": {
-                    "sessionId": "d34304a6-a726-4dec-b1cd-9c4a3c192a0d",
-                    "serverCreated": "2021-09-01T11:19:58.796Z",
-                    "serverUpdated": "2021-09-11T16:19:58.796Z",
-                    "clientUpdated": "2021-09-11T16:14:58.796Z",
-                    "duration": 120910,
-                    "source": "https://example.com/",
-                    "aggregations": {
-                      "totalEventCount": 26,
-                      "focusCount": 0,
-                      "blurCount": 3,
-                      "inputChangeCount": 6,
-                      "submissionCount": 1,
-                      "clickCount": 3,
-                      "pasteCount": 0
-                    }
-                  },
-                  "entityProfiler": [
-                    {
-                      "entity": "12223334444",
-                      "entityType": "phone",
-                      "profile": {
-                        "seenCount": 2,
-                        "firstSeen": "2019-08-24T14:15:22Z",
-                        "lastSeen": "2019-08-24T14:15:22Z",
-                        "deviceTypes": [
-                          "phone",
-                          "tablet"
-                        ],
-                        "deviceModels": [
-                          "iphone14,7",
-                          "GT70053G"
-                        ],
-                        "deviceIsps": [
-                          "comcast",
-                          "t-mobile"
-                        ],
-                        "deviceLanguages": [
-                          "en-us",
-                          "es-us"
-                        ],
-                        "deviceTimezones": [
-                          "america/new_york",
-                          "america/los_angeles"
-                        ],
-                        "networkLocationStates": [
-                          "ca",
-                          "az"
-                        ],
-                        "networkLocationPostalCodes": [
-                          "12345",
-                          "56789"
-                        ]
-                      }
-                    },
-                    {
-                      "entity": "john@doe.com",
-                      "entityType": "email",
-                      "profile": {
-                        "seenCount": 5,
-                        "firstSeen": "2020-09-10T10:22:45Z",
-                        "lastSeen": "2020-09-15T13:45:32Z",
-                        "deviceTypes": [
-                          "phone",
-                          "desktop"
-                        ],
-                        "deviceModels": [
-                          "moto g"
-                        ],
-                        "deviceIsps": [
-                          "at&t"
-                        ],
-                        "deviceLanguages": [
-                          "en-us"
-                        ],
-                        "deviceTimezones": [
-                          "america/los_angeles"
-                        ],
-                        "networkLocationStates": [
-                          "or"
-                        ],
-                        "networkLocationPostalCodes": [
-                          "56789"
-                        ]
-                      }
-                    },
-                    {
-                      "entity": "111223333",
-                      "entityType": "nationalId",
-                      "profile": {
-                        "seenCount": 3,
-                        "firstSeen": "2023-01-15T09:30:00Z",
-                        "lastSeen": "2023-09-10T14:45:00Z",
-                        "deviceTypes": [
-                          "phone",
-                          "tablet"
-                        ],
-                        "deviceModels": [
-                          "GT70053G"
-                        ],
-                        "deviceIsps": [
-                          "comcast"
-                        ],
-                        "deviceLanguages": [
-                          "de_us"
-                        ],
-                        "deviceTimezones": [
-                          "america/chicago"
-                        ],
-                        "networkLocationStates": [
-                          "il"
-                        ],
-                        "networkLocationPostalCodes": [
-                          "12345"
-                        ]
-                      }
-                    }
-                  ],
-                  "velocityMetrics": {
-                    "historicalCount": {
-                      "firstName": {
-                        "uniqueCount": 1,
-                        "uniqueSharePercent": 100
-                      },
-                      "surName": {
-                        "uniqueCount": 1,
-                        "uniqueSharePercent": 100
-                      },
-                      "email": {
-                        "uniqueCount": 2,
-                        "uniqueSharePercent": 87
-                      },
-                      "mobileNumber": {
-                        "uniqueCount": 1,
-                        "uniqueSharePercent": 100
-                      }
-                    }
-                  }
-                },
-                "customerProfile": {
-                  "customerUserId": "129",
-                  "userId": "u8JpWn4QsF3R7tA2"
                 }
               },
               "is_source_cache": false,
@@ -6487,28 +6659,20 @@
           "data_enrichments": [
             {
               "enrichment_name": "Socure Payment Screening - Source (Individual)",
-              "enrichment_endpoint": "https://idplus-service.webapps.us-east-1.prod.socure.link/api/3.0/EmailAuthScore",
               "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
               "status_code": 200,
               "request": {
-                "accountNumber": "483920175634",
-                "bankIdentifierCode": "CHASUS33",
-                "city": "Los Angeles",
-                "country": "US",
-                "dob": "1988-04-12",
                 "entityType": "individual",
                 "firstName": "Emily",
-                "modules": [
-                  "watchlistplus"
-                ],
-                "parentTxnId": "809a7984-63ca-4571-9ab9-70beb202fc5f",
-                "physicalAddress": "4521 Westwood Blvd",
-                "riskOSId": "txn-007341829056",
-                "routingNumber": "021000021",
-                "state": "CA",
                 "surName": "Chen",
-                "workflow": "payment_screening",
-                "zip": "90064"
+                "entityName": "Emily Chen",
+                "dob": "1988-04-12",
+                "physicalAddress": "4521 Westwood Blvd",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "90064",
+                "country": "US"
               },
               "response": {
                 "globalWatchlist": {
@@ -6517,28 +6681,57 @@
                     "I196"
                   ]
                 },
-                "referenceId": "c0bc3ae6-32d6-4f71-b77a-cdf538f8c14f"
+                "referenceId": "ref-src-ind-5e6a3934"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Source (Business)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Tech Innovators LLC",
+                "mobileNumber": "+18005556789",
+                "physicalAddress": "456 Innovation Drive",
+                "physicalAddress2": "Floor 5",
+                "city": "Mountain View",
+                "state": "CA",
+                "zip": "94043",
+                "country": "US",
+                "cryptoAddress": "18uKfaUjgG52rVeXEi3wxnveww7zZuECtE",
+                "cryptoNetwork": "XBT"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-src-biz-19af2c11"
               },
               "is_source_cache": false,
               "total_attempts": 1
             },
             {
               "enrichment_name": "Socure Payment Screening - Source (Individual Account)",
-              "enrichment_endpoint": "https://idplus-service.webapps.us-east-1.prod.socure.link/api/3.0/EmailAuthScore",
               "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
               "status_code": 200,
               "request": {
-                "accountNumber": "483920175634",
-                "bankIdentifierCode": "CHASUS33",
-                "entityName": "JPMorgan Chase Bank",
                 "entityType": "organization",
-                "modules": [
-                  "watchlistplus"
-                ],
-                "parentTxnId": "809a7984-63ca-4571-9ab9-70beb202fc5f",
-                "riskOSId": "txn-007341829056",
-                "routingNumber": "021000021",
-                "workflow": "payment_screening"
+                "entityName": "Chase",
+                "physicalAddress": "200 Key Square St",
+                "physicalAddress2": "New York",
+                "city": "New York City",
+                "state": "NY",
+                "zip": "12345",
+                "country": "US",
+                "bankIdentifierCode": "CH-123",
+                "internationalBankAccountNumber": "FR1420041010050500013M02606"
               },
               "response": {
                 "globalWatchlist": {
@@ -6547,110 +6740,65 @@
                     "I196"
                   ]
                 },
-                "referenceId": "5c1d9c5f-341c-4532-ac26-ae147f33187a"
+                "referenceId": "ref-src-indacct-83bb01d2"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Source (Business Account)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Chase",
+                "physicalAddress": "200 Key Square St",
+                "physicalAddress2": "New York",
+                "city": "New York City",
+                "state": "NY",
+                "zip": "12345",
+                "country": "US",
+                "bankIdentifierCode": "CH-123",
+                "internationalBankAccountNumber": "FR1420041010050500013M02606"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-src-bizacct-2a1c9e77"
               },
               "is_source_cache": false,
               "total_attempts": 1
             },
             {
               "enrichment_name": "Socure Payment Screening - Destination (Individual)",
-              "enrichment_endpoint": "https://idplus-service.webapps.us-east-1.prod.socure.link/api/3.0/EmailAuthScore",
               "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
               "status_code": 200,
               "request": {
-                "bankIdentifierCode": "RZBAATWW",
-                "city": "Moscow",
-                "country": "RU",
-                "dob": "1956-09-21",
                 "entityType": "individual",
                 "firstName": "Andrey",
-                "modules": [
-                  "watchlistplus"
-                ],
-                "parentTxnId": "809a7984-63ca-4571-9ab9-70beb202fc5f",
-                "physicalAddress": "29 Degtyarny Pereulok",
-                "riskOSId": "txn-007341829056",
                 "surName": "Kostin",
-                "workflow": "payment_screening",
-                "zip": "127994"
+                "entityName": "Andrey Kostin",
+                "dob": "1956-09-21",
+                "physicalAddress": "29 Degtyarny Pereulok",
+                "city": "Moscow",
+                "zip": "127994",
+                "country": "RU"
               },
               "response": {
                 "globalWatchlist": {
                   "matches": {
                     "OFAC SDN List": [
                       {
-                        "comments": {
-                          "additionalSanctionsInformation": [
-                            "Secondary sanctions risk: - Ukraine-/Russia-Related Sanctions Regulations, 31 CFR 589.201 and/or 589.209"
-                          ],
-                          "address": [
-                            "Moscow, Russia"
-                          ],
-                          "aka": [
-                            "Andrei",
-                            "Andrej Leonidovič KOSTIN",
-                            "Андрей Леонидович КОСТИН"
-                          ],
-                          "countries": [
-                            "RU"
-                          ],
-                          "dateOfBirth": [
-                            "1956-09-21"
-                          ],
-                          "entityType": [
-                            "Individual"
-                          ],
-                          "gender": [
-                            "Male"
-                          ],
-                          "listName": [
-                            "SDN List"
-                          ],
-                          "listingId": [
-                            "OFAC-24063"
-                          ],
-                          "name": [
-                            "ANDREY KOSTIN"
-                          ],
-                          "offence": [
-                            "Sanction"
-                          ],
-                          "offense": [
-                            "Sanction"
-                          ],
-                          "originalCountryText": [
-                            "Russia"
-                          ],
-                          "placeOfBirthList": [
-                            "Moscow, Russian Federation"
-                          ],
-                          "program": [
-                            "UKRAINE-EO13661"
-                          ],
-                          "secondarySanctionsRisk": [
-                            "Ukraine-/Russia-Related Sanctions Regulations, 31 CFR 589.201 and/or 589.209"
-                          ],
-                          "sourceCode": [
-                            "OFAC"
-                          ],
-                          "url": [
-                            "https://sanctionssearch.ofac.treas.gov/"
-                          ],
-                          "yearOfBirth": [
-                            "1956"
-                          ]
-                        },
-                        "entityCorrelationScore": 100,
-                        "entityId": "ZaP+/U4QRtIsYGxKb1EO",
-                        "matchFields": [
-                          "dobExact",
-                          "nameExact",
-                          "akaExact"
-                        ],
                         "matchScore": 100,
-                        "sourceUrls": [
-                          "https://sanctionssearch.ofac.treas.gov/"
-                        ]
+                        "listingId": "OFAC-24063",
+                        "program": "UKRAINE-EO13661",
+                        "sourceCode": "OFAC"
                       }
                     ]
                   },
@@ -6660,26 +6808,29 @@
                     "R180"
                   ]
                 },
-                "referenceId": "ae81104d-a23c-426d-ac1c-f01f208399a8"
+                "referenceId": "ref-dst-ind-3fbb2e10"
               },
               "is_source_cache": false,
               "total_attempts": 1
             },
             {
-              "enrichment_name": "Socure Payment Screening - Destination (Individual Account)",
-              "enrichment_endpoint": "https://idplus-service.webapps.us-east-1.prod.socure.link/api/3.0/EmailAuthScore",
+              "enrichment_name": "Socure Payment Screening - Destination (Business)",
               "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
               "status_code": 200,
               "request": {
-                "bankIdentifierCode": "RZBAATWW",
-                "entityName": "Raiffeisen Bank International",
                 "entityType": "organization",
-                "modules": [
-                  "watchlistplus"
-                ],
-                "parentTxnId": "809a7984-63ca-4571-9ab9-70beb202fc5f",
-                "riskOSId": "txn-007341829056",
-                "workflow": "payment_screening"
+                "entityName": "Tech Innovators LLC",
+                "mobileNumber": "+18005556789",
+                "physicalAddress": "456 Innovation Drive",
+                "physicalAddress2": "Floor 5",
+                "city": "Mountain View",
+                "state": "CA",
+                "zip": "94043",
+                "country": "US",
+                "cryptoAddress": "18uKfaUjgG52rVeXEi3wxnveww7zZuECtE",
+                "cryptoNetwork": "XBT",
+                "nationalId": "12-3456789"
               },
               "response": {
                 "globalWatchlist": {
@@ -6688,7 +6839,65 @@
                     "I196"
                   ]
                 },
-                "referenceId": "d8187606-0c2c-4da7-93f1-e1c18161838c"
+                "referenceId": "ref-dst-biz-7c4d5e88"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Destination (Individual Account)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Chase",
+                "physicalAddress": "200 Key Square St",
+                "physicalAddress2": "New York",
+                "city": "New York City",
+                "state": "NY",
+                "zip": "12345",
+                "country": "US",
+                "bankIdentifierCode": "CH-123",
+                "internationalBankAccountNumber": "FR1420041010050500013M02606"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-dst-indacct-9a1b2c33"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            },
+            {
+              "enrichment_name": "Socure Payment Screening - Destination (Business Account)",
+              "enrichment_provider": "SocurePaymentScreening",
+              "enrichment_endpoint": "https://service.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "request": {
+                "entityType": "organization",
+                "entityName": "Chase",
+                "physicalAddress": "200 Key Square St",
+                "physicalAddress2": "New York",
+                "city": "New York City",
+                "state": "NY",
+                "zip": "12345",
+                "country": "US",
+                "bankIdentifierCode": "CH-123",
+                "internationalBankAccountNumber": "FR1420041010050500013M02606"
+              },
+              "response": {
+                "globalWatchlist": {
+                  "matches": {},
+                  "reasonCodes": [
+                    "I196"
+                  ]
+                },
+                "referenceId": "ref-dst-bizacct-4e5f6a77"
               },
               "is_source_cache": false,
               "total_attempts": 1
