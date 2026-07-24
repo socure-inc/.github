@@ -516,45 +516,13 @@
               },
               "examples": {
                 "updateEmail": {
-                  "summary": "Update Email Address",
-                  "value": {
-                    "id": "onb-12345",
-                    "timestamp": "2023-12-01T08:15:30.456Z",
-                    "workflow": "consumer_onboarding",
-                    "data": {
-                      "individual": {
-                        "email": "updated.email@example.com"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/examples/PatchUpdateEmail"
                 },
                 "updatePhone": {
-                  "summary": "Update Phone Number",
-                  "value": {
-                    "id": "onb-12345",
-                    "timestamp": "2023-12-01T08:15:30.456Z",
-                    "workflow": "consumer_onboarding",
-                    "data": {
-                      "individual": {
-                        "phone_number": "+1-202-555-9999"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/examples/PatchUpdatePhone"
                 },
                 "updateDevice": {
-                  "summary": "Update Device Information",
-                  "value": {
-                    "id": "onb-12345",
-                    "timestamp": "2023-12-01T08:15:30.456Z",
-                    "workflow": "consumer_onboarding",
-                    "data": {
-                      "external_device": {
-                        "id": "DEVICE-123456",
-                        "ip_address": "192.168.1.10",
-                        "session": "UPDATED-SESSION-1234"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/examples/PatchUpdateDevice"
                 }
               }
             }
@@ -3827,6 +3795,47 @@
       }
     },
     "examples": {
+      "PatchUpdateEmail": {
+        "summary": "Update Email Address",
+        "value": {
+          "id": "onb-12345",
+          "timestamp": "2023-12-01T08:15:30.456Z",
+          "workflow": "consumer_onboarding",
+          "data": {
+            "individual": {
+              "email": "updated.email@example.com"
+            }
+          }
+        }
+      },
+      "PatchUpdatePhone": {
+        "summary": "Update Phone Number",
+        "value": {
+          "id": "onb-12345",
+          "timestamp": "2023-12-01T08:15:30.456Z",
+          "workflow": "consumer_onboarding",
+          "data": {
+            "individual": {
+              "phone_number": "+1-202-555-9999"
+            }
+          }
+        }
+      },
+      "PatchUpdateDevice": {
+        "summary": "Update Device Information",
+        "value": {
+          "id": "onb-12345",
+          "timestamp": "2023-12-01T08:15:30.456Z",
+          "workflow": "consumer_onboarding",
+          "data": {
+            "external_device": {
+              "id": "DEVICE-123456",
+              "ip_address": "192.168.1.10",
+              "session": "UPDATED-SESSION-1234"
+            }
+          }
+        }
+      },
       "ConsumerOnboardingRequest": {
         "description": "Consumer Onboarding",
         "value": {
