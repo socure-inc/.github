@@ -2362,10 +2362,15 @@
               },
               "modules": {
                 "type": "array",
-                "description": "A list of activated modules to be included in the evaluation.",
+                "description": "A list of Socure module names to include in the pass-through evaluation. Each entry is a module identifier string following the same naming convention as the ID+ endpoint modules — for example `[\"fraud\", \"synthetic\"]`. The specific module names you can request correspond to the enrichments enabled for your workflow and depend on your Socure contract.<br /><br />**Note:** Listing a module in `data.modules` does not by itself guarantee a pass-through. The requested module data is returned only when your workflow is configured with a pass-through enrichment.",
                 "items": {
-                  "type": "string"
-                }
+                  "type": "string",
+                  "example": "fraud"
+                },
+                "example": [
+                  "fraud",
+                  "synthetic"
+                ]
               },
               "channel": {
                 "$ref": "#/components/schemas/Channel"
@@ -3852,6 +3857,10 @@
           "timestamp": "2023-12-01T08:15:30.456Z",
           "workflow": "generic_passthrough",
           "data": {
+            "modules": [
+              "fraud",
+              "synthetic"
+            ],
             "individual": {
               "id": "ind-9876543",
               "given_name": "Jane",
