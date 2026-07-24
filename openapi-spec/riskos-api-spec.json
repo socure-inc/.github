@@ -163,7 +163,7 @@
             }
           },
           "201": {
-            "description": "The request was partially processed (async integrations).",
+            "description": "The workflow paused at an async step (OTP, DocV, Wait, or Hosted Flow) awaiting user action. The response contains `eval_status: evaluation_paused` and no final `decision`. Subscribe to the `evaluation_completed` webhook, or poll `GET /api/evaluation/{eval_id}`, to receive the final decision once the workflow resumes.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3416,6 +3416,16 @@
               "high_risk"
             ]
           },
+          "decision_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Subset of `tags` contributed only by the workflow's terminal decision or manual review step. Use this field when you need the tags that directly explain the final `decision`, without the broader routing and signal tags captured in `tags`.",
+            "example": [
+              "High Risk"
+            ]
+          },
           "notes": {
             "type": "string",
             "description": "Freeform text field for analyst or system comments about the evaluation. Often used to capture manual review rationale or investigation context.\n",
@@ -3458,6 +3468,11 @@
                 "request": {
                   "type": "object",
                   "description": "The payload sent to the enrichment provider.",
+                  "additionalProperties": true
+                },
+                "request_url_params": {
+                  "type": "object",
+                  "description": "Query string parameters sent to the enrichment provider, for enrichments called via URL parameters rather than a request body.",
                   "additionalProperties": true
                 },
                 "response": {
