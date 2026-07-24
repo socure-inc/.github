@@ -3436,25 +3436,23 @@
             "description": "A collection of external enrichment results generated during the workflow (e.g., device risk checks, KYC verifications, fraud models).",
             "items": {
               "type": "object",
+              "description": "Common metadata shared by every enrichment result, describing the provider and call outcome.",
               "properties": {
                 "enrichment_name": {
                   "type": "string",
-                  "description": "Name of the enrichment executed.",
-                  "example": "Socure Digital Intelligence"
+                  "description": "The human-readable name of the enrichment that executed."
                 },
                 "enrichment_provider": {
                   "type": "string",
-                  "description": "The name of the enrichment or data provider.",
-                  "example": "Socure"
+                  "description": "Identifies the Socure service that processed this enrichment. The value varies by enrichment type — for example, `SocureOTP` for OTP, `SocureSNA` for SNA, and `SocurePaymentScreening` for Payment Screening. Core enrichments such as email risk may return the generic value `Socure`."
                 },
                 "enrichment_endpoint": {
                   "type": "string",
-                  "description": "The API endpoint used for the enrichment request.",
-                  "example": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore"
+                  "description": "The API endpoint used for the enrichment request."
                 },
                 "status_code": {
                   "type": "integer",
-                  "description": "HTTP response code returned by the enrichment provider.",
+                  "description": "The provider or orchestration status code for the enrichment attempt.",
                   "example": 200
                 },
                 "request": {
@@ -3476,17 +3474,17 @@
                 },
                 "is_source_cache": {
                   "type": "boolean",
-                  "description": "Indicates whether the enrichment data was returned from cache instead of making a new provider API request.\n",
+                  "description": "Indicates whether the result was returned from source cache instead of a fresh provider call.",
                   "example": false
                 },
                 "total_attempts": {
-                  "type": "number",
-                  "description": "Total number of API call attempts made for this operation, including retries.\n",
+                  "type": "integer",
+                  "description": "Total number of attempts made to complete the enrichment.",
                   "example": 1
                 },
                 "error_message": {
                   "type": "string",
-                  "description": "Error message returned if the enrichment call failed.",
+                  "description": "Error detail when the enrichment request failed or only partially completed.",
                   "example": ""
                 }
               }
