@@ -3885,8 +3885,10 @@
           "workflow": "generic_passthrough",
           "data": {
             "modules": [
-              "fraud",
-              "synthetic"
+              "addressrisk",
+              "emailrisk",
+              "phonerisk",
+              "digitalintelligence"
             ],
             "individual": {
               "id": "ind-9876543",
