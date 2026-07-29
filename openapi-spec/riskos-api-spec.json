@@ -163,7 +163,7 @@
             }
           },
           "201": {
-            "description": "The workflow paused at an async step (OTP, DocV, Wait, or Hosted Flow) awaiting user action. The response contains `eval_status: evaluation_paused` and no final `decision`. Subscribe to the `evaluation_completed` webhook, or poll `GET /api/evaluation/{eval_id}`, to receive the final decision once the workflow resumes.",
+            "description": "The workflow paused at an async step; get the final decision from the `evaluation_completed` webhook or `GET /api/evaluation/{eval_id}`.",
             "content": {
               "application/json": {
                 "schema": {
