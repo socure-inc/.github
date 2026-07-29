@@ -163,7 +163,7 @@
             }
           },
           "201": {
-            "description": "The workflow paused at an async step; get the final decision from the `evaluation_completed` webhook or `GET /api/evaluation/{eval_id}`.",
+            "description": "The evaluation was accepted but is still processing asynchronously.",
             "content": {
               "application/json": {
                 "schema": {
