@@ -1392,7 +1392,7 @@
       "XApiVersionHeader": {
         "name": "X-API-Version",
         "in": "header",
-        "description": "Specifies the API version used for the request. If omitted, the default version is used. Socure recommends pinning a version to avoid unexpected behavioral changes when new versions are released.",
+        "description": "This header is optional. If omitted, requests use the current default version, `2025-01-01.orion`. Set this header to pin your integration to a specific API version.",
         "required": false,
         "schema": {
           "type": "string",
