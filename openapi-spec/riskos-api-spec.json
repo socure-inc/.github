@@ -163,7 +163,7 @@
             }
           },
           "201": {
-            "description": "The evaluation was accepted but is still processing asynchronously.",
+            "description": "The evaluation was accepted and is paused pending an asynchronous step.",
             "content": {
               "application/json": {
                 "schema": {
