@@ -4266,6 +4266,10 @@
                       "Telecom Carrier"
                     ]
                   },
+                  "sourceAttribution": [
+                    "Credit",
+                    "Telco"
+                  ],
                   "matchCounts": {
                     "tradelines": 3
                   },
@@ -4317,18 +4321,10 @@
                     "dob": 0.99,
                     "ssn": 0.99
                   },
-                  "fieldSourceAttribution": {
-                    "ssn": [
-                      "Social Security Administration"
-                    ],
-                    "address": [
-                      "USPS",
-                      "Utility Records"
-                    ],
-                    "mobileNumber": [
-                      "Telecom Carrier"
-                    ]
-                  },
+                  "sourceAttribution": [
+                    "Credit",
+                    "Telco"
+                  ],
                   "bestMatchedEntity": {
                     "firstName": "John",
                     "middleName": "Michael",
