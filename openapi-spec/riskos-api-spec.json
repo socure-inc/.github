@@ -1424,7 +1424,6 @@
       "AgeAssurance": {
         "title": "Age Assurance",
         "type": "object",
-        "description": "Age Assurance evaluation request. Age Assurance uses the same RiskOS™ Evaluation API as every other workflow and returns a privacy-preserving threshold decision. Supply the inputs your configured waterfall reads (phone number, email, name, address, or a Digital Intelligence session token). Age Assurance does not require date of birth or SSN.",
         "required": [
           "workflow",
           "id",
