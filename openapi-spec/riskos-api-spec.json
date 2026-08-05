@@ -93,6 +93,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/PaymentScreening"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AgeAssurance"
                   }
                 ]
               },
@@ -120,6 +123,9 @@
                 },
                 "Payment Screening": {
                   "$ref": "#/components/examples/PaymentScreeningIndividualRequest"
+                },
+                "Age Assurance": {
+                  "$ref": "#/components/examples/AgeAssuranceRequest"
                 }
               }
             }
@@ -157,6 +163,9 @@
                   },
                   "Payment Screening": {
                     "$ref": "#/components/examples/PaymentScreeningIndividualResponse"
+                  },
+                  "Age Assurance": {
+                    "$ref": "#/components/examples/AgeAssuranceResponse"
                   }
                 }
               }
@@ -1412,6 +1421,92 @@
       }
     },
     "schemas": {
+      "AgeAssurance": {
+        "title": "Age Assurance",
+        "type": "object",
+        "description": "Age Assurance evaluation request. Age Assurance uses the same RiskOS™ Evaluation API as every other workflow and returns a privacy-preserving threshold decision. Supply the inputs your configured waterfall reads (phone number, email, name, address, or a Digital Intelligence session token). Age Assurance does not require date of birth or SSN.",
+        "required": [
+          "workflow",
+          "id",
+          "timestamp",
+          "data"
+        ],
+        "properties": {
+          "workflow": {
+            "type": "string",
+            "description": "Your environment-specific Age Assurance workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
+            "example": "age_assurance"
+          },
+          "id": {
+            "type": "string",
+            "description": "Required, customer-defined unique identifier for the request. Reusing an ID causes RiskOS™ to treat the request as a re-run.",
+            "example": "test-user-phone"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2026-07-07T12:44:22.059Z"
+          },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
+          },
+          "data": {
+            "type": "object",
+            "description": "The main payload for the Age Assurance workflow.",
+            "properties": {
+              "event_type": {
+                "type": "string",
+                "description": "The event category for the evaluation.",
+                "example": "identity_verification"
+              },
+              "channel": {
+                "$ref": "#/components/schemas/Channel"
+              },
+              "individual": {
+                "type": "object",
+                "description": "Inputs the configured Age Assurance methods resolve age from.",
+                "properties": {
+                  "given_name": {
+                    "type": "string",
+                    "maxLength": 240,
+                    "description": "The consumer's given name. Improves passive identity resolution.",
+                    "example": "Alex"
+                  },
+                  "family_name": {
+                    "type": "string",
+                    "maxLength": 240,
+                    "description": "The consumer's family name. Improves passive identity resolution.",
+                    "example": "Doe"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "The consumer's phone number in E.164 format (e.g., `+12025550147`); hyphens and spaces are tolerated. Required for phone-based assurance.\n",
+                    "example": "19843359615"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The consumer's email address. Required for email-based assurance.",
+                    "example": "user@example.com"
+                  },
+                  "address": {
+                    "$ref": "#/components/schemas/Address"
+                  },
+                  "docv": {
+                    "$ref": "#/components/schemas/Docv"
+                  },
+                  "di_session_token": {
+                    "type": "string",
+                    "description": "Device session token captured by the Digital Intelligence SDK. Required for device-based assurance.",
+                    "example": "eyJraWQiOi_di_token"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "CustomerMetadata": {
         "title": "Customer Metadata",
         "type": "object",
@@ -3795,6 +3890,65 @@
       }
     },
     "examples": {
+      "AgeAssuranceRequest": {
+        "description": "Age Assurance",
+        "value": {
+          "id": "test-user-phone",
+          "timestamp": "2026-07-07T12:44:22.059Z",
+          "workflow": "age_assurance",
+          "data": {
+            "event_type": "identity_verification",
+            "channel": "web",
+            "individual": {
+              "given_name": "Alex",
+              "family_name": "Doe",
+              "phone_number": "19843359615",
+              "email": "user@example.com",
+              "address": {
+                "country": "US"
+              },
+              "docv": {
+                "config": {
+                  "language": "en",
+                  "send_message": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "AgeAssuranceResponse": {
+        "description": "Age Assurance",
+        "value": {
+          "id": "test-user-phone",
+          "eval_id": "7e79e169-5021-475b-af98-9362ac690c38",
+          "workflow": "age_assurance",
+          "eval_status": "evaluation_completed",
+          "decision": "ACCEPT",
+          "status": "CLOSED",
+          "sub_status": "Accept",
+          "workflow_id": "5b1399aa-c4b9-4f70-90ee-170e6f3cdc55",
+          "workflow_version": "3.7.0",
+          "eval_source": "API",
+          "eval_start_time": "2026-07-07T12:44:22.100Z",
+          "eval_end_time": "2026-07-07T12:44:23.512Z",
+          "tags": [
+            "Valid Age"
+          ],
+          "review_queues": [],
+          "computed": {
+            "socure_age_assurance_response": {
+              "age18Plus": true,
+              "age21Plus": true,
+              "age25Plus": false,
+              "entityKind": "phone",
+              "isSuccess": true,
+              "refId": "789a83ce-8b28-4239-8a7c-20e1a8ba0b5a",
+              "uniqueCnt": 96
+            }
+          }
+        }
+      },
       "PatchUpdateEmail": {
         "summary": "Update Email Address",
         "value": {
