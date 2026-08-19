@@ -2600,8 +2600,8 @@
         "properties": {
           "entity_type": {
             "type": "string",
-            "description": "business structure",
-            "example": "Limited Liability Corporation"
+            "description": "Legal structure of the business. Free-form string; no fixed set of values is enforced. For best business verification results, send a standard legal entity type such as `CORPORATION`, `LLC`, `SOLE_PROPRIETOR`, or `PARTNERSHIP`.",
+            "example": "LLC"
           },
           "registration_date": {
             "type": "string",
