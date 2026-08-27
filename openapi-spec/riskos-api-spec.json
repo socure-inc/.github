@@ -74,6 +74,9 @@
                     "$ref": "#/components/schemas/ConsumerOnboarding"
                   },
                   {
+                    "$ref": "#/components/schemas/AdvancedPrefill"
+                  },
+                  {
                     "$ref": "#/components/schemas/GenericPassthrough"
                   },
                   {
@@ -102,6 +105,9 @@
               "examples": {
                 "Consumer Onboarding": {
                   "$ref": "#/components/examples/ConsumerOnboardingRequest"
+                },
+                "Advanced Prefill": {
+                  "$ref": "#/components/examples/OnboardingWithAdvancedPrefillRequest"
                 },
                 "Generic Passthrough": {
                   "$ref": "#/components/examples/GenericPassthroughRequest"
@@ -142,6 +148,9 @@
                 "examples": {
                   "Consumer Onboarding": {
                     "$ref": "#/components/examples/ConsumerOnboardingResponse"
+                  },
+                  "Advanced Prefill": {
+                    "$ref": "#/components/examples/OnboardingWithAdvancedPrefillResponse"
                   },
                   "Generic Passthrough": {
                     "$ref": "#/components/examples/GenericPassthroughResponse"
@@ -2386,6 +2395,119 @@
           }
         }
       },
+      "AdvancedPrefill": {
+        "title": "Advanced Prefill",
+        "type": "object",
+        "required": [
+          "workflow",
+          "id",
+          "timestamp",
+          "data"
+        ],
+        "properties": {
+          "workflow": {
+            "type": "string",
+            "example": "advanced_pre_fill",
+            "description": "Your environment-specific workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist. Use the identifier for your Advanced Prefill workflow (for example, `advanced_pre_fill`). <br /><br /> **Note:** The workflow name must be unique within your RiskOS™ environment. It is not scoped by use case and must identify a single active workflow for each Evaluation API request."
+          },
+          "id": {
+            "type": "string",
+            "description": "Required, customer-defined unique identifier for the request. <br /><br /> This value must be unique for each evaluation. Reusing an ID causes RiskOS™ to treat the request as a re-run and can impact processing behavior, results, and downstream workflows.",
+            "example": "advanced-prefill-03f1de"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2026-04-02T12:00:00Z"
+          },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
+          },
+          "data": {
+            "type": "object",
+            "description": "The main payload for the Advanced Prefill workflow.",
+            "properties": {
+              "individual": {
+                "type": "object",
+                "description": "Minimal identity and device inputs used to verify the requester and gate identity-data disclosure. Only `phone_number` and `di_session_token` are required; additional attributes improve Prefill match accuracy.",
+                "required": [
+                  "phone_number",
+                  "di_session_token"
+                ],
+                "properties": {
+                  "di_session_token": {
+                    "type": "string",
+                    "description": "Token from the Digital Intelligence SDK that links the device session. Generate it client-side before submitting the evaluation. Required to produce device risk signals for the data disclosure gate.",
+                    "example": "YOUR_DI_SESSION_TOKEN"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "The consumer's phone number. The API expects the standard E.164 format (e.g., +12025550147) but tolerates hyphens and spaces for user convenience.\n\n**Examples:**\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
+                    "example": 16673681976
+                  },
+                  "date_of_birth": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "The consumer's date of birth in the format YYYY-MM-DD, compliant with RFC 3339. Recommended to improve Prefill match accuracy.",
+                    "example": "1992-03-11"
+                  },
+                  "national_id": {
+                    "type": "string",
+                    "description": "The consumer's national identification number. For US consumers, this can be a nine-digit Social Security Number (SSN) or Individual Tax Identification Number (ITIN). Partial SSNs (last four digits) are also accepted. Hyphens are optional. Recommended to improve Prefill match accuracy.\n",
+                    "example": "555667772"
+                  },
+                  "given_name": {
+                    "type": "string",
+                    "description": "The consumer's given name. Recommended to improve Prefill match accuracy.",
+                    "example": "Franky",
+                    "maxLength": 240
+                  },
+                  "family_name": {
+                    "type": "string",
+                    "description": "The consumer's family name. Recommended to improve Prefill match accuracy.",
+                    "example": "Valley",
+                    "maxLength": 240
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "The consumer's email address. May improve deny list screening.",
+                    "example": "frankeyV@test.com"
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "A customer-defined identifier for the consumer that maps to `userId` in enrichments or internal systems.",
+                    "example": "username"
+                  },
+                  "address": {
+                    "$ref": "#/components/schemas/Address"
+                  },
+                  "otp": {
+                    "$ref": "#/components/schemas/Otp"
+                  }
+                }
+              },
+              "channel": {
+                "$ref": "#/components/schemas/Channel"
+              },
+              "line_of_business": {
+                "$ref": "#/components/schemas/LineOfBusiness"
+              },
+              "ip_address": {
+                "$ref": "#/components/schemas/IPAddress"
+              },
+              "external_device": {
+                "$ref": "#/components/schemas/Device"
+              },
+              "custom": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Use this field to send any additional, customer-specific data relevant to the evaluation. See [Custom Fields](https://help.socure.com/riskos/docs/custom-fields) for more information."
+              }
+            }
+          }
+        }
+      },
       "GenericPassthrough": {
         "title": "Generic Passthrough",
         "type": "object",
@@ -4031,6 +4153,21 @@
           }
         }
       },
+      "OnboardingWithAdvancedPrefillRequest": {
+        "description": "Advanced Prefill",
+        "value": {
+          "id": "advanced-prefill-03f1de",
+          "timestamp": "2026-04-02T12:00:00Z",
+          "workflow": "advanced_pre_fill",
+          "data": {
+            "individual": {
+              "phone_number": 16673681976,
+              "date_of_birth": "1992-03-11",
+              "di_session_token": "YOUR_DI_SESSION_TOKEN"
+            }
+          }
+        }
+      },
       "GenericPassthroughRequest": {
         "description": "Generic Passthrough",
         "value": {
@@ -4968,6 +5105,83 @@
             }
           ],
           "environment_name": "Sandbox"
+        }
+      },
+      "OnboardingWithAdvancedPrefillResponse": {
+        "description": "Advanced Prefill",
+        "value": {
+          "id": "advanced-prefill-03f1de",
+          "eval_id": "7bc4b7c8-eb67-429b-919a-cdc9ab3c590f",
+          "workflow": "advanced_pre_fill",
+          "eval_status": "evaluation_completed",
+          "decision": "ACCEPT",
+          "status": "CLOSED",
+          "eval_start_time": "2026-04-02T12:00:00.196Z",
+          "eval_end_time": "2026-04-02T12:00:02.007Z",
+          "tags": [
+            "none"
+          ],
+          "data_enrichments": [
+            {
+              "enrichment_name": "Socure Prefill",
+              "enrichment_provider": "Socure",
+              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "status_code": 200,
+              "response": {
+                "customerProfile": {
+                  "userId": "555adc5d-5f55-555b-a5ef-5555a4555ce5"
+                },
+                "prefill": {
+                  "socureId": "afe5bd55-a555-5555-55bb-55f55a55ed5c",
+                  "firstName": "Bart",
+                  "middleName": "A",
+                  "surName": "Lambert",
+                  "suffix": "Jr",
+                  "aliases": [
+                    "el barto"
+                  ],
+                  "dob": "2001-01-10",
+                  "ssnFirst5": "56790",
+                  "nationalId": "567905555",
+                  "mobileNumber": 15556678910,
+                  "associatedPhoneNumbers": [
+                    {
+                      "phoneNumber": 15556678910,
+                      "isMatched": true,
+                      "isLatest": true,
+                      "firstSeenDate": "2020-07-01",
+                      "lastSeenDate": "2025-11-01"
+                    }
+                  ],
+                  "associatedEmails": [
+                    {
+                      "emailAddress": "myemail@gmail.com",
+                      "isMatched": true,
+                      "isLatest": false,
+                      "firstSeenDate": "2010-01-28",
+                      "lastSeenDate": "2026-03-22"
+                    }
+                  ],
+                  "associatedAddresses": [
+                    {
+                      "streetAddress": "123 4th Ave",
+                      "city": "Springfield",
+                      "county": "Lane",
+                      "state": "OR",
+                      "zip": "55668",
+                      "isMatched": false,
+                      "firstSeenDate": "",
+                      "lastSeenDate": "",
+                      "isLatest": true
+                    }
+                  ]
+                },
+                "referenceId": "555e5555-55e5-5a55-5555-f5dcfddd5555"
+              },
+              "is_source_cache": false,
+              "total_attempts": 1
+            }
+          ]
         }
       },
       "GenericPassthroughResponse": {
