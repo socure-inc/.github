@@ -561,7 +561,7 @@
                       "id": "onb-12345",
                       "eval_id": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816",
                       "workflow": "consumer_onboarding",
-                      "eval_status": "evaluation_in_progress",
+                      "eval_status": "evaluation_in_process",
                       "decision": "REVIEW",
                       "status": "OPEN",
                       "sub_status": "Verification Pending",
@@ -3525,7 +3525,7 @@
           },
           "eval_status": {
             "type": "string",
-            "description": "The current lifecycle state of the evaluation — for example, `evaluation_in_progress`, `evaluation_completed`, or `evaluation_paused`.",
+            "description": "The current lifecycle state of the evaluation — for example, `evaluation_in_process`, `evaluation_completed`, or `evaluation_paused`.",
             "example": "evaluation_completed"
           },
           "decision": {
