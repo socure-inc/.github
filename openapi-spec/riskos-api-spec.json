@@ -1823,6 +1823,11 @@
             "description": "The transaction token from the Document Request API response (v5). Use this if integrated with Socure's DocV solution.\n",
             "example": "1558769a-f069-48b1-b273-bd885dae1383"
           },
+          "barcode_payload": {
+            "type": "string",
+            "description": "The barcode payload read from the back of an identity document, provided as a base64-encoded string (typically 300–500 bytes). Send this to verify a barcode in a single Evaluation request, instead of uploading it separately with the Upload API. Do not send image data in this field.\n",
+            "example": "<base64-encoded barcode payload>"
+          },
           "config": {
             "$ref": "#/components/schemas/DocumentVerificationConfig"
           }
