@@ -1649,6 +1649,15 @@
             "example": "CHECKING",
             "description": "Account Type"
           },
+          "account_type": {
+            "type": "string",
+            "enum": [
+              "PERSONAL",
+              "BUSINESS"
+            ],
+            "example": "PERSONAL",
+            "description": "Account holder type. Required for international Account Intelligence requests."
+          },
           "account_number": {
             "type": "string",
             "example": "4111111111111111",
