@@ -382,7 +382,7 @@
         "tags": [
           "Evaluation"
         ],
-        "summary": "Enroll an evaluation in Watchlist Monitoring",
+        "summary": "Enroll an Evaluation in Watchlist Monitoring",
         "operationId": "watchlistMonitoring",
         "security": [
           {
