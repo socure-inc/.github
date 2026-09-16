@@ -2917,8 +2917,7 @@
             "type": "object",
             "description": "The main payload for the Login and Authentication workflow.",
             "required": [
-              "event_type",
-              "event_category"
+              "event_type"
             ],
             "properties": {
               "event_category": {
