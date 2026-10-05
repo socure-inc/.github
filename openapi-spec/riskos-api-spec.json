@@ -43,6 +43,10 @@
     {
       "name": "Reason Codes",
       "description": "Use the Reason Codes API to retrieve the catalog of reason codes available to your account, including each code's name, provider, description, and product. Filter the catalog by product, name, free text, or active status."
+    },
+    {
+      "name": "Custom Watchlist",
+      "description": "Use the Custom Watchlist API to manage records on your own custom watchlists — add, update, or soft-delete entries that RiskOS™ screens and monitors against, using the same matching engine that powers Socure's Watchlist Screening and Monitoring. Create the list in the RiskOS™ Dashboard first, then manage its records with this API."
     }
   ],
   "paths": {
@@ -1393,6 +1397,591 @@
           },
           "500": {
             "description": "Internal Server Error - RiskOS™ could not retrieve the catalog. Retry, then contact Socure support if the problem persists.\n"
+          }
+        }
+      }
+    },
+    "/api/custom-watchlists/{listId}/records": {
+      "post": {
+        "tags": [
+          "Custom Watchlist"
+        ],
+        "summary": "Manage a Custom Watchlist Record",
+        "operationId": "ingestCustomWatchlistRecord",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Add, update, or soft-delete a record in a custom watchlist. The operation is determined by the `action_type` field:\n\n- **add**: Create a new record in the watchlist.\n- **update**: Update an existing record.\n- **delete**: Soft-delete a record. The record stays on the list, but its status changes from Active to Inactive.\n\nAll operations are keyed by `record.id`. The list itself must already exist — create it in the RiskOS™ Dashboard before calling this endpoint.\n",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the custom watchlist to add, update, or remove a record from. The list must already exist (created in the RiskOS™ Dashboard).\n",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "e22139a9-c6bb-46f4-b284-7a665f282cd0"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "action_type",
+                  "record"
+                ],
+                "properties": {
+                  "action_type": {
+                    "type": "string",
+                    "enum": [
+                      "add",
+                      "update",
+                      "delete"
+                    ],
+                    "description": "The action to take on this record — `add`, `update`, or `delete`.\nNote: `delete` is a soft delete; the record stays on the list, but its status changes from Active to Inactive.\n",
+                    "example": "add"
+                  },
+                  "record": {
+                    "type": "object",
+                    "description": "The record details you're adding, updating, or deleting.\n",
+                    "required": [
+                      "id"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "description": "A unique ID you assign to this record, used for all future updates or deletions. Must be unique within the watchlist. Maximum length is 128 characters.\n",
+                        "example": "rec-0000002"
+                      },
+                      "entity_name": {
+                        "type": "string",
+                        "description": "The full name of the individual or organization on the watchlist. Required when adding or updating a record.\n",
+                        "example": "John Doe"
+                      },
+                      "entity_type": {
+                        "type": "string",
+                        "enum": [
+                          "individual",
+                          "organisation",
+                          "vessel",
+                          "aircraft",
+                          "others"
+                        ],
+                        "description": "Whether this record represents a person (`individual`), a business or group (`organisation`), a `vessel`, an `aircraft`, or `others`.\n",
+                        "example": "individual"
+                      },
+                      "list_origin": {
+                        "type": "string",
+                        "description": "A label describing where this record came from — an internal team or an external source (for example, \"EXTERNAL LIST\") — to help track how it entered the watchlist.\n",
+                        "example": "EXTERNAL LIST"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "The individual's job title or role, if relevant (for example, \"Analyst\" or \"Director\").",
+                        "example": "Analyst"
+                      },
+                      "official_list_id": {
+                        "type": "string",
+                        "description": "An external reference ID for this record from another list or system outside RiskOS™ (for example, a vendor's sanctions-list ID). Separate from `id`, which applies only within this watchlist.\n",
+                        "example": "test"
+                      },
+                      "listed_date": {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                        "description": "The date this record was first listed, in YYYY-MM-DD format.",
+                        "example": "2025-01-01"
+                      },
+                      "akas": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Any known aliases or alternate names for this individual or organization.",
+                        "example": [
+                          "Johnny Doe",
+                          "John Doee"
+                        ]
+                      },
+                      "date_of_birth": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "format": "date",
+                          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                        },
+                        "description": "One or more known dates of birth, in YYYY-MM-DD format. Provide more than one if sources disagree.\n",
+                        "example": [
+                          "1990-01-01"
+                        ]
+                      },
+                      "address": {
+                        "type": "object",
+                        "description": "The individual's or organization's address.",
+                        "properties": {
+                          "line_1": {
+                            "type": "string",
+                            "description": "Street number or house name and street name.",
+                            "example": "1 Main St"
+                          },
+                          "line_2": {
+                            "type": "string",
+                            "description": "Additional street address, like landmarks.",
+                            "example": "Apt 2"
+                          },
+                          "locality": {
+                            "type": "string",
+                            "description": "City, town, or village.",
+                            "example": "New York"
+                          },
+                          "major_admin_division": {
+                            "type": "string",
+                            "description": "Major administrative division like the state, province, or oblast.",
+                            "example": "NY"
+                          },
+                          "minor_admin_division": {
+                            "type": "string",
+                            "description": "Minor administrative division like the city area or district.",
+                            "example": "Manhattan"
+                          },
+                          "country": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z]{2}$",
+                            "description": "Country in ISO 3166-1 alpha-2 format. For example: US, CA.",
+                            "example": "US"
+                          },
+                          "postal_code": {
+                            "type": "string",
+                            "description": "The postal or ZIP code.",
+                            "example": "10001"
+                          }
+                        }
+                      },
+                      "national_ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Government-issued ID numbers for this individual or organization (for example, a Social Security Number or National Insurance Number).\n",
+                        "example": [
+                          "123-45-6789"
+                        ]
+                      },
+                      "nationality": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z]{2}$"
+                        },
+                        "description": "The individual's nationality or nationalities, as 2-letter country codes (for example, US).",
+                        "example": [
+                          "US"
+                        ]
+                      },
+                      "country_of_birth": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z]{2}$"
+                        },
+                        "description": "The country or countries where this individual was born, as 2-letter country codes (for example, US).",
+                        "example": [
+                          "US"
+                        ]
+                      },
+                      "place_of_birth": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "The city or place(s) where this individual was born.",
+                        "example": [
+                          "New York"
+                        ]
+                      },
+                      "phone_numbers": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Phone number(s) for this individual or organization, in E.164 format including country code (for example, +12125550123).\n",
+                        "example": [
+                          "+12125550123"
+                        ]
+                      },
+                      "emails": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "description": "Email address(es) associated with this individual or organization.",
+                        "example": [
+                          "john@example.com"
+                        ]
+                      },
+                      "occupation": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "The individual's occupation or profession(s), if known.",
+                        "example": [
+                          "Engineer"
+                        ]
+                      },
+                      "gender": {
+                        "type": "string",
+                        "enum": [
+                          "male",
+                          "female",
+                          "other"
+                        ],
+                        "description": "The individual's gender.",
+                        "example": "male"
+                      },
+                      "account_numbers": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Bank account number(s) associated with this individual or organization.",
+                        "example": [
+                          "ACC-001"
+                        ]
+                      },
+                      "crypto_addresses": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Cryptocurrency wallet address(es) associated with this individual or organization.",
+                        "example": [
+                          "0xabc123"
+                        ]
+                      },
+                      "notes": {
+                        "type": "string",
+                        "description": "Free-text notes about this record, such as why it was added.",
+                        "example": "flagged for review"
+                      }
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "addRecord": {
+                  "summary": "Add a new record",
+                  "value": {
+                    "action_type": "add",
+                    "record": {
+                      "id": "rec-0000002",
+                      "entity_name": "John Doe",
+                      "entity_type": "individual",
+                      "list_origin": "EXTERNAL LIST",
+                      "title": "Analyst",
+                      "official_list_id": "test",
+                      "listed_date": "2025-01-01",
+                      "akas": [
+                        "Johnny Doe",
+                        "John Doee"
+                      ],
+                      "date_of_birth": [
+                        "1990-01-01"
+                      ],
+                      "address": {
+                        "line_1": "1 Main St",
+                        "line_2": "Apt 2",
+                        "locality": "New York",
+                        "major_admin_division": "NY",
+                        "minor_admin_division": "Manhattan",
+                        "country": "US",
+                        "postal_code": "10001"
+                      },
+                      "national_ids": [
+                        "123-45-6789"
+                      ],
+                      "nationality": [
+                        "US"
+                      ],
+                      "country_of_birth": [
+                        "US"
+                      ],
+                      "place_of_birth": [
+                        "New York"
+                      ],
+                      "phone_numbers": [
+                        "+12125550123"
+                      ],
+                      "emails": [
+                        "john@example.com"
+                      ],
+                      "occupation": [
+                        "Engineer"
+                      ],
+                      "gender": "male",
+                      "account_numbers": [
+                        "ACC-001"
+                      ],
+                      "crypto_addresses": [
+                        "0xabc123"
+                      ],
+                      "notes": "flagged for review"
+                    }
+                  }
+                },
+                "updateRecord": {
+                  "summary": "Update an existing record",
+                  "value": {
+                    "action_type": "update",
+                    "record": {
+                      "id": "rec-0000002",
+                      "entity_name": "John Doe",
+                      "entity_type": "individual",
+                      "address": {
+                        "line_1": "1 Main St",
+                        "line_2": "Apt 2",
+                        "locality": "New York City",
+                        "major_admin_division": "NY",
+                        "minor_admin_division": "Manhattan",
+                        "country": "US",
+                        "postal_code": "10001"
+                      },
+                      "notes": "updated address"
+                    }
+                  }
+                },
+                "deleteRecord": {
+                  "summary": "Soft-delete a record",
+                  "value": {
+                    "action_type": "delete",
+                    "record": {
+                      "id": "rec-0000002"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Whether the request succeeded. A successful HTTP response alone doesn't guarantee the record was added, updated, or deleted — always check this field.\n",
+                      "example": true
+                    },
+                    "record_id": {
+                      "type": "string",
+                      "description": "The ID of the record that was processed. Returned only when the request succeeds.",
+                      "example": "rec-0000002"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CustomWatchlistErrorItem"
+                      },
+                      "description": "A list of reasons the request failed. Present only when `success` is false."
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Successful response",
+                    "value": {
+                      "success": true,
+                      "record_id": "rec-0000002"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request — validation error or upstream rejection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CustomWatchlistErrorItem"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "validationError": {
+                    "summary": "Missing required field",
+                    "value": {
+                      "success": false,
+                      "errors": [
+                        {
+                          "field": "action_type",
+                          "code": "REQUIRED",
+                          "message": "action_type is required"
+                        }
+                      ]
+                    }
+                  },
+                  "invalidActionType": {
+                    "summary": "Invalid action type",
+                    "value": {
+                      "success": false,
+                      "errors": [
+                        {
+                          "field": "action_type",
+                          "code": "INVALID",
+                          "message": "invalid action_type — must be add, update, or delete"
+                        }
+                      ]
+                    }
+                  },
+                  "missingEntityName": {
+                    "summary": "Missing entity name",
+                    "value": {
+                      "success": false,
+                      "errors": [
+                        {
+                          "field": "record.entity_name",
+                          "code": "REQUIRED",
+                          "message": "record.entity_name is required"
+                        }
+                      ]
+                    }
+                  },
+                  "invalidGender": {
+                    "summary": "Invalid enum value",
+                    "value": {
+                      "success": false,
+                      "errors": [
+                        {
+                          "field": "record.gender",
+                          "code": "INVALID",
+                          "message": "invalid gender — must be male, female, or other"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — invalid or missing authentication token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CustomWatchlistErrorItem"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "success": false,
+                  "errors": [
+                    {
+                      "code": "UNAUTHORIZED",
+                      "message": "authentication failed"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CustomWatchlistErrorItem"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "success": false,
+                  "errors": [
+                    {
+                      "code": "INTERNAL_ERROR",
+                      "message": "failed to resolve account context"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway — upstream service error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CustomWatchlistErrorItem"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "success": false,
+                  "errors": [
+                    {
+                      "code": "UPSTREAM_ERROR",
+                      "message": "upstream service unavailable"
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -4021,6 +4610,39 @@
         },
         "example": {
           "message": "Fraud feedback file has been submitted successfully for processing"
+        }
+      },
+      "CustomWatchlistErrorItem": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "The specific field that caused the error, if applicable.",
+            "example": "record.entity_name"
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "REQUIRED",
+              "INVALID",
+              "UNAUTHORIZED",
+              "INTERNAL_ERROR",
+              "UPSTREAM_ERROR",
+              "UPSTREAM_REJECTED",
+              "SERVICE_UNAVAILABLE"
+            ],
+            "description": "A short code identifying the type of error:\n- `REQUIRED`: A required field was missing from your request.\n- `INVALID`: A field was present but contained an invalid or unsupported value.\n- `UNAUTHORIZED`: Your API key is missing, invalid, or doesn't have access to this resource.\n- `INTERNAL_ERROR`: An unexpected error occurred on Socure's side while processing your request. Retrying later may help.\n- `UPSTREAM_ERROR`: A downstream service Socure depends on failed or timed out. Retrying later may help.\n- `UPSTREAM_REJECTED`: A downstream service explicitly rejected the request (for example, because the record ID already exists). Check the `message` field for details.\n- `SERVICE_UNAVAILABLE`: The service is temporarily unavailable. Retrying later may help.\n",
+            "example": "REQUIRED"
+          },
+          "message": {
+            "type": "string",
+            "description": "A plain-language explanation of the error, useful for debugging.",
+            "example": "record.entity_name is required"
+          }
         }
       }
     },
@@ -7058,6 +7680,12 @@
         "tags": [
           "Evaluation",
           "Feedback"
+        ]
+      },
+      {
+        "name": "Watchlist",
+        "tags": [
+          "Custom Watchlist"
         ]
       },
       {
