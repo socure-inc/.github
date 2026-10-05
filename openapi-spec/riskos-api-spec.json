@@ -1413,7 +1413,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Add, update, or soft-delete a record in a custom watchlist. The operation is determined by the `action_type` field:\n\n- **add**: Create a new record in the watchlist.\n- **update**: Update an existing record.\n- **delete**: Soft-delete a record. The record stays on the list, but its status changes from Active to Inactive.\n\nAll operations are keyed by `record.id`. The list itself must already exist — create it in the RiskOS™ Dashboard before calling this endpoint.\n",
+        "description": "Add, update, or soft-delete a record on one of your custom watchlists. The operation is set by the action_type field and keyed by the record ID.",
         "parameters": [
           {
             "name": "listId",
