@@ -40,5 +40,7 @@ Integrate and automate RiskOS™ from your terminal and your AI development tool
 
 * **Documentation Portal:** Access all official guides and documentation:
     * [RiskOS™ Docs Portal](https://help.socure.com/riskos#/)
+    * [RiskOS™ GovCloud Docs Portal](https://riskos.docs.socure.usgov.cloud)
     * [ID+ Docs Portal](https://developer.socure.com/)
+    * [ID+ GovCloud Docs Portal](https://developer.socure.us/)
 * **Support:** Request access and connect with our [support team](support@socure.com.).
