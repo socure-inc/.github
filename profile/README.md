@@ -27,6 +27,15 @@ Access the official specifications and SDKs to build fast, secure onboarding and
 
 ---
 
+## Developer Tools
+
+Integrate and automate RiskOS™ from your terminal and your AI development tools.
+
+* [RiskOS™ CLI](https://github.com/socure-inc/riskos-cli) — a Go CLI that handles authentication, use-case discovery, integration guide generation, webhook management, and sandbox test runs.
+* [RiskOS™ MCP Server](https://help.socure.com/riskos/docs/riskos-mcp-server) — connect AI development tools like Cursor and EkLine Docs Agent to your RiskOS™ account to access documentation, API schemas, and workflow configuration.
+
+---
+
 ## Getting Started & Support
 
 * **Documentation Portal:** Access all official guides and documentation:
