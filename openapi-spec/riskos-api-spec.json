@@ -17,12 +17,12 @@
   "servers": [
     {
       "url": "https://riskos.socure.com",
-      "description": "Production server (versioned)",
+      "description": "Production",
       "x-environment": "production"
     },
     {
       "url": "https://riskos.sandbox.socure.com",
-      "description": "Sandbox server (for testing and development, versioned)",
+      "description": "Sandbox (for testing; nothing is saved)",
       "x-environment": "sandbox"
     }
   ],
@@ -39,6 +39,10 @@
     {
       "name": "Feedback",
       "description": "Use the Feedback APIs to submit decision feedback, either individually or in bulk, to enhance fraud detection models and improve decision accuracy."
+    },
+    {
+      "name": "Outcome",
+      "description": "Use the Evaluation Outcome API to report what happened after a RiskOS™ evaluation: the final decision (`evaluation_decisions`), feedback for specific products (`account_intelligence`, `watchlist`, `docv`, `kyc`), or both."
     },
     {
       "name": "Reason Codes",
@@ -209,7 +213,7 @@
                       "data_enrichments": [
                         {
                           "enrichment_name": "Deliver OTP SMS",
-                          "enrichment_endpoint": "https://idplus.dev.socure.com/api/1.0/otp/send",
+                          "enrichment_endpoint": "https://sandbox.socure.com/api/1.0/otp/send",
                           "enrichment_provider": "SocureOTP",
                           "status_code": 200,
                           "request": {
@@ -224,7 +228,7 @@
                         },
                         {
                           "enrichment_name": "Verify OTP SMS",
-                          "enrichment_endpoint": "https://idplus.dev.socure.com/api/1.0/otp/verify",
+                          "enrichment_endpoint": "https://sandbox.socure.com/api/1.0/otp/verify",
                           "enrichment_provider": "SocureOTP",
                           "status_code": 200,
                           "request": {
@@ -241,7 +245,7 @@
                         },
                         {
                           "enrichment_name": "Socure Address risk",
-                          "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+                          "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
                           "enrichment_provider": "Socure",
                           "status_code": 200,
                           "request": {
@@ -282,7 +286,7 @@
                         },
                         {
                           "enrichment_name": "SocureCNam",
-                          "enrichment_endpoint": "https://mfa-orchestrator-service-9.webapps.us-east-1.product-dev.socure.link/api/2.0/cnam",
+                          "enrichment_endpoint": "https://sandbox.socure.com/api/2.0/cnam",
                           "enrichment_provider": "SocureCNam",
                           "status_code": 200,
                           "request": {
@@ -531,9 +535,6 @@
                     "$ref": "#/components/schemas/AccountTakeover"
                   }
                 ],
-                "discriminator": {
-                  "propertyName": "workflow"
-                },
                 "description": "A subset of the request body used in flows such as Consumer Onboarding, Business Onboarding, and Bank Account Verification.\n"
               },
               "examples": {
@@ -545,6 +546,12 @@
                 },
                 "updateDevice": {
                   "$ref": "#/components/examples/PatchUpdateDevice"
+                },
+                "trustAndSafetyUpdateEmail": {
+                  "$ref": "#/components/examples/PatchTrustAndSafety"
+                },
+                "loginAuthenticationSubmitOtp": {
+                  "$ref": "#/components/examples/PatchLoginAndAuthentication"
                 }
               }
             }
@@ -582,7 +589,7 @@
                         {
                           "enrichment_name": "Socure Phone Risk",
                           "enrichment_provider": "Socure",
-                          "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+                          "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
                           "status_code": 200,
                           "response": {
                             "referenceId": "68bb36f1-7e32-4600-bebf-26a6cdd39f8b"
@@ -677,7 +684,7 @@
                       "data_enrichments": [
                         {
                           "enrichment_name": "Socure Address risk",
-                          "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+                          "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
                           "enrichment_provider": "Socure",
                           "status_code": 200,
                           "request": {
@@ -718,7 +725,7 @@
                         },
                         {
                           "enrichment_name": "Socure Email Risk",
-                          "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+                          "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
                           "enrichment_provider": "Socure",
                           "status_code": 200,
                           "request": {
@@ -748,7 +755,7 @@
                         },
                         {
                           "enrichment_name": "Socure Phone Risk",
-                          "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+                          "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
                           "enrichment_provider": "Socure",
                           "status_code": 200,
                           "request": {
@@ -1234,6 +1241,1278 @@
         }
       }
     },
+    "/api/outcome_contribution": {
+      "post": {
+        "tags": [
+          "Outcome"
+        ],
+        "operationId": "EvaluationOutcomeAPI",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Submit Outcome Contribution",
+        "description": "Contribute evaluation level outcome and product-specific outcome data to RiskOS™ after an evaluation has completed. ",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "event_timestamp",
+                  "eval_id"
+                ],
+                "properties": {
+                  "event_timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the decision became final, or when fraud was confirmed. ISO 8601.",
+                    "example": "2024-01-15T10:30:00Z"
+                  },
+                  "eval_id": {
+                    "type": "string",
+                    "description": "The ID of the RiskOS™ evaluation this contribution is about.",
+                    "example": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "maxLength": 255
+                  },
+                  "customer_user_id": {
+                    "type": "string",
+                    "description": "An institution- or account-specific unique identifier. The same `customer_user_id` can be used for a given client across multiple `eval_id`s.",
+                    "example": "customer_123",
+                    "maxLength": 255
+                  },
+                  "notes": {
+                    "type": "string",
+                    "description": "Free-form notes.",
+                    "example": "Post-review fraud confirmation",
+                    "maxLength": 255
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Your own labels for this contribution. 255 characters in total, across all tags.",
+                    "example": [
+                      "manual-review"
+                    ]
+                  },
+                  "evaluation_decisions": {
+                    "type": "object",
+                    "description": "The final decision for the evaluation and whether it was fraud.",
+                    "required": [
+                      "initial_decision",
+                      "final_decision",
+                      "fraud_outcome",
+                      "label_source"
+                    ],
+                    "properties": {
+                      "initial_decision": {
+                        "type": "string",
+                        "description": "Initial decision.",
+                        "enum": [
+                          "accept",
+                          "reject",
+                          "refer",
+                          "resubmit",
+                          "review",
+                          "error",
+                          "cancelled"
+                        ],
+                        "example": "reject"
+                      },
+                      "final_decision": {
+                        "type": "string",
+                        "description": "Final decision.",
+                        "enum": [
+                          "approve",
+                          "reject",
+                          "cancelled"
+                        ],
+                        "example": "reject"
+                      },
+                      "fraud_outcome": {
+                        "type": "string",
+                        "description": "Whether the evaluation turned out to be fraud.",
+                        "enum": [
+                          "fraud",
+                          "suspected fraud",
+                          "not fraud"
+                        ],
+                        "example": "fraud"
+                      },
+                      "fraud_type": {
+                        "type": "string",
+                        "description": "The type of fraud. Required when fraud_outcome is \"fraud\" or \"suspected fraud\". Optional when fraud_outcome is \"not fraud\". When provided with any fraud_outcome, must be one of the allowed values; any other value is rejected with CONTRACT_VALIDATION_FAILED.",
+                        "enum": [
+                          "first party fraud",
+                          "synthetic fraud",
+                          "third party fraud",
+                          "account takeover",
+                          "other fraud"
+                        ],
+                        "example": "third party fraud"
+                      },
+                      "fraud_subtype": {
+                        "type": "string",
+                        "description": "Subtype of fraud for more granular classification within the primary `fraud_type`. Accepts any value.",
+                        "example": "identity theft",
+                        "maxLength": 255
+                      },
+                      "label_source": {
+                        "type": "string",
+                        "description": "How the label was produced.",
+                        "enum": [
+                          "manual",
+                          "systematic"
+                        ],
+                        "example": "manual"
+                      },
+                      "conversion_flag": {
+                        "type": "string",
+                        "description": "Indicates the final lending evaluation outcome and captures relevant onboarding details.",
+                        "enum": [
+                          "booked",
+                          "declined",
+                          "withdrawn"
+                        ],
+                        "example": "declined"
+                      },
+                      "delinquency_bucket": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "description": "Indicates the customer's delinquency status. Send as a string; a JSON number is rejected with `INVALID_JSON`.",
+                        "example": "18"
+                      },
+                      "loss_amount_number": {
+                        "type": "string",
+                        "description": "Loss amount. Send as a string. A JSON number (e.g. 250.00) is also accepted and treated as the same value. Accepts US-style (\"1,234.56\") and European-style (\"1.234,56\") formats, including negative values such as \"-596.23\" and \"-1.234,56\". A leading \"+\", spaces, and currency symbols are not accepted. The maximum is 13 characters, including the minus sign.",
+                        "example": "596.23",
+                        "pattern": "^-?(?:\\d+(?:,\\d+)*(?:\\.\\d+)?|\\d+(?:\\.\\d+)*,\\d+)$",
+                        "maxLength": 13
+                      },
+                      "loss_amount_currency": {
+                        "type": "string",
+                        "description": "Three-letter ISO 4217 currency code, such as USD.",
+                        "example": "USD",
+                        "pattern": "^[A-Z]{3}$"
+                      },
+                      "channel": {
+                        "type": "string",
+                        "description": "Channel.",
+                        "enum": [
+                          "web",
+                          "mobile",
+                          "branch",
+                          "ATM",
+                          "phone",
+                          "other"
+                        ],
+                        "example": "mobile"
+                      },
+                      "account_details": {
+                        "type": "object",
+                        "description": "Optional. Include only when account-related information needs to be supplied. When present, `account_type` is required and the remaining fields are optional. Do not send an empty object.",
+                        "required": [
+                          "account_type"
+                        ],
+                        "properties": {
+                          "account_type": {
+                            "type": "string",
+                            "description": "Account type.",
+                            "enum": [
+                              "checking",
+                              "savings",
+                              "investment",
+                              "gaming",
+                              "other"
+                            ],
+                            "example": "checking"
+                          },
+                          "account_number": {
+                            "type": "string",
+                            "description": "External account number.",
+                            "example": "546876945",
+                            "maxLength": 255
+                          },
+                          "routing_number": {
+                            "type": "string",
+                            "description": "Routing number.",
+                            "example": "546834213",
+                            "maxLength": 255
+                          },
+                          "open_timestamp": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When the account was opened. Use ISO-8601 format.",
+                            "example": "1993-09-12T20:11:12Z"
+                          },
+                          "closed_timestamp": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When the account was closed. Use ISO-8601 format.",
+                            "example": "2020-09-13T00:00:00Z"
+                          },
+                          "closed_reason": {
+                            "type": "string",
+                            "description": "Close reason. Accepts any value.",
+                            "example": "fraud",
+                            "maxLength": 255
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "account_intelligence": {
+                    "type": "object",
+                    "description": "Feedback for Account Intelligence. If you include this section, its required fields must be filled in.",
+                    "required": [
+                      "payment_direction",
+                      "payment_outcome",
+                      "payment_return_code",
+                      "payment_return_date",
+                      "payment_return_reason",
+                      "payment_date",
+                      "payment_type",
+                      "payment_amount"
+                    ],
+                    "properties": {
+                      "evaluation_usecase": {
+                        "type": "string",
+                        "description": "What the original evaluation was for, such as opening an account or making a payment. Use `payment` for payment decisions.",
+                        "enum": [
+                          "account_opening",
+                          "payment",
+                          "purchase",
+                          "account_changes",
+                          "account_funding"
+                        ],
+                        "example": "payment"
+                      },
+                      "payment_direction": {
+                        "type": "string",
+                        "description": "Direction of the payment.",
+                        "enum": [
+                          "inbound",
+                          "outbound"
+                        ],
+                        "example": "outbound"
+                      },
+                      "payment_outcome": {
+                        "type": "string",
+                        "description": "Outcome of the payment transaction.",
+                        "enum": [
+                          "Good",
+                          "Bad",
+                          "Pending",
+                          "Fraud"
+                        ],
+                        "example": "Good"
+                      },
+                      "payment_return_code": {
+                        "type": "string",
+                        "description": "The ACH/payment return code if the payment was returned. Use `#` or `NO_RETURN` if not returned.",
+                        "example": "NO_RETURN",
+                        "maxLength": 255
+                      },
+                      "payment_return_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The date the payment was returned, if applicable. Use ISO-8601 format.",
+                        "example": "2025-04-23T00:00:00Z"
+                      },
+                      "payment_return_reason": {
+                        "type": "string",
+                        "description": "The reason the payment was returned, if applicable.",
+                        "example": "None",
+                        "maxLength": 255
+                      },
+                      "payment_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The date the payment was initiated or processed. Use ISO-8601 format.",
+                        "example": "2025-04-21T00:00:00Z"
+                      },
+                      "payment_type": {
+                        "type": "string",
+                        "description": "The type of payment instrument used.",
+                        "enum": [
+                          "ACH",
+                          "Wire",
+                          "Card",
+                          "Check",
+                          "P2P",
+                          "RTP",
+                          "FedNow"
+                        ],
+                        "example": "ACH"
+                      },
+                      "payment_amount": {
+                        "type": "string",
+                        "description": "The dollar amount of the payment. Send as a string. A JSON number (e.g. 250.00) is also accepted and treated as the same value. Accepts US-style (\"1,234.56\") and European-style (\"1.234,56\") formats, including negative values such as \"-596.23\" and \"-1.234,56\". A leading \"+\", spaces, and currency symbols are not accepted. The maximum is 13 characters, including the minus sign.",
+                        "example": "250.00",
+                        "pattern": "^-?(?:\\d+(?:,\\d+)*(?:\\.\\d+)?|\\d+(?:\\.\\d+)*,\\d+)$",
+                        "maxLength": 13
+                      },
+                      "additional_fields": {
+                        "type": "object",
+                        "description": "Extra fields of your own, as a JSON object. Up to 32 KiB.",
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "watchlist": {
+                    "type": "object",
+                    "description": "Feedback for Watchlist. If you include this section, its required fields must be filled in.",
+                    "required": [
+                      "reference_id",
+                      "entity_id",
+                      "decision"
+                    ],
+                    "properties": {
+                      "reference_id": {
+                        "type": "string",
+                        "description": "The reference_id from the Watchlist result of the original evaluation.",
+                        "example": "10c50ad1-8aba-42b4-ab56-8f9ad582777b",
+                        "maxLength": 255
+                      },
+                      "entity_id": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Watchlist matched entity identifier(s).",
+                        "example": [
+                          "ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc"
+                        ]
+                      },
+                      "decision": {
+                        "type": "string",
+                        "description": "Final decision specific to watchlist screening.",
+                        "enum": [
+                          "match",
+                          "no match"
+                        ],
+                        "example": "no match"
+                      },
+                      "notes": {
+                        "type": "string",
+                        "description": "Free-form notes.",
+                        "maxLength": 255
+                      },
+                      "additional_fields": {
+                        "type": "object",
+                        "description": "Extra fields of your own, as a JSON object. Up to 32 KiB.",
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "docv": {
+                    "type": "object",
+                    "description": "Feedback for DocV. If you include this section, its required fields must be filled in.",
+                    "required": [
+                      "final_doc_v_reason"
+                    ],
+                    "properties": {
+                      "final_doc_v_reason": {
+                        "type": "string",
+                        "description": "DocV decision reasons, separated by commas.",
+                        "example": "document liveness",
+                        "maxLength": 255
+                      },
+                      "doc_v_reasons_subtype": {
+                        "type": "string",
+                        "description": "DocV reason subtypes. Accepts any value.",
+                        "example": "mismatched",
+                        "maxLength": 255
+                      },
+                      "additional_fields": {
+                        "type": "object",
+                        "description": "Extra fields of your own, as a JSON object. Up to 32 KiB.",
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "kyc": {
+                    "type": "object",
+                    "description": "Feedback for KYC. If you include this section, its required fields must be filled in.",
+                    "properties": {
+                      "deceased_flag": {
+                        "type": "string",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "description": "The individual's deceased status. Send the string `\"true\"` or `\"false\"`, not a JSON boolean.",
+                        "example": "true"
+                      },
+                      "deceased_timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Time when the deceased flag was first known to be true. Use ISO-8601 format.",
+                        "example": "2026-09-04T13:30:00Z"
+                      },
+                      "additional_fields": {
+                        "type": "object",
+                        "description": "Extra fields of your own, as a JSON object. Up to 32 KiB.",
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "anyOf": [
+                  {
+                    "required": [
+                      "evaluation_decisions"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "watchlist"
+                    ],
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "account_intelligence"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "docv"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "kyc"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "additionalProperties": false
+              },
+              "examples": {
+                "1. Evaluation Identifier + Evaluation Decisions": {
+                  "summary": "1. Decisions",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "evaluation_decisions": {
+                      "initial_decision": "review",
+                      "final_decision": "reject",
+                      "fraud_outcome": "fraud",
+                      "fraud_type": "third party fraud",
+                      "fraud_subtype": "identity theft",
+                      "label_source": "manual",
+                      "conversion_flag": "declined",
+                      "delinquency_bucket": "18",
+                      "loss_amount_number": "596.23",
+                      "loss_amount_currency": "USD",
+                      "channel": "mobile"
+                    }
+                  }
+                },
+                "2. Evaluation Identifier + Evaluation Decisions + Account Details": {
+                  "summary": "2. Decisions + account",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "evaluation_decisions": {
+                      "initial_decision": "review",
+                      "final_decision": "reject",
+                      "fraud_outcome": "fraud",
+                      "fraud_type": "third party fraud",
+                      "fraud_subtype": "identity theft",
+                      "label_source": "manual",
+                      "conversion_flag": "declined",
+                      "delinquency_bucket": "18",
+                      "loss_amount_number": "596.23",
+                      "loss_amount_currency": "USD",
+                      "channel": "mobile",
+                      "account_details": {
+                        "account_type": "checking",
+                        "account_number": "546876945",
+                        "routing_number": "546834213",
+                        "open_timestamp": "1993-09-12T20:11:12Z",
+                        "closed_timestamp": "2020-09-13T00:00:00Z",
+                        "closed_reason": "fraud"
+                      }
+                    }
+                  }
+                },
+                "3. Evaluation Identifier + Evaluation Decisions + product sections": {
+                  "summary": "3. Decisions + Watchlist + KYC",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "evaluation_decisions": {
+                      "initial_decision": "review",
+                      "final_decision": "reject",
+                      "fraud_outcome": "fraud",
+                      "fraud_type": "third party fraud",
+                      "fraud_subtype": "identity theft",
+                      "label_source": "manual",
+                      "conversion_flag": "declined",
+                      "delinquency_bucket": "18",
+                      "loss_amount_number": "596.23",
+                      "loss_amount_currency": "USD",
+                      "channel": "mobile"
+                    },
+                    "watchlist": {
+                      "reference_id": "10c50ad1-8aba-42b4-ab56-8f9ad582777b",
+                      "entity_id": [
+                        "ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc"
+                      ],
+                      "decision": "match",
+                      "notes": "Analyst confirmed true match",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    },
+                    "kyc": {
+                      "deceased_flag": "true",
+                      "deceased_timestamp": "2026-09-04T13:30:00Z",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    }
+                  }
+                },
+                "4. Evaluation Identifier + Evaluation Decisions + Account Details + product sections": {
+                  "summary": "4. Decisions + account + products",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "evaluation_decisions": {
+                      "initial_decision": "review",
+                      "final_decision": "reject",
+                      "fraud_outcome": "fraud",
+                      "fraud_type": "third party fraud",
+                      "fraud_subtype": "identity theft",
+                      "label_source": "manual",
+                      "conversion_flag": "declined",
+                      "delinquency_bucket": "18",
+                      "loss_amount_number": "596.23",
+                      "loss_amount_currency": "USD",
+                      "channel": "mobile",
+                      "account_details": {
+                        "account_type": "checking",
+                        "account_number": "546876945",
+                        "routing_number": "546834213",
+                        "open_timestamp": "1993-09-12T20:11:12Z",
+                        "closed_timestamp": "2020-09-13T00:00:00Z",
+                        "closed_reason": "fraud"
+                      }
+                    },
+                    "account_intelligence": {
+                      "evaluation_usecase": "payment",
+                      "payment_direction": "outbound",
+                      "payment_outcome": "Fraud",
+                      "payment_return_code": "R10",
+                      "payment_return_date": "2025-04-23T00:00:00Z",
+                      "payment_return_reason": "Customer advises not authorized",
+                      "payment_date": "2025-04-21T00:00:00Z",
+                      "payment_type": "ACH",
+                      "payment_amount": "596.23",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    },
+                    "watchlist": {
+                      "reference_id": "10c50ad1-8aba-42b4-ab56-8f9ad582777b",
+                      "entity_id": [
+                        "ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc"
+                      ],
+                      "decision": "match",
+                      "notes": "Analyst confirmed true match",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    },
+                    "docv": {
+                      "final_doc_v_reason": "document liveness",
+                      "doc_v_reasons_subtype": "mismatched",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    },
+                    "kyc": {
+                      "deceased_flag": "true",
+                      "deceased_timestamp": "2026-09-04T13:30:00Z",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    }
+                  }
+                },
+                "5. Evaluation Identifier + Watchlist only": {
+                  "summary": "5. Watchlist only",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "watchlist": {
+                      "reference_id": "10c50ad1-8aba-42b4-ab56-8f9ad582777b",
+                      "entity_id": [
+                        "ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc"
+                      ],
+                      "decision": "no match",
+                      "notes": "Analyst cleared false positive",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    }
+                  }
+                },
+                "6. Watchlist only (fails)": {
+                  "summary": "6. No eval ID (fails)",
+                  "value": {
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "watchlist": {
+                      "reference_id": "10c50ad1-8aba-42b4-ab56-8f9ad582777b",
+                      "entity_id": [
+                        "ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc"
+                      ],
+                      "decision": "no match",
+                      "notes": "Analyst cleared false positive",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    }
+                  }
+                },
+                "7. Evaluation Identifier + other product sections without Evaluation Decisions (fails)": {
+                  "summary": "7. Products, no decisions (fails)",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "watchlist": {
+                      "reference_id": "10c50ad1-8aba-42b4-ab56-8f9ad582777b",
+                      "entity_id": [
+                        "ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc"
+                      ],
+                      "decision": "match",
+                      "notes": "Analyst confirmed true match",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    },
+                    "kyc": {
+                      "deceased_flag": "true",
+                      "deceased_timestamp": "2026-09-04T13:30:00Z",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    }
+                  }
+                },
+                "8. Missing Evaluation Identifier (fails)": {
+                  "summary": "8. No timestamp (fails)",
+                  "value": {
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "evaluation_decisions": {
+                      "initial_decision": "review",
+                      "final_decision": "reject",
+                      "fraud_outcome": "fraud",
+                      "fraud_type": "third party fraud",
+                      "fraud_subtype": "identity theft",
+                      "label_source": "manual",
+                      "conversion_flag": "declined",
+                      "delinquency_bucket": "18",
+                      "loss_amount_number": "596.23",
+                      "loss_amount_currency": "USD",
+                      "channel": "mobile"
+                    }
+                  }
+                },
+                "9. Evaluation Identifier only (fails)": {
+                  "summary": "9. Eval ID only (fails)",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ]
+                  }
+                },
+                "10. Missing fraud type (fails)": {
+                  "summary": "10. No fraud_type (fails)",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "evaluation_decisions": {
+                      "initial_decision": "review",
+                      "final_decision": "reject",
+                      "fraud_outcome": "fraud",
+                      "fraud_subtype": "identity theft",
+                      "label_source": "manual",
+                      "conversion_flag": "declined",
+                      "delinquency_bucket": "18",
+                      "loss_amount_number": "596.23",
+                      "loss_amount_currency": "USD",
+                      "channel": "mobile"
+                    }
+                  }
+                },
+                "11. Unknown field (fails)": {
+                  "summary": "11. Unknown field (fails)",
+                  "value": {
+                    "version": "v1",
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "evaluation_decisions": {
+                      "initial_decision": "review",
+                      "final_decision": "reject",
+                      "fraud_outcome": "fraud",
+                      "fraud_type": "third party fraud",
+                      "fraud_subtype": "identity theft",
+                      "label_source": "manual",
+                      "conversion_flag": "declined",
+                      "delinquency_bucket": "18",
+                      "loss_amount_number": "596.23",
+                      "loss_amount_currency": "USD",
+                      "channel": "mobile"
+                    }
+                  }
+                },
+                "12. Bad enum (fails)": {
+                  "summary": "12. Bad enum (fails)",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "evaluation_decisions": {
+                      "initial_decision": "review",
+                      "final_decision": "accept",
+                      "fraud_outcome": "fraud",
+                      "fraud_type": "third party fraud",
+                      "fraud_subtype": "identity theft",
+                      "label_source": "manual",
+                      "conversion_flag": "declined",
+                      "delinquency_bucket": "18",
+                      "loss_amount_number": "596.23",
+                      "loss_amount_currency": "USD",
+                      "channel": "mobile"
+                    }
+                  }
+                },
+                "13. Incomplete Watchlist (fails)": {
+                  "summary": "13. Watchlist incomplete (fails)",
+                  "value": {
+                    "event_timestamp": "2024-01-15T10:30:00Z",
+                    "eval_id": "c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb",
+                    "customer_user_id": "customer_123",
+                    "notes": "Post-review fraud confirmation",
+                    "tags": [
+                      "manual-review"
+                    ],
+                    "watchlist": {
+                      "reference_id": "10c50ad1-8aba-42b4-ab56-8f9ad582777b",
+                      "decision": "maybe",
+                      "notes": "Analyst review pending",
+                      "additional_fields": {
+                        "review_queue": "fraud-ops"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted - The contribution was validated and accepted for processing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "contribution_id"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "accepted"
+                    },
+                    "contribution_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "UUID that identifies the accepted contribution. Customers can quote it to Socure support when asking about a specific submission."
+                    }
+                  }
+                },
+                "examples": {
+                  "row1": {
+                    "summary": "1. Decisions",
+                    "value": {
+                      "status": "accepted",
+                      "contribution_id": "3f6c2a9e-8d41-4b7a-9c2e-1a5f0d7b6e21"
+                    }
+                  },
+                  "row2": {
+                    "summary": "2. Decisions + account",
+                    "value": {
+                      "status": "accepted",
+                      "contribution_id": "3f6c2a9e-8d41-4b7a-9c2e-1a5f0d7b6e21"
+                    }
+                  },
+                  "row3": {
+                    "summary": "3. Decisions + Watchlist + KYC",
+                    "value": {
+                      "status": "accepted",
+                      "contribution_id": "3f6c2a9e-8d41-4b7a-9c2e-1a5f0d7b6e21"
+                    }
+                  },
+                  "row4": {
+                    "summary": "4. Decisions + account + products",
+                    "value": {
+                      "status": "accepted",
+                      "contribution_id": "3f6c2a9e-8d41-4b7a-9c2e-1a5f0d7b6e21"
+                    }
+                  },
+                  "row5": {
+                    "summary": "5. Watchlist only",
+                    "value": {
+                      "status": "accepted",
+                      "contribution_id": "3f6c2a9e-8d41-4b7a-9c2e-1a5f0d7b6e21"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - The request body is empty, has no `eval_id`, is not valid JSON or contains an unknown field (`INVALID_JSON`), or has missing or invalid fields (`CONTRACT_VALIDATION_FAILED`). For `CONTRACT_VALIDATION_FAILED`, `details` lists each field to fix.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "description": "Error with a `code`. For `CONTRACT_VALIDATION_FAILED`, `details` lists each field to fix.",
+                      "required": [
+                        "status",
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "description": "Always `error` for an error response.",
+                          "example": "error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "Machine-readable error code.",
+                          "enum": [
+                            "INVALID_JSON",
+                            "CONTRACT_VALIDATION_FAILED",
+                            "INTERNAL_ERROR"
+                          ],
+                          "example": "CONTRACT_VALIDATION_FAILED"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Human-readable summary. For `CONTRACT_VALIDATION_FAILED`, the message is `one or more fields failed validation` and `details` lists each failing field. For `INVALID_JSON`, the message is the parser error.",
+                          "example": "one or more fields failed validation"
+                        },
+                        "details": {
+                          "type": "array",
+                          "description": "Field-level validation failures. Returned for `CONTRACT_VALIDATION_FAILED`. Not returned for `INVALID_JSON`.",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "field",
+                              "reason"
+                            ],
+                            "properties": {
+                              "field": {
+                                "type": "string",
+                                "description": "Path of the failing field, such as `evaluation_decisions.final_decision`. Empty when the rule applies to the contribution as a whole.",
+                                "example": "evaluation_decisions.final_decision"
+                              },
+                              "reason": {
+                                "type": "string",
+                                "description": "Why the field failed. Ends with the ID of the failed rule in brackets.",
+                                "example": "must be one of [approve, reject, cancelled] [final_decision]"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "title": "Validation error",
+                      "example": {
+                        "status": "error",
+                        "code": "CONTRACT_VALIDATION_FAILED",
+                        "message": "one or more fields failed validation",
+                        "details": [
+                          {
+                            "field": "event_timestamp",
+                            "reason": "is required [event_timestamp.required]"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "title": "Simple error",
+                      "type": "object",
+                      "description": "Error with only an `error` message. If Socure has enabled the standard error format for your account, it also includes `code` and `error_details`.",
+                      "required": [
+                        "error"
+                      ],
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "description": "Human-readable error message.",
+                          "example": "eval_id is required in the request body"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "Standard error format only. Empty for these errors.",
+                          "example": ""
+                        },
+                        "error_details": {
+                          "type": "object",
+                          "description": "Standard error format only.",
+                          "properties": {
+                            "status": {
+                              "type": "integer",
+                              "description": "HTTP status code.",
+                              "example": 400
+                            },
+                            "request_id": {
+                              "type": "string",
+                              "description": "Identifier of the API call, when available."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "examples": {
+                  "row6": {
+                    "summary": "6. No eval ID (fails)",
+                    "value": {
+                      "error": "eval_id is required in the request body"
+                    }
+                  },
+                  "row7": {
+                    "summary": "7. Products, no decisions (fails)",
+                    "value": {
+                      "status": "error",
+                      "code": "CONTRACT_VALIDATION_FAILED",
+                      "message": "one or more fields failed validation",
+                      "details": [
+                        {
+                          "field": "",
+                          "reason": "evaluation_decisions is required unless the only enrichment is watchlist [evaluation_decisions.when_required]"
+                        }
+                      ]
+                    }
+                  },
+                  "row8": {
+                    "summary": "8. No timestamp (fails)",
+                    "value": {
+                      "status": "error",
+                      "code": "CONTRACT_VALIDATION_FAILED",
+                      "message": "one or more fields failed validation",
+                      "details": [
+                        {
+                          "field": "event_timestamp",
+                          "reason": "is required [event_timestamp.required]"
+                        }
+                      ]
+                    }
+                  },
+                  "row9": {
+                    "summary": "9. Eval ID only (fails)",
+                    "value": {
+                      "status": "error",
+                      "code": "CONTRACT_VALIDATION_FAILED",
+                      "message": "one or more fields failed validation",
+                      "details": [
+                        {
+                          "field": "",
+                          "reason": "evaluation_decisions is required unless the only enrichment is watchlist [evaluation_decisions.when_required]"
+                        }
+                      ]
+                    }
+                  },
+                  "row10": {
+                    "summary": "10. No fraud_type (fails)",
+                    "value": {
+                      "status": "error",
+                      "code": "CONTRACT_VALIDATION_FAILED",
+                      "message": "one or more fields failed validation",
+                      "details": [
+                        {
+                          "field": "evaluation_decisions",
+                          "reason": "fraud_type is required unless fraud_outcome is 'not fraud' [fraud_type.required_unless_not_fraud]"
+                        }
+                      ]
+                    }
+                  },
+                  "row11": {
+                    "summary": "11. Unknown field (fails)",
+                    "value": {
+                      "status": "error",
+                      "code": "INVALID_JSON",
+                      "message": "unmarshal outcome request: proto: (line 1:2): unknown field \"version\""
+                    }
+                  },
+                  "row12": {
+                    "summary": "12. Bad enum (fails)",
+                    "value": {
+                      "status": "error",
+                      "code": "CONTRACT_VALIDATION_FAILED",
+                      "message": "one or more fields failed validation",
+                      "details": [
+                        {
+                          "field": "evaluation_decisions.final_decision",
+                          "reason": "must be one of [approve, reject, cancelled] [final_decision]"
+                        }
+                      ]
+                    }
+                  },
+                  "row13": {
+                    "summary": "13. Watchlist incomplete (fails)",
+                    "value": {
+                      "status": "error",
+                      "code": "CONTRACT_VALIDATION_FAILED",
+                      "message": "one or more fields failed validation",
+                      "details": [
+                        {
+                          "field": "watchlist.entity_id",
+                          "reason": "is required [entity_id.required]"
+                        },
+                        {
+                          "field": "watchlist.decision",
+                          "reason": "must be one of [match, no match] [decision]"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - A missing or invalid API key was provided."
+          },
+          "403": {
+            "description": "Forbidden - The API key is not permitted to perform this action."
+          },
+          "404": {
+            "description": "Not Found - The `eval_id` does not match an evaluation in your account and environment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Simple error",
+                  "type": "object",
+                  "description": "Error with only an `error` message. If Socure has enabled the standard error format for your account, it also includes `code` and `error_details`.",
+                  "required": [
+                    "error"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message.",
+                      "example": "evaluation not found in caller namespace"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Standard error format only. Empty for these errors.",
+                      "example": ""
+                    },
+                    "error_details": {
+                      "type": "object",
+                      "description": "Standard error format only.",
+                      "properties": {
+                        "status": {
+                          "type": "integer",
+                          "description": "HTTP status code.",
+                          "example": 404
+                        },
+                        "request_id": {
+                          "type": "string",
+                          "description": "Identifier of the API call, when available."
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "evaluation_not_found": {
+                    "summary": "Evaluation not found",
+                    "value": {
+                      "error": "evaluation not found in caller namespace"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload Too Large - The request body exceeds 160 KiB."
+          },
+          "429": {
+            "description": "Too Many Requests - The rate limit for this API has been exceeded."
+          },
+          "500": {
+            "description": "Internal Server Error - An unexpected condition occurred on the server (`INTERNAL_ERROR`)."
+          }
+        },
+        "x-readme": {
+          "code-samples": [
+            {
+              "language": "shell",
+              "name": "1. Decisions",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"evaluation_decisions\": {\n    \"initial_decision\": \"review\",\n    \"final_decision\": \"reject\",\n    \"fraud_outcome\": \"fraud\",\n    \"fraud_type\": \"third party fraud\",\n    \"fraud_subtype\": \"identity theft\",\n    \"label_source\": \"manual\",\n    \"conversion_flag\": \"declined\",\n    \"delinquency_bucket\": \"18\",\n    \"loss_amount_number\": \"596.23\",\n    \"loss_amount_currency\": \"USD\",\n    \"channel\": \"mobile\"\n  }\n}'",
+              "correspondingExample": "row1"
+            },
+            {
+              "language": "shell",
+              "name": "2. Decisions + account",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"evaluation_decisions\": {\n    \"initial_decision\": \"review\",\n    \"final_decision\": \"reject\",\n    \"fraud_outcome\": \"fraud\",\n    \"fraud_type\": \"third party fraud\",\n    \"fraud_subtype\": \"identity theft\",\n    \"label_source\": \"manual\",\n    \"conversion_flag\": \"declined\",\n    \"delinquency_bucket\": \"18\",\n    \"loss_amount_number\": \"596.23\",\n    \"loss_amount_currency\": \"USD\",\n    \"channel\": \"mobile\",\n    \"account_details\": {\n      \"account_type\": \"checking\",\n      \"account_number\": \"546876945\",\n      \"routing_number\": \"546834213\",\n      \"open_timestamp\": \"1993-09-12T20:11:12Z\",\n      \"closed_timestamp\": \"2020-09-13T00:00:00Z\",\n      \"closed_reason\": \"fraud\"\n    }\n  }\n}'",
+              "correspondingExample": "row2"
+            },
+            {
+              "language": "shell",
+              "name": "3. Decisions + Watchlist + KYC",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"evaluation_decisions\": {\n    \"initial_decision\": \"review\",\n    \"final_decision\": \"reject\",\n    \"fraud_outcome\": \"fraud\",\n    \"fraud_type\": \"third party fraud\",\n    \"fraud_subtype\": \"identity theft\",\n    \"label_source\": \"manual\",\n    \"conversion_flag\": \"declined\",\n    \"delinquency_bucket\": \"18\",\n    \"loss_amount_number\": \"596.23\",\n    \"loss_amount_currency\": \"USD\",\n    \"channel\": \"mobile\"\n  },\n  \"watchlist\": {\n    \"reference_id\": \"10c50ad1-8aba-42b4-ab56-8f9ad582777b\",\n    \"entity_id\": [\n      \"ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc\"\n    ],\n    \"decision\": \"match\",\n    \"notes\": \"Analyst confirmed true match\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  },\n  \"kyc\": {\n    \"deceased_flag\": \"true\",\n    \"deceased_timestamp\": \"2026-09-04T13:30:00Z\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  }\n}'",
+              "correspondingExample": "row3"
+            },
+            {
+              "language": "shell",
+              "name": "4. Decisions + account + products",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"evaluation_decisions\": {\n    \"initial_decision\": \"review\",\n    \"final_decision\": \"reject\",\n    \"fraud_outcome\": \"fraud\",\n    \"fraud_type\": \"third party fraud\",\n    \"fraud_subtype\": \"identity theft\",\n    \"label_source\": \"manual\",\n    \"conversion_flag\": \"declined\",\n    \"delinquency_bucket\": \"18\",\n    \"loss_amount_number\": \"596.23\",\n    \"loss_amount_currency\": \"USD\",\n    \"channel\": \"mobile\",\n    \"account_details\": {\n      \"account_type\": \"checking\",\n      \"account_number\": \"546876945\",\n      \"routing_number\": \"546834213\",\n      \"open_timestamp\": \"1993-09-12T20:11:12Z\",\n      \"closed_timestamp\": \"2020-09-13T00:00:00Z\",\n      \"closed_reason\": \"fraud\"\n    }\n  },\n  \"account_intelligence\": {\n    \"evaluation_usecase\": \"payment\",\n    \"payment_direction\": \"outbound\",\n    \"payment_outcome\": \"Fraud\",\n    \"payment_return_code\": \"R10\",\n    \"payment_return_date\": \"2025-04-23T00:00:00Z\",\n    \"payment_return_reason\": \"Customer advises not authorized\",\n    \"payment_date\": \"2025-04-21T00:00:00Z\",\n    \"payment_type\": \"ACH\",\n    \"payment_amount\": \"596.23\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  },\n  \"watchlist\": {\n    \"reference_id\": \"10c50ad1-8aba-42b4-ab56-8f9ad582777b\",\n    \"entity_id\": [\n      \"ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc\"\n    ],\n    \"decision\": \"match\",\n    \"notes\": \"Analyst confirmed true match\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  },\n  \"docv\": {\n    \"final_doc_v_reason\": \"document liveness\",\n    \"doc_v_reasons_subtype\": \"mismatched\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  },\n  \"kyc\": {\n    \"deceased_flag\": \"true\",\n    \"deceased_timestamp\": \"2026-09-04T13:30:00Z\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  }\n}'",
+              "correspondingExample": "row4"
+            },
+            {
+              "language": "shell",
+              "name": "5. Watchlist only",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"watchlist\": {\n    \"reference_id\": \"10c50ad1-8aba-42b4-ab56-8f9ad582777b\",\n    \"entity_id\": [\n      \"ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc\"\n    ],\n    \"decision\": \"no match\",\n    \"notes\": \"Analyst cleared false positive\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  }\n}'",
+              "correspondingExample": "row5"
+            },
+            {
+              "language": "shell",
+              "name": "6. No eval ID (fails)",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"watchlist\": {\n    \"reference_id\": \"10c50ad1-8aba-42b4-ab56-8f9ad582777b\",\n    \"entity_id\": [\n      \"ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc\"\n    ],\n    \"decision\": \"no match\",\n    \"notes\": \"Analyst cleared false positive\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  }\n}'",
+              "correspondingExample": "row6"
+            },
+            {
+              "language": "shell",
+              "name": "7. Products, no decisions (fails)",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"watchlist\": {\n    \"reference_id\": \"10c50ad1-8aba-42b4-ab56-8f9ad582777b\",\n    \"entity_id\": [\n      \"ZaP+/U4QdD5dfmJNCjtmwzKDgOyECzc\"\n    ],\n    \"decision\": \"match\",\n    \"notes\": \"Analyst confirmed true match\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  },\n  \"kyc\": {\n    \"deceased_flag\": \"true\",\n    \"deceased_timestamp\": \"2026-09-04T13:30:00Z\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  }\n}'",
+              "correspondingExample": "row7"
+            },
+            {
+              "language": "shell",
+              "name": "8. No timestamp (fails)",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"evaluation_decisions\": {\n    \"initial_decision\": \"review\",\n    \"final_decision\": \"reject\",\n    \"fraud_outcome\": \"fraud\",\n    \"fraud_type\": \"third party fraud\",\n    \"fraud_subtype\": \"identity theft\",\n    \"label_source\": \"manual\",\n    \"conversion_flag\": \"declined\",\n    \"delinquency_bucket\": \"18\",\n    \"loss_amount_number\": \"596.23\",\n    \"loss_amount_currency\": \"USD\",\n    \"channel\": \"mobile\"\n  }\n}'",
+              "correspondingExample": "row8"
+            },
+            {
+              "language": "shell",
+              "name": "9. Eval ID only (fails)",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ]\n}'",
+              "correspondingExample": "row9"
+            },
+            {
+              "language": "shell",
+              "name": "10. No fraud_type (fails)",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"evaluation_decisions\": {\n    \"initial_decision\": \"review\",\n    \"final_decision\": \"reject\",\n    \"fraud_outcome\": \"fraud\",\n    \"fraud_subtype\": \"identity theft\",\n    \"label_source\": \"manual\",\n    \"conversion_flag\": \"declined\",\n    \"delinquency_bucket\": \"18\",\n    \"loss_amount_number\": \"596.23\",\n    \"loss_amount_currency\": \"USD\",\n    \"channel\": \"mobile\"\n  }\n}'",
+              "correspondingExample": "row10"
+            },
+            {
+              "language": "shell",
+              "name": "11. Unknown field (fails)",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"version\": \"v1\",\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"evaluation_decisions\": {\n    \"initial_decision\": \"review\",\n    \"final_decision\": \"reject\",\n    \"fraud_outcome\": \"fraud\",\n    \"fraud_type\": \"third party fraud\",\n    \"fraud_subtype\": \"identity theft\",\n    \"label_source\": \"manual\",\n    \"conversion_flag\": \"declined\",\n    \"delinquency_bucket\": \"18\",\n    \"loss_amount_number\": \"596.23\",\n    \"loss_amount_currency\": \"USD\",\n    \"channel\": \"mobile\"\n  }\n}'",
+              "correspondingExample": "row11"
+            },
+            {
+              "language": "shell",
+              "name": "12. Bad enum (fails)",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"evaluation_decisions\": {\n    \"initial_decision\": \"review\",\n    \"final_decision\": \"accept\",\n    \"fraud_outcome\": \"fraud\",\n    \"fraud_type\": \"third party fraud\",\n    \"fraud_subtype\": \"identity theft\",\n    \"label_source\": \"manual\",\n    \"conversion_flag\": \"declined\",\n    \"delinquency_bucket\": \"18\",\n    \"loss_amount_number\": \"596.23\",\n    \"loss_amount_currency\": \"USD\",\n    \"channel\": \"mobile\"\n  }\n}'",
+              "correspondingExample": "row12"
+            },
+            {
+              "language": "shell",
+              "name": "13. Watchlist incomplete (fails)",
+              "code": "curl --request POST \\\n  --url https://riskos.socure.com/api/outcome_contribution \\\n  --header 'Authorization: Bearer <RISKOS_API_KEY>' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n  \"event_timestamp\": \"2024-01-15T10:30:00Z\",\n  \"eval_id\": \"c9b1dab6-4ffd-49f4-ba02-c5f517ef00fb\",\n  \"customer_user_id\": \"customer_123\",\n  \"notes\": \"Post-review fraud confirmation\",\n  \"tags\": [\n    \"manual-review\"\n  ],\n  \"watchlist\": {\n    \"reference_id\": \"10c50ad1-8aba-42b4-ab56-8f9ad582777b\",\n    \"decision\": \"maybe\",\n    \"notes\": \"Analyst review pending\",\n    \"additional_fields\": {\n      \"review_queue\": \"fraud-ops\"\n    }\n  }\n}'",
+              "correspondingExample": "row13"
+            }
+          ]
+        }
+      }
+    },
     "/api/reason-codes": {
       "get": {
         "tags": [
@@ -1413,7 +2692,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Add, update, or soft-delete a record on one of your custom watchlists. The operation is set by the action_type field and keyed by the record ID.",
+        "description": "Add, update, or soft-delete a record in a custom watchlist. The operation is determined by the `action_type` field:\n\n- **add**: Create a new record in the watchlist.\n- **update**: Update an existing record.\n- **delete**: Soft-delete a record. The record stays on the list, but its status changes from Active to Inactive.\n\nAll operations are keyed by `record.id`. The list itself must already exist — create it in the RiskOS™ Dashboard before calling this endpoint.\n",
         "parameters": [
           {
             "name": "listId",
@@ -1995,113 +3274,44 @@
         "description": "Socure provides separate RiskOS™ keys for the Sandbox and Production environments. Be sure to use the correct key when making a request.\n"
       }
     },
-    "parameters": {
-      "XApiVersionHeader": {
-        "name": "X-API-Version",
-        "in": "header",
-        "description": "This header is optional. If omitted, requests use the current default version, `2025-01-01.orion`. Set this header to pin your integration to a specific API version.",
-        "required": false,
-        "schema": {
-          "type": "string",
-          "example": "2025-01-01.orion"
-        }
-      },
-      "EvalId": {
-        "name": "eval_id",
-        "in": "path",
-        "required": true,
-        "description": "The system-generated unique ID for the evaluation. Capture this value from the initial `POST` `/api/evaluation` response.",
-        "schema": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "example": "e9c170f2-b3e4-423b-a373-5d6e1e9b23f8"
-      }
-    },
     "schemas": {
-      "AgeAssurance": {
-        "title": "Age Assurance",
+      "OutcomeError": {
         "type": "object",
+        "description": "Application error envelope returned by the Evaluation Outcome API for validation and server errors.",
         "required": [
-          "workflow",
-          "id",
-          "timestamp",
-          "data"
+          "status",
+          "code",
+          "message"
         ],
         "properties": {
-          "workflow": {
+          "status": {
             "type": "string",
-            "description": "Your environment-specific Age Assurance workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
-            "example": "age_assurance"
+            "description": "Always `error` for an error response.",
+            "example": "error"
           },
-          "id": {
+          "code": {
             "type": "string",
-            "description": "Required, customer-defined unique identifier for the request. Reusing an ID causes RiskOS™ to treat the request as a re-run.",
-            "example": "test-user-phone"
+            "description": "Machine-readable error code.",
+            "enum": [
+              "EMPTY_BODY",
+              "INVALID_JSON",
+              "CONTRACT_VALIDATION_FAILED",
+              "UNKNOWN_CONTRACT_VERSION",
+              "PAYLOAD_TOO_LARGE",
+              "INTERNAL_ERROR"
+            ],
+            "example": "CONTRACT_VALIDATION_FAILED"
           },
-          "timestamp": {
+          "message": {
             "type": "string",
-            "format": "date-time",
-            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
-            "example": "2026-07-07T12:44:22.059Z"
-          },
-          "customer_metadata": {
-            "$ref": "#/components/schemas/CustomerMetadata"
-          },
-          "data": {
-            "type": "object",
-            "description": "The main payload for the Age Assurance workflow.",
-            "properties": {
-              "event_type": {
-                "type": "string",
-                "description": "The event category for the evaluation.",
-                "example": "identity_verification"
-              },
-              "channel": {
-                "$ref": "#/components/schemas/Channel"
-              },
-              "individual": {
-                "type": "object",
-                "description": "Inputs the configured Age Assurance methods resolve age from.",
-                "properties": {
-                  "given_name": {
-                    "type": "string",
-                    "maxLength": 240,
-                    "description": "The consumer's given name. Improves passive identity resolution.",
-                    "example": "Alex"
-                  },
-                  "family_name": {
-                    "type": "string",
-                    "maxLength": 240,
-                    "description": "The consumer's family name. Improves passive identity resolution.",
-                    "example": "Doe"
-                  },
-                  "phone_number": {
-                    "type": "string",
-                    "description": "The consumer's phone number in E.164 format (e.g., `+12025550147`); hyphens and spaces are tolerated. Required for phone-based assurance.\n",
-                    "example": "19843359615"
-                  },
-                  "email": {
-                    "type": "string",
-                    "format": "email",
-                    "description": "The consumer's email address. Required for email-based assurance.",
-                    "example": "user@example.com"
-                  },
-                  "address": {
-                    "$ref": "#/components/schemas/Address"
-                  },
-                  "docv": {
-                    "$ref": "#/components/schemas/Docv"
-                  },
-                  "di_session_token": {
-                    "type": "string",
-                    "description": "Device session token captured by the Digital Intelligence SDK. Required for device-based assurance.",
-                    "example": "eyJraWQiOi_di_token"
-                  }
-                }
-              }
-            }
+            "description": "Human-readable detail. For `CONTRACT_VALIDATION_FAILED`, a multi-line list of every failing field.",
+            "example": "validation error:\n - event_timestamp: is required"
           }
+        },
+        "example": {
+          "status": "error",
+          "code": "CONTRACT_VALIDATION_FAILED",
+          "message": "validation error:\n - event_timestamp: is required"
         }
       },
       "CustomerMetadata": {
@@ -2314,7 +3524,7 @@
           },
           "language": {
             "type": "string",
-            "description": "Specifies the language package for the Capture App. Below are the possible values.\n- Automatic (device default): `auto`\n- Arabic: `ar`\n- Arabic (Saudi Arabia): `ar-sa`\n- Armenian: `hy`\n- Bengali: `bn`\n- Chinese (Hong Kong): `zh-hk`\n- Chinese (Simplified): `zh-cn`\n- Chinese (Traditional): `zh-tw`\n- Czech: `cs-cz`\n- Danish: `da-dk`\n- Dutch: `nl-nl`\n- English: `en`\n- English (Australian): `en-au`\n- English (Canadian): `en-ca`\n- English (United Kingdom): `en-gb`\n- English (United States): `en-us`\n- Finnish: `fi-fi`\n- French: `fr`\n- French (Canada): `fr-ca`\n- German: `de-de`\n- Haitian Creole: `ht`\n- Hebrew: `he-il`\n- Hindi: `hi-in`\n- Hungarian: `hu-hu`\n- Indonesian: `id-id`\n- Italian: `it`\n- Italian (Switzerland): `it-ch`\n- Japanese: `ja-jp`\n- Korean: `ko`\n- Malay: `ms-my`\n- Norwegian: `no-no`\n- Polish: `pl-pl`\n- Portuguese (Brazil): `pt-br`\n- Portuguese (Portugal): `pt-pt`\n- Romanian (Moldova): `ro-mo`\n- Romanian (Romania): `ro-ro`\n- Russian: `ru`\n- Slovak: `sk-sk`\n- Spanish: `es`\n- Spanish (Argentina): `es-ar`\n- Spanish (International): `es-001`\n- Spanish (Mexico): `es-mx`\n- Spanish (Spain): `es-es`\n- Spanish (US): `es-us`\n- Swedish: `sv-se`\n- Tagalog: `tl`\n- Thai: `th-th`\n- Turkish: `tr-tr`\n- Urdu: `ur`\n- Vietnamese: `vi`\n\nSet `language` to `auto` to use the consumer's device default language. If the device's default language isn't supported, the Capture App defaults to English (`en`).\n",
+            "description": "Specifies the language package for the Capture App. Below are the possible values.\n- Automatic (device default): `auto`\n- Arabic: `ar`\n- Arabic (Saudi Arabia): `ar-sa`\n- Armenian: `hy`\n- Bengali: `bn`\n- Chinese (Hong Kong): `zh-hk`\n- Chinese (Simplified): `zh-cn`\n- Chinese (Traditional): `zh-tw`\n- Czech: `cs-cz`\n- Danish: `da-dk`\n- Dutch: `nl-nl`\n- English: `en`\n- English (Australian): `en-au`\n- English (Canadian): `en-ca`\n- English (United Kingdom): `en-gb`\n- English (United States): `en-us`\n- Finnish: `fi-fi`\n- French: `fr`\n- French (Canada): `fr-ca`\n- German: `de-de`\n- Haitian Creole: `ht`\n- Hebrew: `he-il`\n- Hindi: `hi-in`\n- Hungarian: `hu-hu`\n- Indonesian: `id-id`\n- Italian: `it`\n- Italian (Switzerland): `it-ch`\n- Japanese: `ja-jp`\n- Korean: `ko`\n- Malay: `ms-my`\n- Norwegian: `no-no`\n- Polish: `pl-pl`\n- Portuguese (Brazil): `pt-br`\n- Portuguese (Portugal): `pt-pt`\n- Romanian (Moldova): `ro-mo`\n- Romanian (Romania): `ro-ro`\n- Russian: `ru`\n- Slovak: `sk-sk`\n- Spanish: `es`\n- Spanish (Argentina): `es-ar`\n- Spanish (International): `es-001`\n- Spanish (Mexico): `es-mx`\n- Spanish (Spain): `es-es`\n- Spanish (US): `es-us`\n- Swedish: `sv-se`\n- Tagalog: `tl`\n- Thai: `th-th`\n- Turkish: `tr-tr`\n- Urdu: `ur`\n- Vietnamese: `vi`\nSet `language` to `auto` to use the consumer's device default language. If the device's default language isn't supported, the Capture App defaults to English (`en`).\n",
             "example": "en-us",
             "default": "en-us",
             "enum": [
@@ -2907,97 +4117,6 @@
           }
         }
       },
-      "Individual": {
-        "type": "object",
-        "description": "Represents core information about the primary individual consumer.",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Maps to the `userId` in  enrichments or a customer’s internal identifier.  Can be enabled as a searchable field in RiskOS™ Dashboard.",
-            "example": "9876543"
-          },
-          "given_name": {
-            "type": "string",
-            "description": "The consumer's given name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
-            "example": "Dwayne",
-            "maxLength": 240
-          },
-          "family_name": {
-            "type": "string",
-            "description": "The consumer's family name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
-            "example": "Denver",
-            "maxLength": 240
-          },
-          "suffix": {
-            "type": "string",
-            "description": "A suffix for the consumer's name, if applicable (e.g., Jr., Sr., III).",
-            "example": "JR."
-          },
-          "national_id": {
-            "type": "string",
-            "description": "The consumer's national identification number. For US consumers, this can be a nine-digit Social Security Number (SSN) or Individual Tax Identification Number (ITIN). Partial SSNs (last four digits) are also accepted. Hyphens are optional.\n",
-            "example": "461118208"
-          },
-          "date_of_birth": {
-            "type": "string",
-            "format": "date",
-            "description": "The consumer's date of birth in the format YYYY-MM-DD, compliant with RFC 3339.",
-            "example": "1975-04-02"
-          },
-          "email": {
-            "type": "string",
-            "description": "The consumer's email address.",
-            "example": "john.doe@example.com"
-          },
-          "alternate_email": {
-            "type": "string",
-            "description": "The consumer's alternate email address.",
-            "example": "doe.john@example.com"
-          },
-          "phone_number": {
-            "type": "string",
-            "description": "The consumer’s phone number. The API expects the standard E.164 format (e.g., +12025550147) but tolerates hyphens and spaces for user convenience.\n\n**Examples:**\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
-            "example": "+1-202-555-0147"
-          },
-          "alternate_phone_number": {
-            "type": "string",
-            "description": "The consumer’s alternate phone number. The API accepts E.164 format (e.g., `+12025550147`) but tolerates hyphens and spaces for user convenience.\n",
-            "example": "+1-555-202-0147"
-          },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "Male",
-              "Female",
-              "Self Identify"
-            ],
-            "description": "The consumer's gender.\n",
-            "example": "Male"
-          },
-          "address": {
-            "$ref": "#/components/schemas/Address"
-          },
-          "account": {
-            "$ref": "#/components/schemas/Account"
-          },
-          "docv": {
-            "$ref": "#/components/schemas/Docv"
-          },
-          "additional_context": {
-            "$ref": "#/components/schemas/AdditionalContext"
-          },
-          "di_session_token": {
-            "type": "string",
-            "description": "Token required to extract Device Intelligence (DI) signals.",
-            "example": "SESSION-ABC123"
-          },
-          "custom": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Send any additional, customer-specific data for this consumer in this field. See [Custom Fields](https://help.socure.com/riskos/docs/custom-fields) for more information. "
-          }
-        }
-      },
       "AdvancedPrefill": {
         "title": "Advanced Prefill",
         "type": "object",
@@ -3108,6 +4227,97 @@
                 "description": "Use this field to send any additional, customer-specific data relevant to the evaluation. See [Custom Fields](https://help.socure.com/riskos/docs/custom-fields) for more information."
               }
             }
+          }
+        }
+      },
+      "Individual": {
+        "type": "object",
+        "description": "Represents core information about the primary individual consumer.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Maps to the `userId` in  enrichments or a customer’s internal identifier.  Can be enabled as a searchable field in RiskOS™ Dashboard.",
+            "example": "9876543"
+          },
+          "given_name": {
+            "type": "string",
+            "description": "The consumer's given name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+            "example": "Dwayne",
+            "maxLength": 240
+          },
+          "family_name": {
+            "type": "string",
+            "description": "The consumer's family name.\n\n**Requirements:**\n- Must be UTF-8 encoded\n- Supports single-byte Latin characters only\n- The following special characters are not supported:\n  ^ ± ! @ £ $ % & * _ + ¡ € # ¢ § ¶ • ª º « < > ? \\ / : ; | =\n",
+            "example": "Denver",
+            "maxLength": 240
+          },
+          "suffix": {
+            "type": "string",
+            "description": "A suffix for the consumer's name, if applicable (e.g., Jr., Sr., III).",
+            "example": "JR."
+          },
+          "national_id": {
+            "type": "string",
+            "description": "The consumer's national identification number. For US consumers, this can be a nine-digit Social Security Number (SSN) or Individual Tax Identification Number (ITIN). Partial SSNs (last four digits) are also accepted. Hyphens are optional.\n",
+            "example": "461118208"
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "date",
+            "description": "The consumer's date of birth in the format YYYY-MM-DD, compliant with RFC 3339.",
+            "example": "1975-04-02"
+          },
+          "email": {
+            "type": "string",
+            "description": "The consumer's email address.",
+            "example": "john.doe@example.com"
+          },
+          "alternate_email": {
+            "type": "string",
+            "description": "The consumer's alternate email address.",
+            "example": "doe.john@example.com"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "The consumer’s phone number. The API expects the standard E.164 format (e.g., +12025550147) but tolerates hyphens and spaces for user convenience.\n\n**Examples:**\n- United States: `+13475550100`\n- United Kingdom: `+447911123456`\n- Brazil: `+5511987654321`\n- India: `+919876543210`\n- Australia: `+61412345678`\n",
+            "example": "+1-202-555-0147"
+          },
+          "alternate_phone_number": {
+            "type": "string",
+            "description": "The consumer’s alternate phone number. The API accepts E.164 format (e.g., `+12025550147`) but tolerates hyphens and spaces for user convenience.\n",
+            "example": "+1-555-202-0147"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "Male",
+              "Female",
+              "Self Identify"
+            ],
+            "description": "The consumer's gender.\n",
+            "example": "Male"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "account": {
+            "$ref": "#/components/schemas/Account"
+          },
+          "docv": {
+            "$ref": "#/components/schemas/Docv"
+          },
+          "additional_context": {
+            "$ref": "#/components/schemas/AdditionalContext"
+          },
+          "di_session_token": {
+            "type": "string",
+            "description": "Token required to extract Device Intelligence (DI) signals.",
+            "example": "SESSION-ABC123"
+          },
+          "custom": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Send any additional, customer-specific data for this consumer in this field. See [Custom Fields](https://help.socure.com/riskos/docs/custom-fields) for more information. "
           }
         }
       },
@@ -4096,6 +5306,91 @@
           }
         }
       },
+      "AgeAssurance": {
+        "title": "Age Assurance",
+        "type": "object",
+        "required": [
+          "workflow",
+          "id",
+          "timestamp",
+          "data"
+        ],
+        "properties": {
+          "workflow": {
+            "type": "string",
+            "description": "Your environment-specific Age Assurance workflow identifier. You can find this value in the RiskOS™ Dashboard > Developer Workbench > Integration Checklist.",
+            "example": "age_assurance"
+          },
+          "id": {
+            "type": "string",
+            "description": "Required, customer-defined unique identifier for the request. Reusing an ID causes RiskOS™ to treat the request as a re-run.",
+            "example": "test-user-phone"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the evaluation was initiated, in ISO 8601 / RFC 3339 format.\n",
+            "example": "2026-07-07T12:44:22.059Z"
+          },
+          "customer_metadata": {
+            "$ref": "#/components/schemas/CustomerMetadata"
+          },
+          "data": {
+            "type": "object",
+            "description": "The main payload for the Age Assurance workflow.",
+            "properties": {
+              "event_type": {
+                "type": "string",
+                "description": "The event category for the evaluation.",
+                "example": "identity_verification"
+              },
+              "channel": {
+                "$ref": "#/components/schemas/Channel"
+              },
+              "individual": {
+                "type": "object",
+                "description": "Inputs the configured Age Assurance methods resolve age from.",
+                "properties": {
+                  "given_name": {
+                    "type": "string",
+                    "maxLength": 240,
+                    "description": "The consumer's given name. Improves passive identity resolution.",
+                    "example": "Alex"
+                  },
+                  "family_name": {
+                    "type": "string",
+                    "maxLength": 240,
+                    "description": "The consumer's family name. Improves passive identity resolution.",
+                    "example": "Doe"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "The consumer's phone number in E.164 format (e.g., `+12025550147`); hyphens and spaces are tolerated. Required for phone-based assurance.\n",
+                    "example": "19843359615"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The consumer's email address. Required for email-based assurance.",
+                    "example": "user@example.com"
+                  },
+                  "address": {
+                    "$ref": "#/components/schemas/Address"
+                  },
+                  "docv": {
+                    "$ref": "#/components/schemas/Docv"
+                  },
+                  "di_session_token": {
+                    "type": "string",
+                    "description": "Device session token captured by the Digital Intelligence SDK. Required for device-based assurance.",
+                    "example": "eyJraWQiOi_di_token"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "EvalResponseWithOutSocureData": {
         "type": "object",
         "description": "The standard Socure RiskOS™ evaluation response.",
@@ -4442,6 +5737,11 @@
           "data": {
             "type": "object",
             "description": "The main payload for the Consumer Onboarding workflow.",
+            "example": {
+              "individual": {
+                "email": "updated.email@example.com"
+              }
+            },
             "properties": {
               "individual": {
                 "type": "object",
@@ -4646,118 +5946,36 @@
         }
       }
     },
+    "parameters": {
+      "XApiVersionHeader": {
+        "name": "X-API-Version",
+        "in": "header",
+        "description": "This header is optional. If omitted, requests use the current default version, `2025-01-01.orion`. Set this header to pin your integration to a specific API version.",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "2025-01-01.orion"
+        }
+      },
+      "EvalId": {
+        "name": "eval_id",
+        "in": "path",
+        "required": true,
+        "description": "The system-generated unique ID for the evaluation. Capture this value from the initial `POST` `/api/evaluation` response.",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "example": "e9c170f2-b3e4-423b-a373-5d6e1e9b23f8"
+      }
+    },
     "examples": {
-      "AgeAssuranceRequest": {
-        "description": "Age Assurance",
-        "value": {
-          "id": "test-user-phone",
-          "timestamp": "2026-07-07T12:44:22.059Z",
-          "workflow": "age_assurance",
-          "data": {
-            "event_type": "identity_verification",
-            "channel": "web",
-            "individual": {
-              "given_name": "Alex",
-              "family_name": "Doe",
-              "phone_number": "19843359615",
-              "email": "user@example.com",
-              "address": {
-                "country": "US"
-              },
-              "docv": {
-                "config": {
-                  "language": "en",
-                  "send_message": false
-                }
-              }
-            }
-          }
-        }
-      },
-      "AgeAssuranceResponse": {
-        "description": "Age Assurance",
-        "value": {
-          "id": "test-user-phone",
-          "eval_id": "7e79e169-5021-475b-af98-9362ac690c38",
-          "workflow": "age_assurance",
-          "eval_status": "evaluation_completed",
-          "decision": "ACCEPT",
-          "status": "CLOSED",
-          "sub_status": "Accept",
-          "workflow_id": "5b1399aa-c4b9-4f70-90ee-170e6f3cdc55",
-          "workflow_version": "3.7.0",
-          "eval_source": "API",
-          "eval_start_time": "2026-07-07T12:44:22.100Z",
-          "eval_end_time": "2026-07-07T12:44:23.512Z",
-          "tags": [
-            "Valid Age"
-          ],
-          "review_queues": [],
-          "computed": {
-            "socure_age_assurance_response": {
-              "age18Plus": true,
-              "age21Plus": true,
-              "age25Plus": false,
-              "entityKind": "phone",
-              "isSuccess": true,
-              "refId": "789a83ce-8b28-4239-8a7c-20e1a8ba0b5a",
-              "uniqueCnt": 96
-            }
-          }
-        }
-      },
-      "PatchUpdateEmail": {
-        "summary": "Update Email Address",
-        "value": {
-          "id": "onb-12345",
-          "timestamp": "2023-12-01T08:15:30.456Z",
-          "workflow": "consumer_onboarding",
-          "data": {
-            "individual": {
-              "email": "updated.email@example.com"
-            }
-          }
-        }
-      },
-      "PatchUpdatePhone": {
-        "summary": "Update Phone Number",
-        "value": {
-          "id": "onb-12345",
-          "timestamp": "2023-12-01T08:15:30.456Z",
-          "workflow": "consumer_onboarding",
-          "data": {
-            "individual": {
-              "phone_number": "+1-202-555-9999"
-            }
-          }
-        }
-      },
-      "PatchUpdateDevice": {
-        "summary": "Update Device Information",
-        "value": {
-          "id": "onb-12345",
-          "timestamp": "2023-12-01T08:15:30.456Z",
-          "workflow": "consumer_onboarding",
-          "data": {
-            "external_device": {
-              "id": "DEVICE-123456",
-              "ip_address": "192.168.1.10",
-              "session": "UPDATED-SESSION-1234"
-            }
-          }
-        }
-      },
       "ConsumerOnboardingRequest": {
         "description": "Consumer Onboarding",
         "value": {
           "id": "onb-12345",
           "timestamp": "2023-12-01T08:15:30.456Z",
           "workflow": "consumer_onboarding",
-          "customer_metadata": {
-            "service": "checkout-api",
-            "business_unit": "consumer-lending",
-            "internal_ref": "order-998877"
-          },
           "data": {
             "line_of_business": "ACME Inc",
             "channel": "web",
@@ -5114,17 +6332,39 @@
           }
         }
       },
+      "AgeAssuranceRequest": {
+        "description": "Age Assurance",
+        "value": {
+          "id": "test-user-phone",
+          "timestamp": "2026-07-07T12:44:22.059Z",
+          "workflow": "age_assurance",
+          "data": {
+            "event_type": "identity_verification",
+            "channel": "web",
+            "individual": {
+              "given_name": "Alex",
+              "family_name": "Doe",
+              "phone_number": "19843359615",
+              "email": "user@example.com",
+              "address": {
+                "country": "US"
+              },
+              "docv": {
+                "config": {
+                  "language": "en",
+                  "send_message": false
+                }
+              }
+            }
+          }
+        }
+      },
       "ConsumerOnboardingResponse": {
         "description": "Consumer Onboarding",
         "value": {
           "id": "onb-12345",
           "eval_id": "6dc8f39c-ecc3-4fe0-9283-fc8e5f99e816",
           "workflow": "consumer_onboarding",
-          "customer_metadata": {
-            "service": "checkout-api",
-            "business_unit": "consumer-lending",
-            "internal_ref": "order-998877"
-          },
           "eval_status": "evaluation_completed",
           "decision": "REJECT",
           "status": "CLOSED",
@@ -5512,7 +6752,7 @@
             {
               "enrichment_name": "Socure Prefill",
               "enrichment_provider": "Socure",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
               "status_code": 200,
               "response": {
                 "customerProfile": {
@@ -5590,7 +6830,7 @@
           "data_enrichments": [
             {
               "enrichment_name": "Socure Address risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
               "enrichment_provider": "Socure",
               "status_code": 200,
               "request": {
@@ -5631,7 +6871,7 @@
             },
             {
               "enrichment_name": "Socure Email Risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
               "enrichment_provider": "Socure",
               "status_code": 200,
               "request": {
@@ -5661,7 +6901,7 @@
             },
             {
               "enrichment_name": "Socure Phone Risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
               "enrichment_provider": "Socure",
               "status_code": 200,
               "request": {
@@ -5999,7 +7239,7 @@
           "data_enrichments": [
             {
               "enrichment_name": "Socure Address risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
               "enrichment_provider": "Socure",
               "status_code": 200,
               "request": {
@@ -6040,7 +7280,7 @@
             },
             {
               "enrichment_name": "Socure Email Risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
               "enrichment_provider": "Socure",
               "status_code": 200,
               "request": {
@@ -6070,7 +7310,7 @@
             },
             {
               "enrichment_name": "Socure Phone Risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
               "enrichment_provider": "Socure",
               "status_code": 200,
               "request": {
@@ -6100,7 +7340,7 @@
             },
             {
               "enrichment_name": "SocureCNam",
-              "enrichment_endpoint": "https://mfa-orchestrator-service-9.webapps.us-east-1.product-dev.socure.link/api/2.0/cnam",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/2.0/cnam",
               "enrichment_provider": "SocureCNam",
               "status_code": 200,
               "request": {
@@ -6426,7 +7666,7 @@
           "data_enrichments": [
             {
               "enrichment_name": "Socure Account Intelligence",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
               "enrichment_provider": "Socure",
               "status_code": 200,
               "request": {
@@ -6776,7 +8016,7 @@
           "data_enrichments": [
             {
               "enrichment_name": "Socure Address risk",
-              "enrichment_endpoint": "https://sandbox.dev.socure.com/api/3.0/EmailAuthScore",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/3.0/EmailAuthScore",
               "enrichment_provider": "Socure",
               "status_code": 200,
               "request": {
@@ -6817,7 +8057,7 @@
             },
             {
               "enrichment_name": "SocureCNam",
-              "enrichment_endpoint": "https://mfa-orchestrator-service-9.webapps.us-east-1.product-dev.socure.link/api/2.0/cnam",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/2.0/cnam",
               "enrichment_provider": "SocureCNam",
               "status_code": 200,
               "request": {
@@ -6861,7 +8101,7 @@
           "data_enrichments": [
             {
               "enrichment_name": "SocureCNam",
-              "enrichment_endpoint": "https://mfa-orchestrator-service-9.webapps.us-east-1.product-dev.socure.link/api/2.0/cnam",
+              "enrichment_endpoint": "https://sandbox.socure.com/api/2.0/cnam",
               "enrichment_provider": "SocureCNam",
               "status_code": 200,
               "request": {
@@ -7654,6 +8894,111 @@
           "eval_status": "evaluation_completed",
           "environment_name": "Production"
         }
+      },
+      "AgeAssuranceResponse": {
+        "description": "Age Assurance",
+        "value": {
+          "id": "test-user-phone",
+          "eval_id": "7e79e169-5021-475b-af98-9362ac690c38",
+          "workflow": "age_assurance",
+          "eval_status": "evaluation_completed",
+          "decision": "ACCEPT",
+          "status": "CLOSED",
+          "sub_status": "Accept",
+          "workflow_id": "5b1399aa-c4b9-4f70-90ee-170e6f3cdc55",
+          "workflow_version": "3.7.0",
+          "eval_source": "API",
+          "eval_start_time": "2026-07-07T12:44:22.100Z",
+          "eval_end_time": "2026-07-07T12:44:23.512Z",
+          "tags": [
+            "Valid Age"
+          ],
+          "review_queues": [],
+          "computed": {
+            "socure_age_assurance_response": {
+              "age18Plus": true,
+              "age21Plus": true,
+              "age25Plus": false,
+              "entityKind": "phone",
+              "isSuccess": true,
+              "refId": "789a83ce-8b28-4239-8a7c-20e1a8ba0b5a",
+              "uniqueCnt": 96
+            }
+          }
+        }
+      },
+      "PatchUpdateEmail": {
+        "summary": "Update Email Address",
+        "value": {
+          "id": "onb-12345",
+          "timestamp": "2023-12-01T08:15:30.456Z",
+          "workflow": "consumer_onboarding",
+          "data": {
+            "individual": {
+              "email": "updated.email@example.com"
+            }
+          }
+        }
+      },
+      "PatchUpdatePhone": {
+        "summary": "Update Phone Number",
+        "value": {
+          "id": "onb-12345",
+          "timestamp": "2023-12-01T08:15:30.456Z",
+          "workflow": "consumer_onboarding",
+          "data": {
+            "individual": {
+              "phone_number": "+1-202-555-9999"
+            }
+          }
+        }
+      },
+      "PatchUpdateDevice": {
+        "summary": "Update Device Information",
+        "value": {
+          "id": "onb-12345",
+          "timestamp": "2023-12-01T08:15:30.456Z",
+          "workflow": "consumer_onboarding",
+          "data": {
+            "external_device": {
+              "id": "DEVICE-123456",
+              "ip_address": "192.168.1.10",
+              "session": "UPDATED-SESSION-1234"
+            }
+          }
+        }
+      },
+      "PatchTrustAndSafety": {
+        "summary": "Trust and Safety: Update Email Address",
+        "value": {
+          "id": "ts-89012",
+          "timestamp": "2023-12-01T18:24:10.234Z",
+          "workflow": "trust_and_safety",
+          "data": {
+            "event_type": "consumer_verification",
+            "event_category": "verification",
+            "individual": {
+              "email": "updated.email@example.com"
+            }
+          }
+        }
+      },
+      "PatchLoginAndAuthentication": {
+        "summary": "Login and Authentication: Submit OTP Code",
+        "value": {
+          "id": "ato-78901",
+          "timestamp": "2023-12-01T15:47:05.123Z",
+          "workflow": "account_takeover",
+          "data": {
+            "event_type": "address_update",
+            "event_category": "update",
+            "individual": {
+              "otp": {
+                "code": "123456"
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -7679,7 +9024,8 @@
         "name": "Core Risk Evaluation",
         "tags": [
           "Evaluation",
-          "Feedback"
+          "Feedback",
+          "Outcome"
         ]
       },
       {
